@@ -1,1 +1,65 @@
+/* /global.css */
+
+/*
+ * =================================================================
+ * Main CSS Entry Point
+ * =================================================================
+ * Order is important:
+ * 1. Tailwind directives, plugins, and variants.
+ * 2. Custom modules (fonts, theme, animations).
+ * 3. Other custom stylesheets (e.g., style.css).
+ * 4. Tailwind layers and base styles.
+ * =================================================================
+ */
+
+/* 1. Tailwind Setup */
+@import "./fonts.css";
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+@custom-variant intersect (&:not([no-intersect]));
+@plugin "@tailwindcss/typography";
+
+/* 2. Import CSS Modules */
+@import "./theme.css";
+@import "./animations.css";
+@import "./components.css";
+
+/* 3. Your other custom styles */
+@import "./style.css";
+
+/* 4. Tailwind Layers & Base Styles */
+@layer base, components, utilities;
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    @apply font-lexend;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@theme inline {
+  --animate-marquee: marquee var(--duration) infinite linear;
+
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+}
