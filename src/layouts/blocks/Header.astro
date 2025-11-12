@@ -1,0 +1,152 @@
+---
+import { navigation } from "@/navigation.ts";
+import { i18n } from "@/config.ts";
+import { ui } from "@/i18n/ui";
+import type { Language } from "@/i18n/ui.ts";
+import { useTranslations } from "@/i18n/utils.ts";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import NavDrawer from "@/components/NavDrawer.astro";
+import Button from "@/components/ui-astro/Button.astro";
+import { Image } from "astro:assets";
+// 1. Import the LanguageToggle component
+import LanguageToggle from "@/components/LanguageToggle.astro";
+
+type TranslationKeys = keyof (typeof ui)[typeof i18n.defaultLocale];
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as Language);
+
+const nav = navigation[lang as keyof typeof navigation];
+const homeUrl = nav.header[0]?.href || `/${lang}/`;
+
+const { pathname } = Astro.url;
+---
+
+<header
+  id="site-header"
+  class="bg-background/90 fixed top-0 z-30 w-screen border-b backdrop-blur-sm"
+>
+  <div class="relative mx-3 flex h-full grow md:mx-8 lg:mx-12">
+    <nav
+      aria-label="Main navigation"
+      class="mx-auto flex w-full items-center justify-between px-3 md:max-w-7xl md:px-6"
+    >
+      <a href={homeUrl} class="flex items-center">
+        <span class="sr-only">Homepage</span>
+        <Image
+          src="/images/Logo-landscape-black.png"
+          alt="Company Logo"
+          width={150}
+          height={150}
+          class="hidden p-2 transition-transform duration-300 hover:scale-105 dark:block"
+        />
+
+        <Image
+          src="/images/Logo-landscape-white.png"
+          alt="Company Logo"
+          width={150}
+          height={150}
+          class="p-2 transition-transform duration-300 hover:scale-105 dark:hidden"
+        />
+      </a>
+
+      <div id="desktop-menu" class="hidden items-center lg:flex">
+        <ul
+          id="navigation"
+          class="inline-flex w-auto flex-wrap justify-center space-x-1 self-center px-5 text-center text-sm"
+        >
+          {
+            nav.header.map((menu) => {
+              const isHome = menu.href === `/${lang}`;
+              const isActive = isHome
+                ? pathname === `/${lang}`
+                : menu.href && pathname.startsWith(menu.href.toString());
+
+              return (
+                <li>
+                  <a
+                    href={menu.href}
+                    class:list={[
+                      "text-foreground/80 group hover:bg-primary/12 relative block gap-10 rounded-xl px-4 py-3",
+                      {
+                        "text-primary/80 bg-primary/12": isActive,
+                      },
+                    ]}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    {t(menu.textKey)}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+
+        {
+          nav.callToAction && (
+            <Button
+              size="default"
+              className="bg-primary/80 my-auto  transition-colors duration-800"
+              href={nav.callToAction.href}
+            >
+              {t(nav.callToAction.textKey)}
+            </Button>
+          )
+        }
+
+        <ThemeToggle className="mx-2 self-center" />
+        <LanguageToggle />
+      </div>
+
+      <div id="mobile-menu" class="flex items-center gap-2 lg:hidden">
+        {
+          nav.callToAction && (
+            <Button
+              size="sm"
+              className="bg-primary/60 mr-2 align-middle transition-colors duration-800"
+              href={nav.callToAction.href}
+            >
+              {t(nav.callToAction.textKey)}
+            </Button>
+          )
+        }
+        <Button
+          icon="LuMenu"
+          variant="outline"
+          size="sm"
+          data-aw-show-nav
+          className="align-middle"
+        />
+      </div>
+    </nav>
+    <div
+      class="bg-background border-primary absolute -bottom-1 -left-1 z-10 h-2 w-2 rotate-45 border"
+    >
+    </div>
+    <div
+      class="bg-background border-primary absolute -right-1 -bottom-1 z-10 h-2 w-2 rotate-45 border"
+    >
+    </div>
+  </div>
+</header>
+
+<NavDrawer lang={lang} />
+
+<script is:inline>
+  const addBorder = () => {
+    const header = document.getElementById("site-header");
+    if (header) {
+      const scrollThreshold = 50; // Adjust this value as needed
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > scrollThreshold) {
+          header.classList.add("border-b");
+        } else {
+          header.classList.remove("border-b");
+        }
+      });
+    }
+  };
+
+  window.addEventListener("load", addBorder);
+  document.addEventListener("astro:after-swap", addBorder);
+</script>

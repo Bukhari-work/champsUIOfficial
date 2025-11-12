@@ -1,0 +1,99 @@
+---
+import { useTranslations } from "@/i18n/utils";
+import type { Language } from "@/i18n/ui";
+import { navigation } from "@/navigation"; // 1. Import the navigation object
+import Drawer from "@/components/ui-astro/Drawer.astro";
+import { ChevronRight } from "lucide-react";
+import { i18n } from "@/config.ts";
+
+// Component Imports
+import Button from "@/components/ui-astro/Button.astro";
+
+const { lang = "en" } = Astro.props as { lang: Language };
+const t = useTranslations(lang);
+
+// 2. Build mainMenu dynamically from the navigation object
+const mainMenu = navigation[lang].header.map((item) => ({
+  text: t(item.textKey as any), // Use the textKey to get the translated string
+  href: item.href,
+}));
+
+const { pathname } = Astro.url;
+
+// --- Step 1: Determine the current language ---
+const potentialLang = pathname.split("/")[1];
+const currentLang = i18n.locales.includes(potentialLang as Language)
+  ? (potentialLang as Language)
+  : i18n.defaultLocale;
+
+const otherLangs = i18n.locales.filter((lang) => lang !== currentLang);
+
+const pathWithoutLocale = "/" + pathname.split("/").slice(2).join("/");
+---
+
+<Drawer
+  id="navDrawer"
+  triggerIcon="LuMenu"
+  triggerVariant="outline"
+  triggerClass="hidden"
+>
+  <ul class="mt-auto flex flex-col gap-2 p-4">
+    {
+      mainMenu.map((menu, index) => (
+        <>
+          <li>
+            <Button
+              href={menu.href}
+              variant="ghost"
+              className="flex justify-between"
+              data-aw-close-nav
+              aria-current={
+                pathname === `${menu.href}/` || pathname === menu.href
+                  ? "page"
+                  : undefined
+              }
+            >
+              <span>{menu.text}</span>
+              <ChevronRight />
+            </Button>
+          </li>
+          {/* Add hr after the first item */}
+          {index === 0 && mainMenu.length > 1 && (
+            <hr class="dark:border-foreground/10" />
+          )}
+          {/* Add hr before the last item */}
+          {index === mainMenu.length - 2 && mainMenu.length > 1 && (
+            <hr class="dark:border-foreground/10" />
+          )}
+        </>
+      ))
+    }
+    <Button
+      variant="outline"
+      className="hidden dark:block"
+      data-aw-toggle-color-scheme
+    >
+      {t("drawer.theme.light")}
+    </Button>
+    <Button
+      variant="outline"
+      className="dark:hidden"
+      data-aw-toggle-color-scheme
+    >
+      {t("drawer.theme.dark")}
+    </Button>
+    {
+      otherLangs.map((lang) => {
+        const targetPath = `/${lang}${pathWithoutLocale}`;
+        return (
+          <Button variant="outline" href={targetPath}>
+            {t("drawer.language")}
+          </Button>
+        );
+      })
+    }
+    <Button variant="ghost" data-aw-close-nav>
+      {t("drawer.close")}
+    </Button>
+  </ul>
+</Drawer>

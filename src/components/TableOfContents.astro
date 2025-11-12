@@ -1,0 +1,129 @@
+---
+import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
+import { cn } from "@/lib/utils";
+import { slugify } from "@/lib/utils/textConverter.ts";
+
+// --- Define component props ---
+export interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+export interface Programme {
+  category: string;
+}
+
+export interface Props {
+  headings?: Heading[]; // Standard headings prop
+  programmes?: Programme[]; // Custom programmes prop
+  className?: string;
+}
+
+const { headings: rawHeadings, programmes, className } = Astro.props as Props;
+
+let finalHeadings: Heading[] = [];
+
+// --- Logic to handle either prop ---
+if (rawHeadings && rawHeadings.length > 0) {
+  // 1. If 'headings' prop is provided, use it directly
+  finalHeadings = rawHeadings;
+} else if (programmes && programmes.length > 0) {
+  // 2. If 'programmes' prop is provided, transform it into the 'Heading' format
+  finalHeadings = programmes.map((program) => ({
+    slug: slugify(program.category), // Use the slugified version for the link
+    text: program.category,
+    depth: 2, // Assign a default depth
+  }));
+}
+---
+
+<div class={cn(className)}>
+  <nav
+    class="sticky top-24 mx-auto hidden grow flex-col gap-1 pt-15 xl:flex"
+    role="navigation"
+    aria-labelledby="toc-heading"
+  >
+    <h2
+      id="toc-heading"
+      class="mb-2 flex items-center gap-2 text-sm font-semibold"
+    >
+      <DynamicIcon icon="LuTableOfContents" />
+      On This Page
+    </h2>
+
+    <ul
+      id="toc-list"
+      class="border-offgray-100 dark:border-offgray-600/20 ml-[7px] space-y-1 border-l pl-4"
+    >
+      {
+        finalHeadings.map((heading) => (
+          <li class="line-clamp-1">
+            <a
+              class="link text-primary inline text-sm underline"
+              data-slug-ref={heading.slug}
+              href={`#${heading.slug}`}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="dark:shadow-primary/20 mt-6 rounded-sm border p-2.5 shadow-xl">
+      <h2 class="mb-1 flex items-center gap-2 text-sm font-semibold">
+        <DynamicIcon icon="LuHistory" />
+        What have we done?
+      </h2>
+      <a class="link text-primary inline text-sm underline" href="/what-we-do">
+        See What We Do →
+      </a>
+    </div>
+  </nav>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Select the list to scope our link queries
+    const tocList = document.getElementById("toc-list");
+    if (!tocList) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const { target, isIntersecting } = entry;
+          const slug = target.id;
+
+          // --- SCRIPT FIX ---
+          // The original script selected `.toc-link`, but the class wasn't on the anchor.
+          // This selector is more robust: it finds the link inside the ToC list
+          // that has the matching 'data-slug-ref'.
+          const link = tocList.querySelector(`a[data-slug-ref="${slug}"]`);
+
+          if (link) {
+            if (isIntersecting) {
+              // Set the current one to active
+              link.setAttribute("data-active", "true");
+              link.setAttribute("aria-current", "location");
+            } else {
+              // Remove active state when it's not intersecting
+              link.removeAttribute("data-active");
+              link.removeAttribute("aria-current");
+            }
+          }
+        }
+      },
+      {
+        rootMargin: "-40% 0px -60% 0px", // Triggers when a heading is in the middle of the screen
+        threshold: 0,
+      },
+    );
+
+    // Observe all the heading elements on the page that have an ID
+    const headings = document.querySelectorAll(
+      "h1[id], h2[id], h3[id], h4[id]",
+    );
+    headings.forEach((h) => observer.observe(h));
+  });
+</script>

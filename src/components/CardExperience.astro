@@ -1,0 +1,95 @@
+---
+import DynamicIcon from "@/components/blocks/DynamicIcon";
+import { slugify } from "@/lib/utils/textConverter";
+
+// Define the shape of an experience item, which this component expects as a prop.
+interface ExperienceItem {
+  year: number;
+  title: string;
+  authors?: string;
+  location?: string;
+  icon: string;
+}
+
+// Define the component's props: the experience data and its position (isEven).
+interface Props {
+  exp: ExperienceItem;
+  isEven: boolean;
+}
+
+const { exp, isEven } = Astro.props;
+const patternId = `pattern-${slugify(exp.title)}`;
+
+// --- Responsive Class Logic (specific to the card) ---
+
+// Mobile text is always left-aligned. Odd items are right-aligned on desktop.
+const textAlign = `text-left ${!isEven ? "md:text-right" : ""}`;
+
+// Calculate positioning for the icon and connector dot based on whether the
+// card is on the left (even) or right (odd) of the timeline.
+const iconPosition = isEven
+  ? "md:-left-6 md:group-hover:-translate-x-6 group-hover:scale-105"
+  : "md:-right-6 md:group-hover:translate-x-6 group-hover:scale-105";
+const connectorPosition = isEven ? "md:-right-6" : "-left-6";
+---
+
+<div class="relative w-full md:w-5/11">
+  <div
+    class={`group bg-background  hover:border-primary hover:scale-105 duration-150 relative isolate rounded-xl border-2 p-6 hover:[box-shadow:_var(--sh-alt)] ${textAlign}`}
+  >
+    <svg
+      class="text-primary pointer-events-none invisible absolute inset-0 z-[-1] size-full [mask-image:linear-gradient(to_left,_#ffffffad,_transparent)] opacity-100 select-none group-hover:visible dark:opacity-80"
+    >
+      <defs>
+        <pattern
+          id={patternId}
+          width="4"
+          height="4"
+          patternUnits="userSpaceOnUse"
+          patternTransform="rotate(45)"
+        >
+          <line
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="4"
+            stroke="currentColor"
+            stroke-width="1.5"></line>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill={`url(#${patternId})`}></rect>
+    </svg>
+
+    <!-- Icon and dot (with ping animation) -->
+    <span
+      class={`bg-primary text-background flex w-full mt-4 md:mt-0 duration-300 -translate-y-1/2 transform items-center justify-center rounded-full p-2 text-white md:absolute md:top-1/2 md:w-fit ${iconPosition}`}
+    >
+      <DynamicIcon icon={exp.icon} className="text-background h-6 w-6" />
+    </span>
+
+    <span
+      class={`bg-primary absolute top-1/2 hidden h-3 w-3 -translate-y-1/2 transform rounded-full md:block ${connectorPosition}`}
+    ></span>
+    <span
+      class={`bg-primary absolute top-1/2 hidden h-3 w-3 -translate-y-1/2 transform animate-ping rounded-full md:block ${connectorPosition}`}
+    ></span>
+
+    <!-- Card text -->
+    <span class="mb-1 block font-mono text-sm font-semibold">
+      {exp.year}
+    </span>
+    <h2 class="group-hover:text-primary mb-2 text-xl font-semibold">
+      {exp.title}
+    </h2>
+    <p class="text-sm text-gray-700 dark:text-gray-300">
+      {exp.authors}
+    </p>
+    {
+      exp.location && (
+        <p class="mt-1 text-sm text-gray-500 italic dark:text-gray-400">
+                    {exp.location}       {" "}
+        </p>
+      )
+    }
+  </div>
+</div>

@@ -1,0 +1,144 @@
+---
+export interface Props {
+  images: {
+    src: string;
+    alt: string;
+  }[];
+}
+
+const { images } = Astro.props;
+---
+
+<section class="relative w-full">
+  <div
+    class="from-background pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-1/4 bg-gradient-to-r md:block"
+  >
+  </div>
+  <div
+    class="from-background pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-1/4 bg-gradient-to-l md:block"
+  >
+  </div>
+
+  <div class="article-image-slider swiper mx-auto overflow-hidden rounded-xl">
+    <div class="swiper-wrapper items-center">
+      {
+        images.map((image) => (
+          <div class="swiper-slide !w-[100%] md:!w-[80%]">
+            <img
+              src={image.src}
+              alt={image.alt}
+              class="h-auto w-full rounded-lg object-cover shadow-xl"
+              loading="lazy"
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Pagination buttons -->
+    <div class="relative flex h-11 items-center justify-center">
+      <div
+        class:list={[
+          "article-slider-pagination",
+          "items-center text-center align-middle font-light",
+        ]}
+      >
+      </div>
+      <!-- Navigation buttons -->
+      <div
+        class:list={[
+          "swiper-button-prev flex",
+          "absolute left-1/4 z-10 mx-10 h-11 w-11",
+          "bg-primary/10 transform cursor-pointer items-center justify-center rounded-full text-xl select-none hover:bg-black/60 dark:hover:bg-white/60",
+        ]}
+      >
+        &#10094;
+      </div>
+      <div
+        class:list={[
+          "swiper-button-next flex",
+          "absolute right-1/4 z-10 mx-10 h-11 w-11",
+          "bg-primary/10 transform cursor-pointer items-center justify-center rounded-full text-xl select-none hover:bg-black/60 dark:hover:bg-white/60",
+        ]}
+      >
+        &#10095;
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import Swiper from "swiper";
+  import "swiper/css";
+  import type { Swiper as SwiperType } from "swiper";
+  import { Navigation, Pagination, EffectCoverflow } from "swiper/modules";
+
+  let swiperInstance: SwiperType | null = null;
+
+  // Function to clean up the Swiper instance before page navigation
+  function destroySwiper() {
+    if (swiperInstance) {
+      swiperInstance.destroy(true, true);
+      swiperInstance = null;
+    }
+  }
+
+  // Function to initialize the Swiper instance
+  function initSwiper() {
+    // Ensure we don't initialize it twice
+    if (swiperInstance) return;
+
+    swiperInstance = new Swiper(".article-image-slider", {
+      // Use the new modules
+      modules: [Navigation, Pagination, EffectCoverflow],
+
+      // Main Settings
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: "auto", // Let Swiper determine slides based on width
+      loop: true,
+
+      // Coverflow Effect settings
+      breakpoints: {
+        // For small screens (default settings)
+        0: {
+          coverflowEffect: {
+            rotate: 0,
+            stretch: 0,
+            depth: 0,
+            modifier: 1,
+            slideShadows: false,
+          },
+        },
+        // For large screens (viewport width >= 1024px)
+        1024: {
+          coverflowEffect: {
+            rotate: 0,
+            stretch: 50,
+            depth: 50,
+            modifier: -1,
+            slideShadows: false,
+          },
+        },
+      },
+
+      // Pagination settings (fraction style)
+      pagination: {
+        el: ".article-slider-pagination",
+        type: "fraction",
+      },
+
+      // Navigation settings
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+        addIcons: false,
+      },
+    });
+  }
+
+  // Use Astro's lifecycle events for robust initialization and cleanup
+  document.addEventListener("astro:page-load", initSwiper);
+  document.addEventListener("astro:before-swap", destroySwiper);
+</script>

@@ -1,0 +1,45 @@
+---
+import Base from "@/layouts/Base.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+
+// Construct the 'content' prop required by Base.astro
+const contentForBase = {
+  title: data.title,
+  description: data.description,
+};
+---
+
+<Base content={contentForBase} makara>
+  <PageHeader
+    title={data.title}
+    breadcrumbs={false}
+    headtitle={data.headtitle}
+    subtitle={data.subtitle}
+  />
+
+  <section
+    class="relative mx-auto max-w-7xl gap-8 p-4 pb-24 lg:grid lg:grid-cols-3"
+  >
+    <div class="lg:col-span-2">
+      <article class="mt-8 space-y-12">
+        <slot name="main-content" />
+      </article>
+    </div>
+
+    <aside class="lg:col-span-1">
+      <div
+        class="bg-background dark:shadow-primary/20 top-24 mt-8 w-full rounded-xl border p-6 font-light shadow-xl lg:sticky"
+      >
+        <slot name="sidebar" />
+      </div>
+    </aside>
+  </section>
+</Base>

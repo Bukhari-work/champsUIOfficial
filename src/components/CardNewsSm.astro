@@ -1,0 +1,47 @@
+---
+import { SETTINGS } from "@/config.ts";
+import dateFormat from "@/lib/utils/dateFormat";
+import { plainify } from "@/lib/utils/textConverter";
+import { FaClock } from "react-icons/fa6";
+
+import Button from "@/components/ui-astro/Button.astro";
+import Card from "@/components/blocks/Card.astro";
+
+const { news_folder } = SETTINGS;
+const { data } = Astro.props;
+const { title, date } = data.data;
+
+const firstImage = data.data.images?.[0];
+---
+
+<Card
+  href={`/${data.id.split("/")[0]}/${news_folder}/${data.id.split("/")[1]}`}
+  title={title}
+  imageMeta={firstImage}
+  imageAlt={firstImage.alt}
+  headingLevel="h3"
+  size="small"
+>
+  {
+    date && (
+      <div class="mt-2 flex items-center gap-1 text-xs text-gray-500 dark:text-gray-200">
+        <FaClock />
+        <time>{dateFormat(date)}</time>
+      </div>
+    )
+  }
+
+  <p class="mt-2 line-clamp-2 text-sm">
+    {plainify(data.body?.slice(0, 100)) + "..."}
+  </p>
+
+  <div slot="footer">
+    <Button
+      variant="default"
+      href={`/${data.id.split("/")[0]}/${news_folder}/${data.id.split("/")[1]}`}
+      className="bg-primary/60 px-3 py-1 text-xs"
+    >
+      Read More
+    </Button>
+  </div>
+</Card>

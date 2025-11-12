@@ -1,0 +1,109 @@
+<script is:inline type="module">
+  // START OF SCROLL.TS (for modal, enabling or disabling scrolling)
+  // left: 37, up: 38, right: 39, down: 40,
+  // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+  const keys = {
+    37: 1,
+    38: 1,
+    39: 1,
+    40: 1,
+  };
+
+  function preventDefault(e) {
+    e.preventDefault();
+  }
+
+  function preventDefaultForScrollKeys(e) {
+    if (keys[e.keyCode]) {
+      preventDefault(e);
+      return false;
+    }
+  }
+
+  // modern Chrome requires { passive: false } when adding event
+  var supportsPassive = false;
+  try {
+    var opts = Object.defineProperty({}, "passive", {
+      get: function () {
+        supportsPassive = true;
+      },
+    });
+    window.addEventListener(
+      "test",
+      null, // Cast null to any to satisfy TypeScript
+      opts, // Cast the options object for clarity, though casting the listener is the primary fix
+    );
+  } catch (e) {}
+
+  var wheelOpt = supportsPassive ? { passive: false } : false;
+  var wheelEvent =
+    "onwheel" in document.createElement("div") ? "wheel" : "mousewheel";
+
+  // call this to Disable
+  export function disableScroll(element) {
+    element.addEventListener("DOMMouseScroll", preventDefault, false); // older FF
+    element.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
+    element.addEventListener("touchmove", preventDefault, wheelOpt); // mobile
+    element.addEventListener("keydown", preventDefaultForScrollKeys, false);
+  }
+
+  // call this to Enable
+  export function enableScroll(element) {
+    element.removeEventListener("DOMMouseScroll", preventDefault, false);
+    element.removeEventListener(wheelEvent, preventDefault, wheelOpt);
+    element.removeEventListener("touchmove", preventDefault, wheelOpt);
+    element.removeEventListener("keydown", preventDefaultForScrollKeys, false);
+  }
+
+  // END OF SCROLL.TS
+  function attachEvent(selector, event, fn) {
+    const matches =
+      typeof selector === "string"
+        ? document.querySelectorAll(selector)
+        : selector;
+    if (matches && matches.length) {
+      matches.forEach((elem) => {
+        elem.addEventListener(event, (e) => fn(e, elem), false);
+      });
+    }
+  }
+
+  const drawerAttachFunction = function () {
+    const drawer = document.getElementById("navDrawer");
+
+    if (!drawer) return;
+    const drawerBody = drawer.querySelector(".drawer-body");
+    const drawerBackdrop = drawer.querySelector(".drawer-backdrop");
+
+    const modal = drawer.getAttribute("modal") === `true`;
+
+    // Attach event listener to open the dialog
+    attachEvent("[data-aw-show-nav]", "click", function () {
+      drawerBody.classList.add("translate-y-0");
+      drawerBackdrop.classList.add("overlay");
+      console.log("Drawer opened");
+
+      if (modal) {
+        document.documentElement.classList.add("overflow-hidden");
+      } else {
+        disableScroll(drawerBody);
+      }
+    });
+
+    // Attach event listener to close the dialog
+    attachEvent("[data-aw-close-nav]", "click", function (_, elem) {
+      drawerBody.classList.remove("translate-y-0");
+      drawerBackdrop.classList.remove("overlay");
+
+      if (modal) {
+        document.documentElement.classList.remove("overflow-hidden");
+      } else {
+        enableScroll(drawerBody);
+      }
+    });
+  };
+
+  window.addEventListener("load", drawerAttachFunction);
+  // Script re-execution for viewTransition
+  document.addEventListener("astro:after-swap", drawerAttachFunction);
+</script>

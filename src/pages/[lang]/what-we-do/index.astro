@@ -1,0 +1,207 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+import { useTranslations } from "@/i18n/utils.ts";
+import type { Language } from "@/i18n/ui.ts";
+import { i18n } from "@/config.ts";
+import type { SideBarProps } from "@/types.ts";
+import { Image } from "astro:assets";
+import AboutLayout from "@/layouts/AboutLayout.astro";
+import CardProgram from "@/components/CardProgram.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import { navigation } from "@/navigation.ts";
+import { slugify } from "@/lib/utils/textConverter.ts";
+// =================================================================================
+// 2. ROUTING & LANGUAGE VALIDATION
+// =================================================================================
+
+export async function getStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params;
+if (!i18n.locales.includes(lang)) {
+  throw new Error(
+    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+  );
+}
+
+// =================================================================================
+// 3. DATA & PROPS PREPARATION
+// =================================================================================
+
+const t = useTranslations(lang as Language);
+
+// --- Page Metadata ---
+const content = {
+  title: t("nav.whatWeDo"),
+  meta_title: t("whatWeDo.meta.title"),
+  description: t("whatWeDo.meta.description"),
+};
+
+const nav = navigation[lang as keyof typeof navigation];
+
+// --- Sidebar Data ---
+const sideBar: SideBarProps = {
+  title: t(nav.bars.whatWeDo.titleKey),
+  menuItems: nav.bars.whatWeDo.links.map((item) => ({
+    text: t(item.textKey),
+    href: item.href,
+    "aria-label": t(item.textKey), // Use the textKey for proper translation
+  })),
+};
+
+// --- Dynamic Programme Data ---
+const programmeCategories = [
+  {
+    category: t("whatWeDo.research.title"),
+    image: "/images/what-we-do/research.webp",
+    description: t("whatWeDo.research.description"),
+    programmes: [
+      {
+        title: t("whatWeDo.research.prog1.title"),
+        description: t("whatWeDo.research.prog1.description"),
+        icon: "FaScaleBalanced",
+      },
+      {
+        title: t("whatWeDo.research.prog2.title"),
+        description: t("whatWeDo.research.prog2.description"),
+        icon: "FaHospital",
+      },
+      {
+        title: t("whatWeDo.research.prog3.title"),
+        description: t("whatWeDo.research.prog3.description"),
+        icon: "FaHandHoldingDollar",
+      },
+      {
+        title: t("whatWeDo.research.prog4.title"),
+        description: t("whatWeDo.research.prog4.description"),
+        icon: "FaShieldHalved",
+      },
+    ],
+  },
+  {
+    category: t("whatWeDo.capacity.title"),
+    image: "/images/what-we-do/capacity-building.webp",
+    description: t("whatWeDo.capacity.description"),
+    programmes: [
+      {
+        title: t("whatWeDo.capacity.prog1.title"),
+        description: t("whatWeDo.capacity.prog1.description"),
+        icon: "FaChalkboardUser",
+      },
+      {
+        title: t("whatWeDo.capacity.prog2.title"),
+        description: t("whatWeDo.capacity.prog2.description"),
+        icon: "FaUsers",
+      },
+      {
+        title: t("whatWeDo.capacity.prog3.title"),
+        description: t("whatWeDo.capacity.prog3.description"),
+        icon: "IoBed",
+      },
+    ],
+  },
+  {
+    category: t("whatWeDo.consultation.title"),
+    image: "/images/what-we-do/consultation.webp",
+    description: t("whatWeDo.consultation.description"),
+    programmes: [
+      {
+        title: t("whatWeDo.consultation.prog1.title"),
+        description: t("whatWeDo.consultation.prog1.description"),
+        icon: "FaMagnifyingGlass",
+      },
+      {
+        title: t("whatWeDo.consultation.prog2.title"),
+        description: t("whatWeDo.consultation.prog2.description"),
+        icon: "FaCheckDouble",
+      },
+      {
+        title: t("whatWeDo.consultation.prog3.title"),
+        description: t("whatWeDo.consultation.prog3.description"),
+        icon: "FaLifeRing",
+      },
+      {
+        title: t("whatWeDo.consultation.prog4.title"),
+        description: t("whatWeDo.consultation.prog4.description"),
+        icon: "FaHandshakeAngle",
+      },
+    ],
+  },
+  {
+    category: t("whatWeDo.csr.title"),
+    image: "/images/what-we-do/corporate.webp",
+    description: t("whatWeDo.csr.description"),
+    programmes: [
+      {
+        title: t("whatWeDo.csr.prog1.title"),
+        description: t("whatWeDo.csr.prog1.description"),
+        icon: "FaCompass",
+      },
+      {
+        title: t("whatWeDo.csr.prog2.title"),
+        description: t("whatWeDo.csr.prog2.description"),
+        icon: "FaHouseMedicalCircleCheck",
+      },
+      {
+        title: t("whatWeDo.csr.prog3.title"),
+        description: t("whatWeDo.csr.prog3.description"),
+        icon: "FaSquarePersonConfined",
+      },
+      {
+        title: t("whatWeDo.csr.prog4.title"),
+        description: t("whatWeDo.csr.prog4.description"),
+        icon: "FaBuildingCircleArrowRight",
+      },
+    ],
+  },
+];
+---
+
+<AboutLayout {content} {sideBar}>
+  <h1
+    class="font-lexend text-primary mt-8 mb-6 w-fit scroll-mt-24 text-6xl font-semibold"
+  >
+    {t("whatWeDo.title")}
+  </h1>
+  <section class="not-prose grid grid-cols-1 gap-4 space-y-12">
+    {
+      programmeCategories.map((category) => (
+        <article
+          class="bg-background rounded-xl border p-6 shadow-xl"
+          id={`${slugify(category.category)}`}
+        >
+          <h2 class="text-primary mb-2 border-b pb-2 text-center text-2xl font-bold">
+            {category.category}
+          </h2>
+
+          {category.image && (
+            <Image
+              src={category.image}
+              alt={category.category}
+              width={445}
+              height={230}
+              loading="lazy"
+              format="webp"
+              class="mx-auto mb-4 w-full rounded-xl"
+            />
+          )}
+          <p class="text-muted-foreground mb-6">{category.description}</p>
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {category.programmes.map((program) => (
+              <CardProgram data={program} />
+            ))}
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <div slot="aside">
+    <TableOfContents programmes={programmeCategories} />
+  </div>
+</AboutLayout>

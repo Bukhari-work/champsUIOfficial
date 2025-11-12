@@ -1,0 +1,104 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+import { useTranslations } from "@/i18n/utils.ts";
+import type { Language } from "@/i18n/ui.ts";
+import { i18n } from "@/config.ts";
+import type { SideBarProps } from "@/types.ts";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import type { CollectionEntry } from "astro:content";
+
+import AboutLayout from "@/layouts/AboutLayout.astro";
+import PeopleDeck from "@/layouts/DeckPeople.astro";
+import { navigation } from "@/navigation";
+
+// =================================================================================
+// 2. ROUTING & LANGUAGE VALIDATION
+// =================================================================================
+
+export async function getStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params;
+if (!i18n.locales.includes(lang)) {
+  throw new Error(
+    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+  );
+}
+
+// =================================================================================
+// 3. DATA & PROPS PREPARATION
+// =================================================================================
+
+const t = useTranslations(lang as Language);
+const nav = navigation[lang as keyof typeof navigation];
+const PEOPLE_FOLDER = "people";
+
+// --- Page & Sidebar Metadata ---
+
+const sideBar: SideBarProps = {
+  title: t(nav.bars.about.titleKey),
+  menuItems: nav.bars.about.links.map((item) => ({
+    text: t(item.textKey),
+    href: item.href,
+    "aria-label": t(item.textKey), // Use the textKey for proper translation
+  })),
+};
+
+// --- Fetch and Filter People Data ---
+// Fetch all non-draft people (from ALL languages)
+const allPeople: CollectionEntry<"people">[] =
+  await getSinglePage(PEOPLE_FOLDER);
+
+// Filter the results by the current language
+const people: CollectionEntry<"people">[] = allPeople.filter((person) =>
+  person.id.startsWith(`${lang}/`),
+);
+const advisors = people.filter((person) => person.data.role === "Advisors");
+const leadership = people.filter((person) => person.data.role === "Leadership");
+const teamMembers = people.filter((person) => person.data.role === "The Team");
+
+const sortPeopleByIndex = (peopleArray: CollectionEntry<"people">[]) => {
+  return peopleArray.sort((a, b) => {
+    // People with an undefined index are pushed to the end.
+    const aIndex = a.data.index ?? Infinity;
+    const bIndex = b.data.index ?? Infinity;
+    return aIndex - bIndex;
+  });
+};
+
+// --- Sort People Data ---
+const sortedAdvisors = sortPeopleByIndex(advisors);
+const sortedLeadership = sortPeopleByIndex(leadership);
+const sortedTeamMembers = sortPeopleByIndex(teamMembers);
+
+const content = { title: t("sidebar.about.item.team") };
+---
+
+<AboutLayout {content} {sideBar} large>
+  <h1
+    class="font-lexend text-primary mt-8 mb-2 w-fit scroll-mt-24 text-6xl font-semibold"
+  >
+    {t("about.team.title")}
+  </h1>
+  <div class="w-full">
+    <div>
+      <h2 class="text-3xl">{t("about.team.advisors")}</h2>
+      <div class="not-prose">
+        <PeopleDeck people={sortedAdvisors} />
+      </div>
+      <h2 class="text-3xl">{t("about.team.leadership")}</h2>
+      <div class="not-prose">
+        <PeopleDeck people={sortedLeadership} />
+      </div>
+      <h2 class="text-3xl">{t("about.team.ourteam")}</h2>
+      <div class="not-prose mb-24">
+        <PeopleDeck people={sortedTeamMembers} />
+      </div>
+    </div>
+  </div>
+</AboutLayout>

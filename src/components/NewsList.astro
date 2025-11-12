@@ -1,0 +1,148 @@
+---
+import dateFormat from "@/lib/utils/dateFormat";
+
+export interface Author {
+  id: string;
+  name: string;
+  avatarUrl: string;
+}
+
+export interface Tag {
+  name: string;
+}
+
+export interface Category {
+  name: string;
+}
+
+export interface Data {
+  href: string;
+  title: string;
+  authors: Author[];
+  tags: Tag[];
+  categories: Category[];
+  date: Date;
+}
+export interface Post {
+  id: string;
+  data: Data;
+}
+
+export interface Category {
+  name: string;
+  href: string;
+}
+
+interface Props {
+  posts: Post[];
+  categories?: Category[];
+  activeCategory?: string;
+}
+
+const { posts, categories, activeCategory = "All Posts" } = Astro.props;
+---
+
+<!-- Blog Post List -->
+<div class="relative w-full gap-6 p-6 lg:gap-16">
+  {
+    posts.map((post, index) => {
+      const patternId = `pattern-${index}`;
+      return (
+        <a
+          class="group hover:border-primary hover:bg-primary/10 relative isolate flex flex-col items-start justify-between gap-2 rounded border border-transparent p-2 hover:[box-shadow:_var(--sh-alt)] lg:min-h-[42px] lg:flex-row lg:items-center"
+          href={`news/${post.id.split("/")[1]}`}
+        >
+          {/* SVG background pattern on hover */}
+          <svg class="text-primary pointer-events-none invisible absolute inset-0 [z-index:-1] size-full [mask-image:linear-gradient(to_left,_#ffffffad,_transparent)] opacity-100 select-none group-hover:visible dark:opacity-80">
+            <defs>
+              <pattern
+                id={patternId}
+                width="4"
+                height="4"
+                patternUnits="userSpaceOnUse"
+                patternTransform="rotate(45)"
+              >
+                <line
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="4"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+          </svg>
+          {/* Post Title and Authors */}
+          <div class="flex shrink-0 flex-col items-start gap-2 lg:flex-row lg:items-center">
+            <h2 class="group-hover:text-primary decoration-foreground/20 dark:decoration-foreground/40 group-hover:decoration-primary dark:group-hover:decoration-primary line-clamp-1 underline underline-offset-2">
+              {post.data.title.length > 80
+                ? `${post.data.title.slice(0, 80)} ...`
+                : post.data.title}
+            </h2>
+            {/* Authors for desktop*/}
+            {post.data.authors.length > 0 && (
+              <div class="hidden -space-x-1.5 hover:space-x-2 lg:flex">
+                {post.data.authors.map((author) => (
+                  <div class="relative isolate [transition:_margin_150ms]">
+                    <img
+                      alt={author.name}
+                      loading="lazy"
+                      width="20"
+                      height="20"
+                      class="size-5 shrink-0 cursor-help overflow-hidden rounded-full"
+                      src={`/images/people/${author.id.split("/")[1]}.webp`}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <hr class="hidden w-full opacity-80 group-hover:invisible lg:flex" />
+          <div class="flex w-full shrink-0 items-center gap-1 lg:w-fit">
+            {/* Authors for mobile */}
+            {post.data.authors.length > 0 && (
+              <div class="flex -space-x-1.5 lg:hidden">
+                {post.data.authors.map((author) => (
+                  <div class="relative isolate [transition:_margin_150ms]">
+                    <img
+                      alt={author.name}
+                      loading="lazy"
+                      width="20"
+                      height="20"
+                      class="size-5 shrink-0 cursor-help overflow-hidden rounded-full"
+                      src={`/images/people/${author.id.split("/")[1]}.webp`}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            {post.data.authors.length > 0 && (
+              <span class="flex opacity-15 lg:hidden">|</span>
+            )}
+            {/* Categories and Date */}
+            {post.data.categories.length > 0 && (
+              <div class="flex flex-wrap gap-2">
+                {post.data.categories.map((category) => (
+                  <div class="text-primary border-primary bg-primary/5 flex h-[18px] w-fit shrink-0 items-center gap-1.5 rounded-xs border border-dotted px-1 font-mono text-[0.625rem] leading-6">
+                    {category}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {post.data.categories.length > 0 && (
+              <span class="hidden opacity-15 lg:flex">|</span>
+            )}
+
+            <p class="ml-auto font-mono text-xs">
+              {dateFormat(post.data.date)}
+            </p>
+          </div>
+          <hr class="flex w-full opacity-60 group-hover:invisible lg:hidden dark:opacity-40" />
+        </a>
+      );
+    })
+  }
+</div>

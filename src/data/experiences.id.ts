@@ -1,0 +1,463 @@
+// Import the type to ensure consistency
+import type { ExperienceItem } from "./experiences.en";
+
+// Export the typed array
+export const experiencesId: ExperienceItem[] = [
+  {
+    year: 2015,
+    title: "Perubahan Perilaku Peresepan Dokter di Rumah Sakit",
+    authors: "Prof. Budi Hidayat, Hendratno, dkk",
+    icon: "FaPills",
+  },
+  {
+    year: 2016,
+    title: "Survei Kepuasan Kerja Karyawan",
+    authors: "Prof. Dr. Ede Surya Darmawan, Dr. Yetty Yulianti dkk",
+    location: "RS Jantung & Paru Harapan Kita",
+    icon: "FaComment",
+  },
+  {
+    year: 2016,
+    title: "Penyusunan Studi Kelayakan",
+    authors: "Prof. Dr. Ede Surya Darmawan, Prof. Amal C Sjaaf dkk",
+    location: "RS Scolo Keyen, Sorong Selatan",
+    icon: "FaFile",
+  },
+  {
+    year: 2016,
+    title: "Survei Kepuasan Pelanggan Internal & Eksternal",
+    authors: "Drg. Indah Rosana, dkk",
+    location: "RS Sawah Besar",
+    icon: "IoHappy",
+  },
+  {
+    year: 2016,
+    title: "Pelatihan Rencana Strategis Pembangunan Kesehatan",
+    authors: "Prof. Dr. Ede Surya Darmawan, Prof. Dr. Adang Bachtiar, dkk",
+    location: "Dinas Kesehatan Provinsi Palu",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2016,
+    title: "Pelatihan Manajemen Pusat Kesehatan Masyarakat",
+    authors: "Prof. Dr. Ede Surya Darmawan, Drg. Indah Rosana dkk",
+    location: "Dinas Kesehatan Kabupaten Bogor",
+    icon: "FaHospital",
+  },
+  {
+    year: 2016,
+    title: "Evaluasi Klasifikasi INA-CBG Studi Kasus CMG I",
+    authors: "Budi Hidayat, Atik Nurwahyuni, dkk",
+    location: "Badan Penyelenggara Jaminan Sosial Kesehatan",
+    icon: "FaClipboardCheck",
+  },
+  {
+    year: 2016,
+    title:
+      "Konferensi Internasional Pertama tentang Administrasi Rumah Sakit (ICHA)",
+    authors: "Prof. Dr. Ede Surya Darmawan, dkk",
+    icon: "FaGlobe",
+  },
+  {
+    year: 2016,
+    title: "Program Pemberdayaan Masyarakat Promosi Kesehatan Ibu & Anak",
+    authors: "Prof. Dr. Ede Surya Darmawan, dkk",
+    location: "Kabupaten Cianjur",
+    icon: "FaBaby",
+  },
+  {
+    year: 2016,
+    title: "Program Pemberdayaan Masyarakat Pengelolaan Bank Sampah",
+    authors: "Prof. Dr. Dumilah Ayuningtyas, dkk",
+    location: "Kabupaten Cianjur",
+    icon: "FaRecycle",
+  },
+  {
+    year: 2016,
+    title: "Studi Kelayakan Pengembangan Rumah Sakit",
+    authors: "Prof. Dr. Ede Surya Darmawan, dkk",
+    location: "Pupuk Kujang",
+    icon: "FaFileMedical",
+  },
+  {
+    year: 2017,
+    title:
+      "Konferensi Internasional Kedua tentang Administrasi Rumah Sakit (ICHA)",
+    authors: "Prof. Ede S.D., dkk",
+    location: "Badan Penyelenggara Jaminan Sosial Kesehatan",
+    icon: "FaGlobe",
+  },
+  {
+    year: 2017,
+    title:
+      "Studi Efektivitas Implementasi Program Kader Jaminan Kesehatan Nasional",
+    authors: "Prof. Dr. Ede Surya Darmawan, Prof. Amal C Sjaaf dkk",
+    location: "Dinas Kesehatan Sulawesi Utara",
+    icon: "FaChartLine",
+  },
+  {
+    year: 2017,
+    title: "Studi Kelayakan Pengembangan Rumah Sakit Mata di Sulawesi Utara",
+    authors: "Prof. Dr. Ede Surya Darmawan, Prof. Amal C Sjaaf dkk",
+    location: "Dinas Kesehatan Sulawesi Utara",
+    icon: "FaEye",
+  },
+  {
+    year: 2017,
+    title: "Survei Kepuasan Karyawan",
+    authors: "RS Sulianti Saroso",
+    icon: "IoHappy",
+  },
+  {
+    year: 2017,
+    title: "Studi Kelayakan Pengembangan Rumah Sakit Umum di Sulawesi Utara",
+    authors: "Prof. Dr. Ede S.D., Prof. Amal C Sjaaf dkk",
+    location: "Dinas Kesehatan Sulawesi Utara",
+    icon: "FaHospital",
+  },
+  {
+    year: 2017,
+    title: "Studi Reklasifikasi Kelas Rumah Sakit",
+    authors: "Dr. Masitoh, dkk",
+    location: "Badan Penyelenggara Jaminan Sosial Kesehatan",
+    icon: "FaListOl",
+  },
+  {
+    year: 2017,
+    title: "Survei Kepuasan Masyarakat",
+    authors: "Dinas Kesehatan Jakarta Utara",
+    icon: "FaUsers",
+  },
+  {
+    year: 2017,
+    title: "Survei Budaya Keselamatan Pasien",
+    authors: "RS Persahabatan",
+    icon: "FaHeart",
+  },
+  {
+    year: 2017,
+    title: "Survei Kepuasan Karyawan",
+    authors: "RS Jantung & Paru Harapan Kita",
+    icon: "FaComment",
+  },
+  {
+    year: 2018,
+    title: "Survei Kepuasan Masyarakat",
+    authors: "Prof. Ede S.D. dkk",
+    location: "Dinas Kesehatan Jakarta Utara, Dinas Kesehatan DKI Jakarta",
+    icon: "FaUsers",
+  },
+  {
+    year: 2018,
+    title:
+      "Implementasi Public-Private Mix untuk Notifikasi Tuberkulosis di RS DKI Jakarta",
+    authors: "Prof. Ede S.D., Eny J.",
+    location: "Kabupaten Garut",
+    icon: "FaBed",
+  },
+  {
+    year: 2018,
+    title: "Pencegahan dan Pengendalian Penyakit",
+    authors: "Kabupaten Tapanuli Selatan",
+    icon: "FaShield",
+  },
+  {
+    year: 2018,
+    title: "Peningkatan Kapasitas Manajemen Pusat Kesehatan Masyarakat",
+    authors: "Kecamatan Tanah Abang",
+    icon: "FaHospitalUser",
+  },
+  {
+    year: 2018,
+    title: "Survei Kepuasan Pasien Pusat Kesehatan Masyarakat",
+    authors: "Puskesmas Pademangan",
+    icon: "FaUserCheck",
+  },
+  {
+    year: 2018,
+    title:
+      "Lokakarya Internasional tentang Peningkatan Kapasitas Tinjauan Etik pada Penelitian Kesehatan Masyarakat",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2018,
+    title: "Survei Kepuasan Masyarakat",
+    authors: "Prof. Ede S.D., Eny J.",
+    location: "Kabupaten Garut",
+    icon: "FaUsers",
+  },
+  {
+    year: 2018,
+    title: "Penyusunan Naskah Akademik Rancangan Peraturan Daerah",
+    location: "Dinas Kesehatan Jakarta Utara",
+    icon: "FaFileSignature",
+  },
+  {
+    year: 2018,
+    title: "Lokakarya Perencanaan Sumber Daya Manusia & Analisis Beban Kerja",
+    authors: "Prof. Dumilah A., Lilis K.",
+    location: "RS Universitas Indonesia",
+    icon: "FaUser",
+  },
+  {
+    year: 2018,
+    title: "Subkontraktor Persiapan Pra-Studi Kelayakan",
+    authors: "Prof. Dumilah A., Dr. Helen A.",
+    location: "RS Universitas Indonesia",
+    icon: "FaClipboardList",
+  },
+  {
+    year: 2018,
+    title:
+      "Perumusan Struktur Tarif Rumah Sakit & Survei Kemampuan Membayar (ATP)/Kemauan Membayar (WTP)",
+    location: "Suku Dinas Kesehatan Kepulauan Seribu",
+    icon: "FaMoneyBill",
+  },
+  {
+    year: 2019,
+    title: "Survei Kepuasan Masyarakat",
+    authors: "Suku Dinas Kesehatan Administrasi Kota Jakarta Utara",
+    icon: "FaUsers",
+  },
+  {
+    year: 2019,
+    title: "Konsultan Penilaian Manajemen/Keuangan/SDM",
+    icon: "FaBriefcase",
+  },
+  {
+    year: 2019,
+    title: "Lokakarya Perencanaan Kesehatan Berbasis Evaluasi",
+    authors: "Prof. Dumilah A., Dr. Puput O., Dr. Vetty Y.",
+    location: "Kementerian Kesehatan",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2019,
+    title: "Konsultan GCA dalam Penyiapan Dokumen Izin Lingkungan",
+    authors: "Prof. Amal C.S., Dr. Bambang S., Prof. Ede S.D.",
+    location: "Kabupaten Sorong Selatan",
+    icon: "FaFileContract",
+  },
+  {
+    year: 2019,
+    title:
+      "Survei Kepuasan Masyarakat tentang Upaya Kesehatan Masyarakat & Upaya Kesehatan Perorangan",
+    location: "Puskesmas Palmerah",
+    icon: "FaUsers",
+  },
+  {
+    year: 2019,
+    title: "Studi Kelayakan Pengembangan Rumah Sakit",
+    authors: "Prof. Amal C.S., Prof. Purnawan J.",
+    location: "Kabupaten Bangka Selatan, Indonesia",
+    icon: "FaHospital",
+  },
+  {
+    year: 2020,
+    title:
+      "Jasa Konsultasi Penyusunan Rencana Strategis Dinas Kesehatan 2021–2024",
+    authors: "Prof. Dumilah A. dkk",
+    location: "Kabupaten Way Kanan",
+    icon: "FaCommentMedical",
+  },
+  {
+    year: 2020,
+    title: "Survei Kepuasan Masyarakat",
+    location: "Puskesmas Kecamatan Koja, Jakarta Utara",
+    icon: "FaUsers",
+  },
+  {
+    year: 2020,
+    title: "Seri Lokakarya Penilaian Dampak Regulasi",
+    authors: "Prof. Dumilah Ayuningtyas, dkk",
+    location: "Badan Pengawas Obat & Makanan",
+    icon: "FaScaleBalanced",
+  },
+  {
+    year: 2020,
+    title:
+      "Studi Eksplorasi Layanan Primer Terintegrasi untuk Ko-Manajemen Tuberkulosis & Diabetes Melitus",
+    authors: "Prof. Ede Surya Darmawan, Dr. Vetty Y., dkk",
+    location: "Universitas Brawijaya",
+    icon: "FaStethoscope",
+  },
+  {
+    year: 2020,
+    title:
+      "Studi Kelayakan Rumah Sakit Akademik Universitas Brawijaya untuk RRP Internasional",
+    authors: "Prof. Dumilah A., Dr. Helen A.",
+    icon: "FaBookMedical",
+  },
+  {
+    year: 2020,
+    title: "Pelatihan Diplomasi Kesehatan Global",
+    authors: "Prof. Adik Wibowo, dkk",
+    location: "WHO & Global Health Initiative Indonesia",
+    icon: "FaGlobe",
+  },
+  {
+    year: 2020,
+    title:
+      "Lokakarya Penyusunan Perencanaan Strategis Berbasis Balance Scorecard",
+    authors: "Prof. Wahyu S., Prof. Dumilah A., Prof. Ede S.D., Dr. Vetty Y.",
+    location: "Kementerian Dalam Negeri, Indonesia",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2021,
+    title: "Penyusunan Kebijakan Institusi Pendidikan Tinggi Swasta & Khusus",
+    authors: "Dr. Puput Oktamianty, dkk",
+    location: "Kementerian Kesehatan, Direktorat Tenaga Kesehatan",
+    icon: "FaBuildingColumns",
+  },
+  {
+    year: 2021,
+    title:
+      "Survei Kepuasan Masyarakat tentang Upaya Kesehatan Masyarakat & Perorangan",
+    location: "Puskesmas Kecamatan Tanah Abang",
+    icon: "FaUsers",
+  },
+  {
+    year: 2022,
+    title:
+      "Tuan Rumah Utama Gugus Tugas 6 Ketahanan Kesehatan Global dan COVID-19",
+    authors: "Dr. Hasbullah, Dr. Puput Oktamianty, dkk",
+    location: "T20 Indonesia",
+    icon: "FaVirus",
+  },
+  {
+    year: 2022,
+    title:
+      "Penyusunan Naskah Akademik Strategi Nasional Pengembangan Tenaga Kesehatan",
+    location: "Kementerian Kesehatan",
+    icon: "FaBook",
+  },
+  {
+    year: 2022,
+    title: "Survei Kepuasan Pasien",
+    location:
+      "RS Persahabatan, RS Pusat Otak Nasional, RS Ketergantungan Obat Jakarta, RS Jantung & Paru Harapan Kita",
+    icon: "FaUserCheck",
+  },
+  {
+    year: 2022,
+    title: "Survei Kepuasan Masyarakat",
+    location: "Puskesmas Kecamatan Koja, Puskesmas Kecamatan Palmerah",
+    icon: "FaUsers",
+  },
+  {
+    year: 2022,
+    title: "Survei Kepuasan Karyawan & Survei Budaya Keselamatan Pasien",
+    location: "RS Fatmawati",
+    icon: "IoHappy",
+  },
+  {
+    year: 2023,
+    title: "Studi Reformasi Layanan Kesehatan Primer",
+    location: "Kabupaten Garut",
+    icon: "FaHouseMedical",
+  },
+  {
+    year: 2023,
+    title: "Strategi Pembiayaan Perlindungan Sosial untuk Mencapai SDGs",
+    location: "Asian Development Bank",
+    icon: "FaCoins",
+  },
+  {
+    year: 2023,
+    title:
+      "Penguatan Perawatan Lansia – Spesialis Keuangan Perawatan Jangka Panjang",
+    location: "Asian Development Bank",
+    icon: "FaUserDoctor",
+  },
+  {
+    year: 2023,
+    title: "Studi Operasional Dana Pendukung Tuberkulosis Resisten Obat",
+    authors: "Dr. Agustin K., dkk",
+    location: "Penabulu-STPI",
+    icon: "FaVials",
+  },
+  {
+    year: 2023,
+    title: "Seri Lokakarya Penilaian Dampak Regulasi",
+    authors: "Prof. Dumilah A., Dr. Vetty Y., dkk",
+    location: "Badan Pengawas Obat & Makanan",
+    icon: "FaScaleBalanced",
+  },
+  {
+    year: 2023,
+    title: "Survei Kepuasan Pasien & Kepuasan Karyawan",
+    location: "Harapan Kita, RSUP Fatmawati",
+    icon: "IoHappy",
+  },
+  {
+    year: 2024,
+    title: "Diseminasi Penguatan Layanan Rawat Inap",
+    authors: "Prof. Wahyu S., dkk",
+    location: "RS Cicendo",
+    icon: "FaBed",
+  },
+  {
+    year: 2024,
+    title: "Studi Kelayakan dan Perencanaan Strategis Rumah Sakit",
+    authors: "Prof. Ede S.D., Dr. Vetty Y., dkk",
+    icon: "FaFileMedical",
+  },
+  {
+    year: 2024,
+    title: "Rencana Strategis Dinas Kesehatan",
+    authors: "Prof. Ede S.D., Dr. Budi H., dkk",
+    location: "Badan Perencanaan Pembangunan Nasional",
+    icon: "FaClipboard",
+  },
+  {
+    year: 2024,
+    title: "Penelitian Pengembangan Rumah Sakit Syariah",
+    authors: "Prof. Wahyu S., dkk",
+    location: "Bank Indonesia",
+    icon: "FaMosque",
+  },
+  {
+    year: 2024,
+    title: "Peningkatan Kapasitas Advokasi Tuberkulosis Resisten Obat",
+    authors:
+      "Prof. Adang B., Prof. Ede S.D., Prof. Dumilah A., Dr. Prastuti S., dkk",
+    location: "Kementerian Kesehatan, USAID & MSH",
+    icon: "FaBiohazard",
+  },
+  {
+    year: 2024,
+    title:
+      "Evaluasi Pasca Pelatihan Komunikasi Antarpribadi untuk Tenaga Kesehatan",
+    authors: "Prof. Ede S.D., dkk",
+    location: "Puslatkesda DKI Jakarta",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2024,
+    title: "Pelatihan Penyusunan Rencana Strategis Daerah Bidang Kesehatan",
+    authors: "Prof. Dumilah A., Dr. Puput O., dkk",
+    location: "Kementerian Kesehatan",
+    icon: "FaClipboardList",
+  },
+  {
+    year: 2024,
+    title: "Pelatihan Kepemimpinan dan Diplomasi Kesehatan Global",
+    authors: "Dr. Vetty Y., dkk",
+    location: "Kementerian Kesehatan",
+    icon: "FaGlobe",
+  },
+  {
+    year: 2024,
+    title: "Dialog Kebijakan: Optimalisasi Skrining Tiroid di Indonesia",
+    authors: "Prof. Ede S.D., dkk",
+    location: "MERCK",
+    icon: "FaMicroscope",
+  },
+  {
+    year: 2024,
+    title: "Survei Kepuasan Karyawan",
+    location: "RS Fatmawati",
+    icon: "IoHappy",
+  },
+];

@@ -1,0 +1,164 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+
+// 1a. i18n & Language Utilities
+import { useTranslations } from "@/i18n/utils.ts";
+import type { Language } from "@/i18n/ui.ts";
+
+// 1b. Project Configuration
+import { i18n } from "@/config.ts";
+
+// 1c. Layouts & Page Structure
+import Base from "@/layouts/Base.astro";
+import Hero from "@/layouts/blocks/Hero.astro";
+import Stats from "@/layouts/blocks/Stats.astro";
+import { MarqueeHome } from "@/layouts/blocks/MarqueeHome.tsx";
+
+// 1d. UI Components
+import CardNewsSm from "@/components/CardNewsSm.astro";
+import Quote from "@/components/ui-astro/Quote.astro";
+
+// 1e. Content & Data Utilities
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { sortByDate } from "@/lib/utils/sortFunctions";
+import { cn } from "@/lib/utils.ts";
+
+// =================================================================================
+// 2. ROUTING & LANGUAGE VALIDATION
+// =================================================================================
+
+// Generate a static page for each supported language
+export async function getStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+// Get and validate the language from the URL parameter
+const { lang } = Astro.params;
+if (!i18n.locales.includes(lang)) {
+  throw new Error(
+    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+  );
+}
+
+// =================================================================================
+// 3. DATA FETCHING & PROCESSING
+// =================================================================================
+
+// Initialize the translation function for the current language
+const t = useTranslations(lang as Language);
+
+// Fetch all news posts from the content folder
+const NEWS_FOLDER = "news";
+const allPosts = await getSinglePage(NEWS_FOLDER);
+
+// Sort all posts, then filter by the current language, and take the 3 most recent
+const currentPosts = sortByDate(allPosts)
+  .filter((post) => post.id && post.id.startsWith(`${lang}/`))
+  .slice(0, 3);
+
+// =================================================================================
+// 4. PAGE METADATA FOR INDEX
+// =================================================================================
+
+const content = {
+  title: t("nav.home"),
+  description: t("site.description"),
+  image: "/og-images/champs-homepage.png", // NOTE: Create this social sharing image (1200x630px)
+  imageAlt: t("hero.subtitle"),
+  canonical: Astro.url.href,
+};
+---
+
+<Base {content} makara={true}>
+  <div class="bg-background">
+    <Hero
+      actions={[
+        {
+          text: t("hero.action.contact"),
+          href: "https://wa.me/6281324096624",
+          target: "_blank",
+          icon: "FaWhatsapp",
+          size: "lg",
+        },
+        {
+          text: t("hero.action.expertise"),
+          icon: "FaUsers",
+          href: `/${lang}/what-we-do`,
+          size: "lg",
+        },
+      ]}
+      imageBg={{
+        src: "/images/hero-bg.webp",
+        height: 512,
+        width: 1024,
+        alt: "Hero Image",
+      }}
+    >
+      <Fragment slot="tagline">{t("hero.tagline")}</Fragment>
+      <Fragment slot="title">{t("hero.title")}</Fragment>
+      <Fragment slot="subtitle">
+        <span class="hidden sm:block">{t("hero.subtitle")}</span>
+      </Fragment>
+    </Hero>
+
+    <section class="mx-auto mb-20 p-6 xl:gap-16">
+      <MarqueeHome client:load />
+    </section>
+  </div>
+
+  <div
+    class="via-primary/30 h-px w-full bg-gradient-to-r from-transparent to-transparent"
+  >
+  </div>
+
+  <Quote
+    className="relative mx-auto my-3 w-fit max-w-4xl flex-nowrap text-center text-lg"
+    quote={t("quote.champs")}
+  />
+
+  <Stats
+    title={t("stats.title")}
+    subtitle={t("stats.subtitle")}
+    stats={[
+      { title: t("stats.item1"), amount: "4" },
+      { title: t("stats.item2"), amount: "3" },
+      { title: t("stats.item3"), amount: "2" },
+      { title: t("stats.item4"), amount: "3" },
+      { title: t("stats.item5"), amount: "2" },
+      { title: t("stats.item6"), amount: "1" },
+      { title: t("stats.item7"), amount: "1" },
+      { title: t("stats.item8"), amount: "2" },
+    ]}
+  />
+
+  <div
+    class="via-primary/30 h-px w-full bg-gradient-to-r from-transparent to-transparent"
+  >
+  </div>
+
+  <!-- News posts cards -->
+  <section
+    class={cn(
+      "intersect-once intersect-quarter intercept-no-queue motion-safe:md:intersect:animate-fade-in motion-safe:md:opacity-0",
+      "mx-auto my-20 max-w-6xl p-6 xl:gap-16",
+    )}
+  >
+    <header class="mb-4 flex flex-wrap items-baseline justify-between">
+      <p class="text-3xl font-bold">{t("news.latest")}</p>
+      <a class="link" href={`/${lang}/news`}>{t("news.all")}</a>
+    </header>
+    <div class="grid h-fit gap-4 lg:grid-cols-3">
+      {
+        currentPosts.map((post) => (
+          <div class="col-span-1 mb-6">
+            <CardNewsSm data={post} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Base>

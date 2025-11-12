@@ -1,0 +1,66 @@
+---
+import { SETTINGS } from "@/config.ts";
+import dateFormat from "@/lib/utils/dateFormat";
+import { humanize, plainify, slugify } from "@/lib/utils/textConverter";
+
+import Button from "@/components/ui-astro/Button.astro";
+import Card from "@/components/blocks/Card.astro"; // <-- Import the new core component
+import { getLangFromUrl } from "@/i18n/utils";
+
+const { summary_length, news_folder } = SETTINGS;
+const { data } = Astro.props;
+const { title, categories, date } = data.data;
+
+const firstImage = data.data.images?.[0];
+---
+
+<Card
+  href={`/${data.id.split("/")[0]}/${news_folder}/${data.id.split("/")[1]}`}
+  title={title}
+  imageMeta={firstImage}
+  imageAlt={firstImage.alt}
+  headingLevel="h3"
+>
+  <div class="mt-2 flex flex-col gap-4">
+    {
+      categories?.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {categories.map((category: string) => (
+            <a
+              href={`/tags/${slugify(category)}`}
+              class="text-primary border-primary bg-primary/5 flex h-[18px] w-fit shrink-0 items-center gap-1.5 rounded-xs border border-dotted px-1 font-mono text-[0.625rem] leading-6"
+            >
+              {humanize(category)}
+            </a>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      date && (
+        <div class="text-foreground/70 flex items-center">
+          <time class="flex flex-wrap gap-2 font-mono text-sm">
+            {dateFormat(date)}
+          </time>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="mt-2 border-t pt-2 sm:pl-6 md:col-span-1">
+    <p class="mt-2 mb-2 line-clamp-3">
+      {plainify(data.body?.slice(0, summary_length)) + "..."}
+    </p>
+  </div>
+
+  <div slot="footer">
+    <Button
+      variant="default"
+      href={`/${data.id.split("/")[0]}/${news_folder}/${data.id.split("/")[1]}`}
+      className="bg-primary/60 dark:bg-primary dark:hover:bg-primary/60"
+    >
+      Read More
+    </Button>
+  </div>
+</Card>

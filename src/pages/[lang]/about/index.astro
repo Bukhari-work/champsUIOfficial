@@ -1,0 +1,104 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+
+import type { SideBarProps } from "@/types.ts";
+import type { Language } from "@/i18n/ui.ts";
+import { useTranslations } from "@/i18n/utils.ts";
+import { i18n } from "@/config.ts";
+import AboutLayout from "@/layouts/AboutLayout.astro";
+import Quote from "@/components/ui-astro/Quote.astro";
+import { navigation } from "@/navigation.ts";
+import { Image } from "astro:assets";
+
+// =================================================================================
+// 2. ROUTING & LANGUAGE VALIDATION
+// =================================================================================
+
+export async function getStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params;
+if (!i18n.locales.includes(lang)) {
+  throw new Error(
+    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+  );
+}
+
+// =================================================================================
+// 3. DATA & PROPS PREPARATION
+// =================================================================================
+
+const t = useTranslations(lang as Language);
+const nav = navigation[lang as keyof typeof navigation];
+
+// Create the sideBar constant by mapping over the imported data
+const sideBar: SideBarProps = {
+  title: t(nav.bars.about.titleKey),
+  menuItems: nav.bars.about.links.map((item) => ({
+    text: t(item.textKey),
+    href: item.href,
+    "aria-label": t(item.textKey), // Use the textKey for proper translation
+  })),
+};
+
+// Prop for the <Base> layout (title for the browser tab, SEO, etc.)
+const content = { title: t("nav.about") };
+---
+
+<AboutLayout {content} {sideBar}>
+  <h1
+    class="font-lexend text-primary mt-8 mb-2 w-fit scroll-mt-24 text-6xl font-semibold"
+  >
+    {t("about.visionTitle")}
+  </h1>
+  <Quote
+    quote={t("about.visionQuote")}
+    className="not-prose font-lexend -mb-4 pl-0 text-center text-2xl"
+  />
+  <p>{t("about.p1")}</p>
+  <p>{t("about.p2")}</p>
+  <p>{t("about.p3")}</p>
+  <p>{t("about.work.title")}</p>
+  <ul>
+    <li>
+      <strong>{t("about.work.item1.title")}</strong>
+      {t("about.work.item1.desc")}
+    </li>
+    <li>
+      <strong>{t("about.work.item2.title")}</strong>
+      {t("about.work.item2.desc")}
+    </li>
+    <li>
+      <strong>{t("about.work.item3.title")}</strong>
+      {t("about.work.item3.desc")}
+    </li>
+    <li>
+      <strong>{t("about.work.item4.title")}</strong>
+      {t("about.work.item4.desc")}
+    </li>
+  </ul>
+  <hr class="!bg-primary/10 my-8 !h-px w-full !border-0 border-t" />
+  <p class="text-center">
+    {t("about.contactText")}
+    <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
+  </p>
+
+  <div slot="aside">
+    <div
+      class="bg-primary/20 dark:bg-primary/80 w-fit transition-transform duration-1000 hover:scale-102"
+    >
+      <Image
+        src="/images/about.webp"
+        alt="CHAMPS' Director"
+        width={250}
+        height={750}
+        class="p-2"
+      />
+    </div>
+  </div>
+</AboutLayout>

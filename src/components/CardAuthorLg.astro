@@ -1,0 +1,130 @@
+---
+import { SETTINGS } from "@/config.ts";
+
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+import { cn } from "@/lib/utils.ts";
+
+import Social from "@/components/Social.astro";
+import Button from "@/components/ui-astro/Button.astro";
+
+// Properties
+const { people_folder } = SETTINGS;
+
+const { person, className } = Astro.props;
+const { name, responsibility, image, social } = person.data;
+const { Content } = await render(person);
+
+// Generate unique IDs for each card instance to avoid conflicts
+const uniqueId = person.id.replace(/[^a-zA-Z0-9]/g, ""); // Sanitize ID for use in HTML
+const contentBoxId = `contentBox-${uniqueId}`;
+const toggleButtonId = `toggleButton-${uniqueId}`;
+const fadeOverlayId = `fadeOverlay-${uniqueId}`;
+const patternId = `pattern-${uniqueId}`;
+---
+
+<article
+  class={cn(
+    "group hover:border-primary bg-background relative isolate grid grid-cols-1 gap-6 overflow-hidden rounded-xl border-2 p-6 duration-100  hover:shadow-xl dark:shadow-primary/20",
+    className,
+  )}
+  transition:name={`person-card-${person.id}`}
+>
+  <div class="lg:grid lg:grid-cols-[1fr_2fr] lg:gap-8">
+    <!-- Left Grid -->
+    <div
+      class="flex flex-col items-center text-center lg:items-start lg:text-left"
+    >
+      {
+        image && (
+          <a
+            class="relative mb-6 h-75 w-75 self-center overflow-hidden rounded-xl lg:mt-6 lg:shrink-0"
+            href={`/${people_folder}/${person.id}`}
+          >
+            <Image
+              class="size-full object-cover"
+              src={image.src}
+              alt={name}
+              width={445}
+              height={230}
+              format="webp"
+              transition:name={`person-image-${person.id}`}
+            />
+          </a>
+        )
+      }
+
+      <header class="mb-4">
+        <h2 class="group-hover:text-primary text-xl font-bold">
+          <a href={`/${people_folder}/${person.id}`} class="inline-block">
+            <span transition:name={`person-name-${person.id}`}>{name}</span>
+          </a>
+        </h2>
+        <h3
+          class="text-text/80 mt-1 text-sm font-light"
+          transition:name={`person-role-${person.id}`}
+        >
+          {responsibility}
+        </h3>
+      </header>
+      <Social
+        socialLinks={social}
+        className="my-4 flex-wrap justify-center lg:justify-start"
+      />
+    </div>
+
+    <!-- Right Grid -->
+    <div class="flex flex-col justify-start text-left lg:border-l-2 lg:pl-8">
+      <div class="relative mt-2 pt-2">
+        <div
+          id={contentBoxId}
+          class="prose dark:prose-invert max-w-none overflow-hidden transition-[max-height] duration-500 ease-in-out"
+          style="max-height: 450px"
+        >
+          <Content />
+          <div
+            id={fadeOverlayId}
+            class="from-background absolute bottom-0 left-0 h-32 w-full bg-gradient-to-t to-transparent transition-opacity duration-500 ease-in-out"
+          >
+          </div>
+        </div>
+        <div class="mt-4 flex w-full justify-center lg:justify-start">
+          <Button
+            class="z-10"
+            id={toggleButtonId}
+            onclick={`toggleContent('${contentBoxId}', '${toggleButtonId}', '${fadeOverlayId}')`}
+            variant="outline"
+          >
+            Read more
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<script is:inline>
+  function toggleContent(contentBoxId, toggleButtonId, fadeOverlayId) {
+    const contentBox = document.getElementById(contentBoxId);
+    const toggleButton = document.getElementById(toggleButtonId);
+    const fadeOverlay = document.getElementById(fadeOverlayId);
+
+    if (!contentBox || !toggleButton || !fadeOverlay) return;
+
+    const isExpanded = contentBox.classList.contains("expanded");
+
+    if (!isExpanded) {
+      // Expand
+      contentBox.style.maxHeight = contentBox.scrollHeight + "px";
+      contentBox.classList.add("expanded");
+      toggleButton.textContent = "Read less";
+      fadeOverlay.classList.add("opacity-0"); // Fade out
+    } else {
+      // Collapse
+      contentBox.style.maxHeight = "450px";
+      contentBox.classList.remove("expanded");
+      toggleButton.textContent = "Read more";
+      fadeOverlay.classList.remove("opacity-0"); // Fade in
+    }
+  }
+</script>

@@ -1,0 +1,46 @@
+---
+import type { SideBarProps } from "@/types.ts";
+import { cn } from "@/lib/utils.ts";
+
+type Props = SideBarProps;
+const { title, menuItems, className } = Astro.props;
+
+// Get the current page's path to determine the active link
+const { pathname } = Astro.url;
+
+// Define classes for the active link state
+const activeLinkClasses =
+  "border-primary/50 bg-primary/5 dark:border-primary/40 dark:bg-primary/12 text-primary";
+---
+
+<div class={cn("col-span-7 lg:col-span-1", className)} id="sidebar">
+  <nav class="sticky top-24 pt-0 lg:pt-10">
+    <div
+      class="font-trajan text-primary text-md border-b px-0 py-2.5 text-center lg:border-b-0 lg:border-l lg:px-2 lg:text-left"
+    >
+      {title}
+    </div>
+    <ul class="lg:text-md flex overflow-x-auto text-sm lg:flex-col">
+      {
+        menuItems.map((item) => {
+          return (
+            <li class="flex w-full flex-1">
+              <a
+                href={item.href}
+                class:list={[
+                  "lg-py-1 hover:bg-primary/5 dark:hover:bg-primary/12 w-full shrink-0 border-b p-2.5 text-center text-nowrap focus-visible:[outline-offset:-4px]! lg:border-b-0 lg:border-l lg:px-4 lg:text-left",
+                  {
+                    [activeLinkClasses]:
+                      item.href && pathname.endsWith(item.href.toString()),
+                  },
+                ]}
+              >
+                {item.text}
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </nav>
+</div>

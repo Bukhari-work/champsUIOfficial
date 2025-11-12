@@ -1,0 +1,43 @@
+---
+import { cn } from "@/lib/utils";
+
+export interface Props {
+  as?: "article" | "div" | "li" | "section";
+  class?: string;
+  id?: string;
+}
+
+const { as: Element = "article", class: className, id } = Astro.props;
+const patternId = `pattern-${id || crypto.randomUUID().slice(0, 8)}`;
+---
+
+<Element
+  class={cn(
+    "group hover:border-primary bg-background relative isolate overflow-hidden rounded-xl border-2 p-6 duration-100 hover:[box-shadow:_var(--sh-alt)]",
+    className, // Allows overrides for padding, border, etc.
+  )}
+>
+  <svg
+    class="text-primary pointer-events-none invisible absolute inset-0 z-[-1] size-full [mask-image:linear-gradient(to_left,_#ffffffad,_transparent)] opacity-100 select-none group-hover:visible dark:opacity-80"
+  >
+    <defs>
+      <pattern
+        id={patternId}
+        width="4"
+        height="4"
+        patternUnits="userSpaceOnUse"
+        patternTransform="rotate(45)"
+      >
+        <line
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="4"
+          stroke="currentColor"
+          stroke-width="1.5"></line>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill={`url(#${patternId})`}></rect>
+  </svg>
+  <slot />
+</Element>
