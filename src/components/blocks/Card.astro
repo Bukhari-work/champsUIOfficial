@@ -1,0 +1,112 @@
+---
+import { Image } from "astro:assets";
+import { cn } from "@/lib/utils";
+
+export interface Props {
+  href?: string; // <-- Make href optional
+  title: string;
+  imageMeta?: ImageMetadata;
+  imageAlt?: string;
+  headingLevel?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  size?: "default" | "small";
+  class?: string;
+}
+
+const {
+  href,
+  title,
+  imageMeta,
+  imageAlt,
+  headingLevel: Heading = "h2",
+  size = "default",
+  class: className,
+} = Astro.props;
+
+const isSmall = size === "small";
+const patternId = `pattern-${crypto.randomUUID().slice(0, 8)}`;
+
+// Use a generic 'Wrapper' component for link or non-link
+const Wrapper = href ? "a" : "div";
+---
+
+<article
+  class={cn(
+    "group hover:border-primary bg-background relative isolate flex flex-col overflow-hidden duration-100 hover:[box-shadow:_var(--sh-alt)]",
+    isSmall
+      ? "gap-3 rounded-lg border p-4 hover:-translate-y-2"
+      : "gap-6 rounded-xl border-2 p-6 hover:-translate-y-3",
+    className,
+  )}
+>
+  {/* SVG background pattern */}
+  <svg
+    class="text-primary pointer-events-none invisible absolute inset-0 z-[-1] size-full [mask-image:linear-gradient(to_left,_#ffffffad,_transparent)] opacity-100 select-none group-hover:visible dark:opacity-80"
+  >
+    <defs>
+      <pattern
+        id={patternId}
+        width="4"
+        height="4"
+        patternUnits="userSpaceOnUse"
+        patternTransform="rotate(45)"
+      >
+        <line
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="4"
+          stroke="currentColor"
+          stroke-width="1.5"></line>
+      </pattern>
+    </defs>
+    <rect width="100%" height="100%" fill={`url(#${patternId})`}></rect>
+  </svg>
+
+  {
+    Astro.slots.has("media") ? (
+      <slot name="media" />
+    ) : (
+      imageMeta && (
+        <Wrapper
+          href={href}
+          class={cn(
+            "relative overflow-hidden",
+            isSmall ? "h-32 rounded-md" : "h-48 rounded-lg md:h-64",
+          )}
+        >
+          <Image
+            class="h-full w-full object-cover"
+            src={imageMeta.src}
+            alt={imageAlt || title}
+            width={isSmall ? 320 : 445}
+            height={isSmall ? 180 : 230}
+            format="webp"
+          />
+        </Wrapper>
+      )
+    )
+  }
+
+  {/* Content Column */}
+  <div class="flex flex-1 flex-col justify-between">
+    <section>
+      <header>
+        <Heading
+          class={cn(
+            "group-hover:text-primary font-bold",
+            isSmall ? "text-base font-semibold" : "text-xl",
+            href && "line-clamp-2",
+          )}
+        >
+          <Wrapper href={href}>{title}</Wrapper>
+        </Heading>
+      </header>
+
+      <slot />
+    </section>
+
+    <div class="mt-auto pt-2">
+      <slot name="footer" />
+    </div>
+  </div>
+</article>

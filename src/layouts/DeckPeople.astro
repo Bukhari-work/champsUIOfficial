@@ -1,0 +1,141 @@
+---
+import CardAuthor from "@/components/CardAuthor.astro";
+
+const { people } = Astro.props;
+---
+
+<section>
+  <div class="swiper">
+    <div
+      class="from-background pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-1/3 bg-gradient-to-r md:block"
+    >
+    </div>
+    <div
+      class="from-background pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-1/3 bg-gradient-to-l md:block"
+    >
+    </div>
+    <div class="peopleDeck-slider mx-auto overflow-hidden rounded-xl p-4">
+      <div class="swiper-wrapper">
+        {
+          people.map((person: any) => (
+            <div class="swiper-slide max-w-sm sm:max-w-xs">
+              <CardAuthor data={person} />
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Pagination buttons -->
+      <div class="flex h-20 items-center">
+        <div
+          class:list={[
+            "person-slider-pagination",
+            "flex items-center justify-center text-center",
+          ]}
+        >
+        </div>
+        <!-- Navigation buttons -->
+        <div
+          class:list={[
+            "swiper-button-prev flex",
+            "absolute left-1/4 z-10 mx-10 h-11 w-11",
+            "bg-primary/10 transform cursor-pointer items-center justify-center rounded-full text-xl select-none hover:bg-black/60 dark:hover:bg-white/60",
+          ]}
+        >
+          &#10094;
+        </div>
+        <div
+          class:list={[
+            "swiper-button-next flex",
+            "absolute right-1/4 z-10 mx-10 h-11 w-11",
+            "bg-primary/10 transform cursor-pointer items-center justify-center rounded-full text-xl select-none hover:bg-black/60 dark:hover:bg-white/60",
+          ]}
+        >
+          &#10095;
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { Swiper } from "swiper";
+  import type { Swiper as SwiperType } from "swiper"; // Add type import
+  import "swiper/css";
+  import "swiper/css/pagination";
+  import "swiper/css/effect-coverflow";
+  import { Pagination, EffectCoverflow, Navigation } from "swiper/modules";
+
+  // Explicitly type the swiper instance
+  let swiperInstance: SwiperType | null = null;
+
+  function destroySwiper() {
+    if (swiperInstance) {
+      swiperInstance.destroy(true, true);
+      swiperInstance = null;
+    }
+  }
+
+  function initSwiper() {
+    const savedSlide =
+      Math.max(
+        0,
+        parseInt(localStorage.getItem("peopleDeckActiveSlide") || "0", 10),
+      ) || 0;
+
+    swiperInstance = new Swiper(".peopleDeck-slider", {
+      effect: "coverflow",
+      slidesPerView: "auto",
+      centeredSlides: true,
+      modules: [Pagination, Navigation, EffectCoverflow],
+      pagination: {
+        el: ".person-slider-pagination",
+        type: "fraction",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+        enabled: true,
+        addIcons: false,
+      },
+      breakpoints: {
+        // For small screens (default settings)
+        0: {
+          coverflowEffect: {
+            rotate: 0,
+            stretch: 50,
+            depth: 0,
+            modifier: -1,
+            slideShadows: false,
+          },
+        },
+        // For large screens (viewport width >= 1024px)
+        1024: {
+          coverflowEffect: {
+            rotate: 0,
+            stretch: 50,
+            depth: 10,
+            modifier: -1,
+            slideShadows: false,
+          },
+          navigation: {
+            enabled: true,
+          },
+        },
+      },
+      initialSlide: savedSlide,
+      on: {
+        slideChange: (swiper) => {
+          localStorage.setItem(
+            "peopleDeckActiveSlide",
+            swiper.activeIndex.toString(),
+          );
+        },
+      },
+    }) as SwiperType; // Type assertion here
+  }
+
+  document.addEventListener("astro:before-swap", destroySwiper);
+  document.addEventListener("astro:page-load", initSwiper);
+</script>

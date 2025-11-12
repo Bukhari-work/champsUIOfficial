@@ -1,0 +1,37 @@
+---
+import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
+import { cn } from "@/lib/utils";
+import type { Link } from "@/types.ts";
+
+interface Props {
+  socialLinks?: Array<Link>;
+  className?: string;
+  childClassName?: string;
+}
+
+const { className, socialLinks = [], childClassName } = Astro.props;
+---
+
+{
+  socialLinks?.length ? (
+    <ul class={cn("mb-4 -ml-2 flex md:mb-0", className)}>
+      {socialLinks.map(({ ariaLabel, href, icon, platform, text }) => (
+        <li>
+          <a
+            class={cn(
+              "hover:bg-primary/20 dark:hover:bg-primary/12 inline-flex items-center rounded-lg p-2 text-sm",
+              childClassName,
+            )}
+            aria-label={ariaLabel}
+            href={href}
+          >
+            {icon && <DynamicIcon icon={icon} className="h-5 w-5 mx-1" />}
+            <Fragment set:html={text} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    ""
+  )
+}

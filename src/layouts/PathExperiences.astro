@@ -1,0 +1,207 @@
+---
+// src/pages/ExperiencePath.astro
+import ExperienceCard from "@/components/CardExperience.astro";
+import { ui } from "@/i18n/ui.ts";
+
+// 1. UPDATE these imports to use the .ts files and named exports
+import { experiencesEn } from "@/data/experiences.en.ts";
+import { experiencesId } from "@/data/experiences.id.ts";
+
+// 3. Get current locale and select correct strings AND data
+const lang = (Astro.currentLocale ?? "en") as keyof typeof ui;
+const t = ui[lang]; // Get all UI strings for the current language
+const experiences = lang === "id" ? experiencesId : experiencesEn;
+
+// --- Get unique years for tabs, sorted from NEWEST to OLDEST ---
+const uniqueYears = [...new Set(experiences.map((exp) => exp.year))].sort(
+  (a, b) => b - a,
+);
+
+// 3. Create tabs using the string from ui.ts
+const allButtonValue = "All"; // This value MUST stay "All" for the script
+const allButtonText = t["experiences.allButton"]; // This is the translated text
+const tabs = [
+  { text: allButtonText, value: allButtonValue },
+  ...uniqueYears.map((year) => ({
+    text: year.toString(),
+    value: year.toString(),
+  })),
+];
+
+const activeYearValue = "All"; // Initial active tab
+
+// --- Initial SVG Path Calculation (for the "All" view) ---
+const segmentHeight = 100;
+const amplitude = 40;
+const totalPathHeight = experiences.length * segmentHeight;
+const firstCurve = `Q ${amplitude} ${segmentHeight / 2} 0 ${segmentHeight}`;
+const subsequentCurves = Array.from(
+  { length: experiences.length - 1 },
+  (_, i) => `T 0 ${(i + 2) * segmentHeight}`,
+).join(" ");
+const pathData = `M 0 0 ${firstCurve} ${subsequentCurves}`;
+---
+
+<article class="mx-auto max-w-6xl px-6 xl:w-4xl">
+  <div
+    id="experience-tabs"
+    class="mb-10 flex flex-wrap justify-center gap-2 md:gap-3"
+  >
+    {
+      tabs.map((tab) => (
+        <button
+          type="button"
+          data-year={tab.value}
+          class:list={[
+            "experience-tab-trigger rounded-sm border px-4 py-2 text-sm font-medium transition-colors md:text-base",
+            tab.value === activeYearValue
+              ? "bg-primary/20 border-primary"
+              : "hover:bg-primary/20 hover:border-primary bg-transparent",
+          ]}
+        >
+          {tab.text}{" "}
+        </button>
+      ))
+    }
+  </div>
+
+  <section class="relative">
+    <svg
+      id="timeline-path-svg"
+      class="absolute top-0 left-1/2 -z-10 hidden h-full w-20 -translate-x-1/2 md:flex"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox={`-${amplitude} 0 ${amplitude * 2} ${totalPathHeight}`}
+      preserveAspectRatio="none"
+    >
+      <path
+        id="timeline-path"
+        d={pathData}
+        fill="transparent"
+        stroke="currentColor"
+        class="text-gray-300 dark:text-gray-600"
+        stroke-width="4"
+        stroke-dasharray="8 6"
+      >
+      </path>
+    </svg>
+
+    <div id="experience-list">
+      {
+        experiences
+          .slice()
+          .reverse()
+          .map((exp, index) => {
+            const isEven = index % 2 === 0;
+            const containerClasses = `justify-end ${
+              isEven ? "md:justify-start" : ""
+            }`;
+
+            return (
+              <div
+                class={`experience-item relative mb-8 flex w-full ${containerClasses}`}
+                data-year={exp.year}
+                hidden={
+                  activeYearValue !== "All" &&
+                  exp.year.toString() !== activeYearValue
+                }
+              >
+                <ExperienceCard exp={exp} isEven={isEven} />
+              </div>
+            );
+          })
+      }
+    </div>
+  </section>
+
+  <script>
+    // This script remains completely unchanged.
+    // It works because the `data-year` for the "All" button
+    // is still "All", even if its text is "Semua".
+    document.addEventListener("astro:page-load", () => {
+      const tabContainer = document.getElementById("experience-tabs");
+      const svgElement = document.getElementById(
+        "timeline-path-svg",
+      ) as SVGElement | null;
+      const pathElement = document.getElementById(
+        "timeline-path",
+      ) as SVGPathElement | null;
+      if (!tabContainer || !svgElement || !pathElement) return;
+
+      const items = document.querySelectorAll<HTMLElement>(".experience-item");
+
+      const updateSvgPath = (visibleItemCount: number) => {
+        if (visibleItemCount === 0) {
+          svgElement.style.display = "none";
+          return;
+        }
+        svgElement.style.display = "flex";
+
+        const segmentHeight = 100;
+        const amplitude = 40;
+        const totalHeight = visibleItemCount * segmentHeight;
+
+        if (totalHeight <= 0) {
+          pathElement.setAttribute("d", "M 0 0");
+          return;
+        }
+
+        const firstCurve = `Q ${amplitude} ${
+          segmentHeight / 2
+        } 0 ${segmentHeight}`;
+        const subsequentCurves = Array.from(
+          { length: visibleItemCount - 1 },
+          (_, i) => `T 0 ${(i + 2) * segmentHeight}`,
+        ).join(" ");
+        const newPathData = `M 0 0 ${firstCurve} ${subsequentCurves}`;
+
+        svgElement.setAttribute(
+          "viewBox",
+          `-${amplitude} 0 ${amplitude * 2} ${totalHeight}`,
+        );
+        pathElement.setAttribute("d", newPathData);
+      };
+
+      const handleTabClick = (e: Event) => {
+        const clickedTab = (e.target as HTMLElement).closest<HTMLElement>(
+          ".experience-tab-trigger",
+        );
+        if (!clickedTab) return;
+
+        const year = clickedTab.dataset.year;
+        if (!year) return;
+
+        tabContainer
+          .querySelectorAll<HTMLElement>(".experience-tab-trigger")
+          .forEach((tab) => {
+            const isActive = tab === clickedTab;
+            tab.classList.toggle("bg-primary/20", isActive);
+            tab.classList.toggle("border-primary", isActive);
+            tab.classList.toggle("bg-transparent", !isActive);
+          });
+
+        let visibleCount = 0;
+        items.forEach((item) => {
+          const itemYear = item.dataset.year;
+          // This "All" check is why data-year must not be translated
+          const isVisible = year === "All" || itemYear === year;
+          item.hidden = !isVisible;
+          if (isVisible) {
+            visibleCount++;
+          }
+        });
+
+        updateSvgPath(visibleCount);
+      };
+
+      if ((window as any).cleanupExperienceTabs) {
+        (window as any).cleanupExperienceTabs();
+      }
+
+      tabContainer.addEventListener("click", handleTabClick);
+
+      (window as any).cleanupExperienceTabs = () => {
+        tabContainer.removeEventListener("click", handleTabClick);
+      };
+    });
+  </script>
+</article>

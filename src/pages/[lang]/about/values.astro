@@ -1,0 +1,86 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+
+import { useTranslations } from "@/i18n/utils.ts";
+import type { SideBarProps } from "@/types.ts";
+import type { Language } from "@/i18n/ui.ts";
+import { i18n } from "@/config.ts";
+import AboutLayout from "@/layouts/AboutLayout.astro";
+import { navigation } from "@/navigation.ts";
+
+// =================================================================================
+// 2. ROUTING & LANGUAGE VALIDATION
+// =================================================================================
+
+export async function getStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params;
+if (!i18n.locales.includes(lang)) {
+  throw new Error(
+    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+  );
+}
+
+// =================================================================================
+// 3. DATA & PROPS PREPARATION
+// =================================================================================
+
+const t = useTranslations(lang as Language);
+
+const nav = navigation[lang as keyof typeof navigation];
+
+// Create the sideBar constant by mapping over the imported data
+const sideBar: SideBarProps = {
+  title: t(nav.bars.about.titleKey),
+  menuItems: nav.bars.about.links.map((item) => ({
+    text: t(item.textKey),
+    href: item.href,
+    "aria-label": t(item.textKey), // Use the textKey for proper translation
+  })),
+};
+
+// Prop for the layout (title for the browser tab, SEO, etc.)
+const content = { title: t("sidebar.about.item.values") };
+---
+
+<AboutLayout {content} {sideBar}>
+  <h1
+    class="font-lexend text-primary mt-8 mb-2 w-fit scroll-mt-24 text-6xl font-semibold"
+  >
+    {t("about.values.title")}
+  </h1>
+  <p>{t("about.values.intro")}</p>
+
+  <div>
+    <h2>{t("about.values.objectivity.title")}</h2>
+    <p set:html={t("about.values.objectivity.desc")} />
+  </div>
+  <div>
+    <h2>{t("about.values.togetherness.title")}</h2>
+    <p set:html={t("about.values.togetherness.desc")} />
+  </div>
+  <div>
+    <h2>{t("about.values.empowerment.title")}</h2>
+    <p set:html={t("about.values.empowerment.desc")} />
+  </div>
+  <div>
+    <h2>{t("about.values.quality.title")}</h2>
+    <p set:html={t("about.values.quality.desc")} />
+  </div>
+  <div>
+    <h2>{t("about.values.sincerity.title")}</h2>
+    <p set:html={t("about.values.sincerity.desc")} />
+  </div>
+
+  <hr class="!bg-primary/10 my-8 !h-px w-full !border-0 border-t" />
+  <p class="text-center">
+    {t("about.contactText")}
+    <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
+  </p>
+</AboutLayout>

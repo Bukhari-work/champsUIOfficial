@@ -1,0 +1,135 @@
+---
+// src/components/Footer.astro
+import { Image } from "astro:assets";
+import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
+import { useTranslations } from "@/i18n/utils.ts";
+import { i18n } from "@/config.ts";
+import type { FooterProps } from "@/types.ts";
+
+// 4. APPLY the imported type to Astro.props
+const {
+  socialLinks = [],
+  secondaryLinks = [],
+  links = [],
+  footNote,
+  lang = i18n.defaultLocale,
+} = Astro.props as FooterProps;
+
+const t = useTranslations(lang);
+---
+
+<footer id="site-footer" class="relative w-screen border-t">
+  <div
+    class="bg-primary/5 dark:bg-primary/10 pointer-events-none absolute inset-0"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="relative mx-3 flex h-full grow flex-col border-x border-transparent md:mx-8 lg:mx-12"
+  >
+    <div
+      class:list={[
+        "relative w-full max-w-7xl self-center px-6",
+        "grid grid-cols-12 gap-4 gap-y-8 py-8 sm:gap-8 md:py-12",
+      ]}
+    >
+      <div
+        class="border-b-kuning text-foreground col-span-12 pb-5 lg:col-span-4"
+      >
+        <Image
+          src="/images/Logo-landscape-black.png"
+          alt="Company Logo"
+          width={250}
+          height={250}
+          class="-ml-2 hidden py-2 transition-transform duration-300 hover:scale-105 dark:block"
+        />
+        <Image
+          src="/images/Logo-landscape-white.png"
+          alt="Company Logo"
+          width={250}
+          height={250}
+          class="-ml-2 py-2 transition-transform duration-300 hover:scale-105 dark:hidden"
+        />
+        <div class="flex flex-col gap-1 pt-4 text-sm">
+          {
+            secondaryLinks.map(({ text, href }) => (
+              <a
+                class="underline decoration-black/20 underline-offset-4 hover:decoration-black dark:decoration-white/50 dark:hover:decoration-white"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                set:html={text}
+              />
+            ))
+          }
+        </div>
+      </div>
+      {
+        links.map(({ titleKey, links }) => (
+          <div class="text-foreground col-span-6 md:col-span-3 lg:col-span-2">
+            <div class="mb-3 font-medium">
+              {titleKey ? t(titleKey) : titleKey}
+            </div>
+            {links?.length && (
+              <ul class="text-sm">
+                {/* --- MODIFIED ---: Map over links and translate text */}
+                {links.map(({ text, textKey, href, target, rel }) => (
+                  <li class="mb-2">
+                    <a
+                      class="underline decoration-black/20 underline-offset-4 hover:decoration-black dark:decoration-white/50 dark:hover:decoration-white"
+                      target={target}
+                      rel={rel}
+                      href={href}
+                    >
+                      <Fragment set:html={textKey ? t(textKey) : text} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div
+    class="bg-primary text-background w-full px-6 py-2 md:flex md:items-center md:justify-between"
+  >
+    {
+      socialLinks?.length && (
+        <ul class="mb-2 -ml-2 flex md:order-1 md:mb-0 md:ml-4">
+          {socialLinks.map(({ ariaLabel, href, icon }) => (
+            <li>
+              <a
+                class="inline-flex items-center rounded-lg p-2.5 text-sm hover:bg-gray-100/20 focus:outline-none"
+                aria-label={ariaLabel}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {icon && <DynamicIcon icon={icon} className="h-5 w-5" />}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <div class="flex items-center text-sm">
+      {
+        footNote?.image && (
+          <img
+            class="mr-1.5 h-5 w-5 rounded-sm"
+            src={footNote.image.src}
+            alt={footNote.image.alt}
+            loading="lazy"
+            width="20"
+            height="20"
+          />
+        )
+      }
+      {footNote?.textKey && t(footNote.textKey)}
+    </div>
+  </div>
+</footer>

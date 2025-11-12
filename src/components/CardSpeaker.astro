@@ -1,0 +1,30 @@
+---
+// Import the new generic Card component
+import Card from "./blocks/Card.astro"; // Assuming Card.astro is in the same directory
+import { cn } from "@/lib/utils.ts";
+
+// Define the props this component accepts, matching the old SpeakerCard
+export interface Props {
+  name: string;
+  title: string;
+  imageMeta?: ImageMetadata;
+  imageAlt?: string;
+  href?: string;
+  className?: string;
+}
+
+const { name, title, imageMeta, imageAlt, href, className } = Astro.props;
+---
+
+<Card
+  href={href}
+  title={name}
+  imageMeta={imageMeta}
+  imageAlt={imageAlt ?? name}
+  headingLevel="h2"
+  class={cn("text-center", className)}
+>
+  <h3 class="mt-2 border-t pt-2 text-sm font-light">
+    {title}
+  </h3>
+</Card>

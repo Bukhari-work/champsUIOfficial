@@ -1,0 +1,124 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+
+// 1a. External Packages & Astro APIs
+import { SEO } from "astro-seo";
+import { ClientRouter } from "astro:transitions";
+
+// 1b. Global Styles
+import "../styles/global.css";
+
+// 1c. Project Configuration & i18n
+import { SITE } from "@/config.ts";
+import { navigation, sharedFooter } from "@/navigation.ts";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils.ts";
+import type { BaseLayoutProps } from "@/types.ts"; // ✨ IMPORT THE NEW TYPE
+
+// 1d. Layout Components & Blocks
+import Favicons from "@/layouts/blocks/Favicons.astro";
+import Header from "@/layouts/blocks/Header.astro";
+import Footer from "@/layouts/blocks/Footer.astro";
+import TWSizeIndicator from "@/layouts/blocks/TWSizeIndicator.astro";
+
+// 1e. Script Components
+import MainScript from "@/scripts/MainScript.astro";
+import DrawerAttachScript from "@/scripts/DrawerAttachScript.astro";
+import IntersectScript from "@/scripts/IntersectScript.astro";
+
+// 1f. Asset Imports
+import Makara from "@/assets/makaraUniversitasIndonesia.svg";
+
+// =================================================================================
+// 2. COMPONENT PROPS
+// =================================================================================
+
+// Define props passed from the page, using the centralized type
+type Props = BaseLayoutProps; // ✨ APPLY THE TYPE TO PROPS
+
+// Define props passed from the page, with sensible defaults
+const { content, mode = "light", makara = false } = Astro.props;
+
+// =================================================================================
+// 3. LAYOUT LOGIC & DATA PREPARATION
+// =================================================================================
+
+// Determine the current language from the URL and get the translation function
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// Get the correct navigation links for the current language
+const nav = navigation[lang];
+
+// Assemble all props needed for the <Footer> component
+const footerProps = {
+  links: [nav.bars.about, nav.bars.whatWeDo, sharedFooter.contact],
+  secondaryLinks: sharedFooter.secondaryLinks,
+  socialLinks: sharedFooter.socialLinks,
+  footNote: sharedFooter.footNote,
+  lang: lang,
+};
+---
+
+{/* The rest of your HTML/Astro template remains the same */}
+
+<html lang={lang} class={mode}>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+
+    <SEO
+      charset="UTF-8"
+      title={`${SITE.company} | ${content.title}`}
+      description={content.description || t("site.description")}
+      openGraph={{
+        basic: {
+          title: content.title,
+          type: "website",
+          image: content.image || "/images/Logo-landscape-white.png",
+        },
+        image: {
+          alt: content.imageAlt || `${SITE.company} Logo`,
+          width: 1200,
+          height: 630,
+        },
+        optional: {
+          siteName: t("site.title"),
+        },
+      }}
+      twitter={{
+        card: "summary_large_image",
+        creator: `@${SITE.company}`,
+      }}
+      canonical={content.canonical}
+    />
+
+    <Favicons />
+    <ClientRouter />
+    <MainScript />
+    <DrawerAttachScript />
+  </head>
+
+  <body class="relative w-screen overflow-x-hidden sm:overscroll-y-none">
+    <TWSizeIndicator />
+    <div class="relative flex w-full flex-none flex-col justify-between">
+      <Header lang={lang} />
+      <main
+        id="main-content"
+        class="relative mx-3 mt-14 min-h-[70vh] grow border-x md:mx-8 lg:mx-12"
+      >
+        <slot />
+      </main>
+      <Footer {...footerProps} />
+      {
+        makara && (
+          <Makara class="dark:fill-primary fixed top-1/2 left-1/2 -z-50 h-[512px] w-[512px] -translate-x-1/2 -translate-y-1/2 opacity-5 dark:opacity-15" />
+        )
+      }
+    </div>
+
+    <div class="absolute top-0 left-0 z-[-1] h-full w-3 md:w-8 lg:w-12"></div>
+    <div class="absolute top-0 right-0 z-[-1] h-full w-3 md:w-8 lg:w-12"></div>
+    <IntersectScript />
+  </body>
+</html>

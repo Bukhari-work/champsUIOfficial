@@ -1,0 +1,147 @@
+---
+import type { ComponentProps, HTMLAttributes } from "astro/types";
+import Button from "@/components/ui-astro/Button.astro";
+import Element from "@/components/ui-astro/Element.astro";
+import { cn } from "@/lib/utils";
+
+// Define props for the Drawer component
+interface Props extends HTMLAttributes<"dialog"> {
+  id: string;
+  modal?: boolean;
+  // Props to configure the trigger button:
+  triggerVariant?: ComponentProps<typeof Button>["variant"];
+  triggerSize?: ComponentProps<typeof Button>["size"];
+  triggerText?: string;
+  triggerIcon?: string;
+  triggerClass?: string; // Optional class for the trigger button
+}
+
+const {
+  id,
+  modal = true,
+  triggerVariant = "ghost",
+  triggerSize = "default",
+  triggerText,
+  triggerIcon,
+  triggerClass,
+  ...rest // Rest of the props go to the <dialog> element
+} = Astro.props;
+
+const slot = await Astro.slots.render("default");
+---
+
+<Element class:list="drawer" {id} {modal}>
+  <Element class:list="drawer-body" as="aside" {...rest}>
+    <!-- <div class="bg-muted mx-auto mt-4 h-2 w-[100px] shrink-0 rounded-full">
+    </div> -->
+    <Fragment set:html={slot} />
+  </Element>
+  <div class="drawer-backdrop"></div>
+</Element>
+<Button
+  className={cn("drawer-trigger", triggerClass)}
+  data-drawer-target={id}
+  variant={triggerVariant}
+  size={triggerSize}
+  text={triggerText}
+  icon={triggerIcon}
+/>
+
+<script is:inline type="module" define:vars={{ id: id, modal: modal }}>
+  // START OF SCROLL.TS (for modal, enabling or disabling scrolling)
+  // left: 37, up: 38, right: 39, down: 40,
+  // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+  const keys = {
+    37: 1,
+    38: 1,
+    39: 1,
+    40: 1,
+  };
+
+  function preventDefault(e) {
+    e.preventDefault();
+  }
+
+  function preventDefaultForScrollKeys(e) {
+    if (keys[e.keyCode]) {
+      preventDefault(e);
+      return false;
+    }
+  }
+
+  // modern Chrome requires { passive: false } when adding event
+  var supportsPassive = false;
+  try {
+    var opts = Object.defineProperty({}, "passive", {
+      get: function () {
+        supportsPassive = true;
+      },
+    });
+    window.addEventListener(
+      "test",
+      null, // Cast null to any to satisfy TypeScript
+      opts, // Cast the options object for clarity, though casting the listener is the primary fix
+    );
+  } catch (e) {}
+
+  var wheelOpt = supportsPassive ? { passive: false } : false;
+  var wheelEvent =
+    "onwheel" in document.createElement("div") ? "wheel" : "mousewheel";
+
+  // call this to Disable
+  export function disableScroll(element) {
+    element.addEventListener("DOMMouseScroll", preventDefault, false); // older FF
+    element.addEventListener(wheelEvent, preventDefault, wheelOpt); // modern desktop
+    element.addEventListener("touchmove", preventDefault, wheelOpt); // mobile
+    element.addEventListener("keydown", preventDefaultForScrollKeys, false);
+  }
+
+  // call this to Enable
+  export function enableScroll(element) {
+    element.removeEventListener("DOMMouseScroll", preventDefault, false);
+    element.removeEventListener(wheelEvent, preventDefault, wheelOpt);
+    element.removeEventListener("touchmove", preventDefault, wheelOpt);
+    element.removeEventListener("keydown", preventDefaultForScrollKeys, false);
+  }
+  // END OF SCROLL.TS
+
+  const drawerFunction = function () {
+    const drawer = document.getElementById(`${id}`);
+    const drawerBody = drawer.querySelector(".drawer-body");
+    const drawerBackdrop = drawer.querySelector(".drawer-backdrop");
+
+    const showButton = document.querySelector(`[data-drawer-target="${id}"]`);
+
+    // "Show" button opens the dialog modally
+    showButton.addEventListener("click", () => {
+      drawerBody.classList.add("translate-y-0");
+      drawerBackdrop.classList.add("overlay");
+
+      if (modal) {
+        document.documentElement.classList.add("overflow-hidden");
+      } else {
+        disableScroll(drawerBody);
+      }
+    });
+
+    // Backdrop closes the dialog
+    drawerBackdrop.addEventListener("click", () => {
+      drawerBody.classList.remove("translate-y-0");
+      drawerBackdrop.classList.remove("overlay");
+
+      if (modal) {
+        document.documentElement.classList.remove("overflow-hidden");
+      } else {
+        enableScroll(drawerBody);
+      }
+    });
+  };
+
+  // Initial execution
+  drawerFunction();
+
+  // Script re-execution for viewTransition
+  document.addEventListener("astro:page-load", () => {
+    drawerFunction();
+  });
+</script>

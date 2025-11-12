@@ -1,0 +1,51 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+
+// 1a. Layout Components
+import Base from "@/layouts/Base.astro";
+import SideBar from "@/components/SideBar.astro";
+
+// 1b. Astro APIs & Types
+import type { PageMetadata, SideBarProps } from "@/types.ts";
+
+// =================================================================================
+// 2. COMPONENT PROPS
+// =================================================================================
+
+type Props = {
+  content: PageMetadata;
+  sideBar: SideBarProps;
+  large?: boolean;
+};
+
+const { content, sideBar, large = false } = Astro.props;
+---
+
+<Base {content} makara>
+  <section class="mx-auto grid max-w-7xl grid-cols-7 gap-6 p-2 pb-24">
+    <SideBar
+      title={sideBar.title}
+      className={sideBar.className}
+      menuItems={sideBar.menuItems}
+    />
+
+    <article
+      class:list={[
+        "prose dark:prose-invert col-span-7 min-w-full px-8 text-justify font-light lg:col-span-5",
+        large ? "lg:col-span-6" : "lg:col-span-5",
+      ]}
+    >
+      <slot />
+    </article>
+
+    {
+      Astro.slots.has("aside") && (
+        <aside class="sticky top-24 col-span-1 hidden h-fit lg:block">
+          <slot name="aside" />
+        </aside>
+      )
+    }
+  </section>
+</Base>

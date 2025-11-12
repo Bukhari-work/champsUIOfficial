@@ -1,0 +1,55 @@
+@layer components {
+  .drawer {
+    @apply contents h-auto;
+  }
+
+  .drawer-body {
+    @apply bg-background fixed right-0 bottom-0 left-0 z-40 flex h-auto max-h-[80vh] w-screen translate-y-full flex-col overflow-x-auto rounded-t-lg shadow-2xl transition-transform duration-200 ease-out;
+    @apply inset-x-0 mt-24 rounded-t-lg border-t;
+  }
+
+  .drawer-backdrop {
+    @apply pointer-events-none invisible fixed top-0 right-0 left-0 z-30 h-screen w-screen opacity-0 transition-all duration-200 ease-out;
+
+    background-image: linear-gradient(
+      45deg,
+      transparent 90%,
+      var(--color-secondary) 0%
+    );
+    &.overlay {
+      @apply pointer-events-auto visible bg-black/50 opacity-90;
+    }
+  }
+
+  .link {
+    @apply underline decoration-black/20 underline-offset-4 hover:decoration-black dark:decoration-white/50 dark:hover:decoration-white;
+  }
+
+  article,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    /* This value should match the height of your fixed nav, e.g., if it's 4rem tall */
+    scroll-margin-top: 5rem;
+  }
+
+  .swiper-slide:not(.swiper-slide-active) {
+    pointer-events: none;
+  }
+
+  .is-invalid {
+    @apply border-red-500;
+  }
+
+  input:focus,
+  textarea:focus {
+    @apply ring-1 ring-blue-500 outline-none;
+  }
+
+  .is-invalid:focus {
+    @apply ring-1 ring-red-500 outline-none;
+  }
+}

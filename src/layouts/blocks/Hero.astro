@@ -1,0 +1,117 @@
+---
+import type { ComponentProps } from "astro/types";
+import { Image } from "astro:assets";
+import Button from "@/components/ui-astro/Button.astro";
+import Quote from "@/components/ui-astro/Quote.astro";
+
+import type { Hero as HeroProps } from "@/types.ts";
+
+interface Props extends Omit<HeroProps, "image"> {
+  image?: ComponentProps<typeof Image>;
+  imageBg?: ComponentProps<typeof Image>;
+}
+
+const { actions, id, image, imageBg } = Astro.props;
+
+const hasTagline = Astro.slots.has("tagline");
+const hasTitle = Astro.slots.has("title");
+const hasSubtitle = Astro.slots.has("subtitle");
+const content = await Astro.slots.render("content");
+---
+
+<section class="not-prose relative sm:h-full" {...id ? { id } : {}}>
+  <div
+    class="pointer-events-none absolute inset-0 mask-y-from-0% mask-y-to-100% opacity-50 dark:opacity-100"
+  >
+    {
+      imageBg && (
+        <Image class:list={`h-full w-full object-cover`} {...imageBg} />
+      )
+    }
+  </div>
+
+  <div class="relative mx-auto px-4 sm:px-6">
+    <div class="py-12">
+      <div
+        class:list={[
+          "mx-auto max-w-5xl pb-10 text-center md:pb-5",
+          "intersect-once intersect-quarter motion-safe:md:intersect:animate-fade-in motion-safe:md:opacity-0",
+          "prose dark:prose-invert",
+        ]}
+      >
+        {
+          hasTagline && (
+            <p class="prose dark:prose-invert mx-auto font-bold tracking-wide uppercase">
+              <slot name="tagline" />
+            </p>
+          )
+        }
+
+        <!-- Title: Only render the h1 container if the 'title' slot is used -->
+        {
+          hasTitle && (
+            <h1 class="mb-12 text-4xl font-bold tracking-tighter md:text-5xl">
+              <slot name="title" />
+            </h1>
+          )
+        }
+
+        <!-- Subtitle: Only render the paragraph container if the 'subtitle' slot is used -->
+        {
+          hasSubtitle && (
+            <h3 class="text-primary mx-auto max-w-3xl text-lg font-bold">
+              <slot name="subtitle" />{" "}
+            </h3>
+          )
+        }
+
+        <!-- Actions: Only render the div container if the 'actions' slot is used -->
+        {
+          actions && (
+            <div class="mx-auto mt-3 flex max-w-xs flex-col flex-nowrap gap-4 sm:max-w-md sm:flex-row sm:justify-center">
+              {Array.isArray(actions) ? (
+                actions.map((action) => (
+                  <div class="flex w-full">
+                    <Button
+                      {...(action || {})}
+                      class:list={[
+                        "w-full",
+                        "intersect-once intersect-quarter intercept-no-queue motion-safe:md:intersect:animate-fade-in motion-safe:md:opacity-0",
+                      ]}
+                    />
+                  </div>
+                ))
+              ) : (
+                <Fragment set:html={actions} />
+              )}
+            </div>
+          )
+        }
+
+        <!-- Additional Content Area: Only render if the 'content' slot is used -->
+        {
+          content && (
+            <div class="relative mx-auto my-3 w-full flex-nowrap leading-5">
+              <Quote quote={content}>
+                <slot name="content" />
+              </Quote>
+            </div>
+          )
+        }
+
+        <!-- Image Area -->
+        <div
+          class="intersect-once intercept-no-queue intersect-quarter motion-safe:md:intersect:animate-fade-in motion-safe:md:opacity-0"
+        >
+          {
+            image && (
+              <div class="relative m-auto max-w-5xl">
+                <Image class:list={`mx-auto w-full rounded-md`} {...image} />
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

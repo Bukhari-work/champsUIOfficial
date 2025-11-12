@@ -1,0 +1,84 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+import { useTranslations } from "@/i18n/utils.ts";
+import type { Language } from "@/i18n/ui.ts";
+import { i18n } from "@/config.ts";
+import type { SideBarProps } from "@/types.ts";
+import AboutLayout from "@/layouts/AboutLayout.astro";
+import ExperiencesPath from "@/layouts/PathExperiences.astro";
+import { navigation } from "@/navigation.ts";
+
+// =================================================================================
+// 2. ROUTING & LANGUAGE VALIDATION
+// =================================================================================
+
+// This block is copied from your example to enable i18n routing
+export async function getStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params;
+if (!i18n.locales.includes(lang)) {
+  throw new Error(
+    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+  );
+}
+
+// =================================================================================
+// 3. DATA & PROPS PREPARATION
+// =================================================================================
+
+const t = useTranslations(lang as Language);
+const nav = navigation[lang as keyof typeof navigation];
+
+// --- Page Metadata ---
+// We use translation keys specific to the "Experiences" page
+const content = {
+  title: t("sidebar.whatWeDo.item.experiences"),
+  meta_title: t("experiences.meta.title"),
+  description: t("experiences.meta.description"),
+};
+
+// --- Sidebar Data ---
+// We re-use the *same* sidebar as the 'whatWeDo' index page
+// for consistent navigation within this section.
+const sideBar: SideBarProps = {
+  title: t(nav.bars.whatWeDo.titleKey),
+  menuItems: nav.bars.whatWeDo.links.map((item) => ({
+    text: t(item.textKey),
+    href: item.href,
+    "aria-label": t(item.textKey),
+  })),
+};
+---
+
+<AboutLayout {content} {sideBar}>
+  <h1
+    class="font-lexend text-primary mt-8 mb-6 w-fit scroll-mt-24 text-6xl font-semibold"
+  >
+    {t("experiences.title")}
+  </h1>
+  <div class="max-w-3xl">
+    <p>
+      {t("experiences.description")}
+    </p>
+  </div>
+
+  <section
+    id="process"
+    class="flex min-w-full flex-col content-center items-center text-justify font-light lg:col-span-5"
+  >
+    <div class="not-prose">
+      <ExperiencesPath />
+    </div>
+  </section>
+
+  <p class="prose dark:prose-invert self-center text-center">
+    {t("experiences.contactPrompt")}
+    <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
+  </p>
+</AboutLayout>

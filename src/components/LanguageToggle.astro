@@ -1,0 +1,58 @@
+---
+import { i18n } from "@/config.ts";
+import type { Language } from "@/i18n/ui.ts";
+
+import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
+
+const { pathname } = Astro.url;
+
+// --- Step 1: Determine the current language ---
+const potentialLang = pathname.split("/")[1];
+const currentLang = i18n.locales.includes(potentialLang as Language)
+  ? (potentialLang as Language)
+  : i18n.defaultLocale;
+
+const otherLangs = i18n.locales.filter((lang) => lang !== currentLang);
+
+const pathWithoutLocale = "/" + pathname.split("/").slice(2).join("/");
+---
+
+<div class="group relative">
+  <button
+    class="hover:bg-background inline-flex items-center gap-2.5 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 shadow-sm transition-all duration-200 [-webkit-tap-highlight-color:transparent] hover:border-slate-300 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:outline-none"
+  >
+    <DynamicIcon icon="LuLanguages" />
+    <span>{currentLang.toUpperCase()}</span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      width="16"
+      height="16"
+      class="text-slate-400 transition-transform duration-200 group-hover:rotate-180"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+        clip-rule="evenodd"></path>
+    </svg>
+  </button>
+
+  <div
+    class="absolute top-full right-0 z-10 hidden w-full min-w-max origin-top-right rounded-md border border-slate-200 bg-white py-1 shadow-lg group-hover:block"
+  >
+    {
+      otherLangs.map((lang) => {
+        const targetPath = `/${lang}${pathWithoutLocale}`;
+        return (
+          <a
+            href={targetPath}
+            class="block px-4 py-2 text-sm font-medium text-slate-700 no-underline hover:bg-slate-100"
+          >
+            {lang.toUpperCase()}
+          </a>
+        );
+      })
+    }
+  </div>
+</div>

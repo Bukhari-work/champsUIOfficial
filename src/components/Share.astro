@@ -1,0 +1,56 @@
+---
+import Button from "@/components/ui-astro/Button.astro";
+
+import { SITE } from "@/config.ts";
+
+const base_href = SITE.base_href;
+
+interface shareProps {
+  title?: string;
+  description?: string;
+  collection?: string;
+  slug?: string;
+  className?: string;
+}
+const { title, description, collection, slug, className } =
+  Astro.props as shareProps;
+---
+
+<ul class={`${className}`}>
+  <li class="inline-block">
+    <Button
+      variant="outline"
+      size="sm"
+      icon="IoLogoWhatsapp"
+      className="gap-0"
+      aria-label="whatsapp share button"
+      href={`https://wa.me/?text=${title}%20${base_href}/${collection}/${slug}`}
+      target="_blank"
+      rel="noreferrer noopener"
+    />
+  </li>
+  <li class="inline-block">
+    <Button
+      variant="outline"
+      size="sm"
+      icon="IoMail"
+      className="gap-0"
+      aria-label="email share button"
+      href={`mailto:?subject=${title}&body=${description}%20${base_href}/${collection}/${slug}`}
+      target="_blank"
+      rel="noreferrer noopener"
+    />
+  </li>
+  <li class="inline-block">
+    <Button
+      variant="outline"
+      size="sm"
+      icon="IoLogoLinkedin"
+      className="gap-0"
+      aria-label="linkedin share button"
+      href={`https://www.linkedin.com/shareArticle?mini=true&url=${base_href}/${collection}/${slug}&title=${title}&summary=${description}&source=${base_href}`}
+      target="_blank"
+      rel="noreferrer noopener"
+    />
+  </li>
+</ul>

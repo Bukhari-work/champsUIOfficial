@@ -1,0 +1,45 @@
+---
+import BreadCrumbs from "@/components/ui-astro/BreadCrumbs.astro";
+
+// Define the component's props with a TypeScript interface for better type safety.
+interface Props {
+  title?: string;
+  headtitle?: string;
+  subtitle?: string;
+  breadcrumbs?: boolean;
+}
+
+const { title, headtitle, subtitle, breadcrumbs = true }: Props = Astro.props;
+---
+
+<section class="bg-primary/10 py-8 text-center">
+  <div class="mx-auto px-4">
+    <div class="flex flex-col items-center justify-center">
+      {
+        headtitle && (
+          <p class="mt-3 text-lg text-gray-700 lg:text-xl dark:text-gray-300">
+            {headtitle}
+          </p>
+        )
+      }
+
+      {
+        title && (
+          <h1 class="font-lexend text-primary my-4 w-fit scroll-mt-24 text-3xl font-semibold lg:text-6xl">
+            {title}
+          </h1>
+        )
+      }
+
+      {
+        subtitle && (
+          <p class="border-primary max-w-3xl border-b p-2 text-xl text-gray-700 lg:text-3xl dark:text-gray-300">
+            {subtitle}
+          </p>
+        )
+      }
+    </div>
+
+    {breadcrumbs && <BreadCrumbs className="not-prose mt-6" />}
+  </div>
+</section>

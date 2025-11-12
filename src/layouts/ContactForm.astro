@@ -1,0 +1,177 @@
+---
+import Button from "@/components/ui-astro/Button.astro";
+
+export interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+---
+
+<article
+  class="bg-background dark:shadow-primary/20 right-0 mx-auto mt-6 w-full max-w-xl rounded-xl border p-2.5 px-10 pb-10 font-light shadow-xl"
+>
+  <h3>{title}</h3>
+
+  <form id="contactForm" method="POST" data-contact-url={url}>
+    <div class="mb-4">
+      <label for="name" class="form-label">
+        Full Name <span class="text-red-500">*</span>
+      </label>
+      <input
+        id="name"
+        name="name"
+        class="form-input w-full"
+        placeholder="Budi Susanti"
+        type="text"
+        autocomplete="name"
+        required
+      />
+    </div>
+
+    <div class="mb-4 hidden" aria-hidden="true">
+      <label for="website" class="form-label">Website</label>
+      <input
+        id="website"
+        name="website"
+        class="form-input w-full"
+        placeholder="champs-ui.org"
+        type="text"
+        autocomplete="off"
+        tabindex="-1"
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="email" class="form-label">
+        Working e-Mail <span class="text-red-500">*</span>
+      </label>
+      <input
+        id="email"
+        name="email"
+        class="form-input w-full"
+        placeholder="budi.susanti@email.com"
+        type="email"
+        autocomplete="email"
+        required
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="message" class="form-label">
+        Message <span class="text-red-500">*</span>
+      </label>
+      <textarea
+        id="message"
+        name="message"
+        class="form-input w-full"
+        placeholder="Message goes here..."
+        rows="6"
+        required
+      >
+      </textarea>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <Button id="submitBtn" type="submit"> Submit </Button>
+      <div id="inline-badge" class="inline-block"></div>
+    </div>
+  </form>
+</article>
+
+<script>
+  const form = document.getElementById("contactForm");
+
+  if (!form) {
+    console.warn("Contact form not found. Submission script will not run.");
+  } else {
+    const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
+    const recaptchaSiteKey = "6LckcswrAAAAAD9Y9Erk6tzAOWtdZXGiUKpNc_dh";
+
+    if (!(window as any).grecaptcha) {
+      const script = document.createElement("script");
+      script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const url = (form as HTMLFormElement).dataset.contactUrl;
+      const honeypot = (form as any).website.value.trim();
+
+      // ============== ✨ START: FIX ==============
+      // Add a check to ensure the URL exists before proceeding
+      if (!url) {
+        console.error(
+          "Submission Error: data-contact-url attribute is missing from the form.",
+        );
+        alert(
+          "Submission failed: A configuration error occurred. Please contact the site administrator.",
+        );
+        return; // Stop the function
+      }
+      // ============== ✨ END: FIX ==============
+
+      // Honeypot check for bots
+      if (honeypot) {
+        console.log("Bot detected!");
+        return;
+      }
+
+      // Disable button and show loading state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+      }
+
+      try {
+        (window as any).grecaptcha.ready(async () => {
+          const token = await (window as any).grecaptcha.execute(
+            recaptchaSiteKey,
+            {
+              action: "submit",
+            },
+          );
+
+          const formData = new FormData(form as HTMLFormElement);
+          formData.append("recaptchaToken", token);
+
+          // Now, TypeScript knows 'url' is a string because of the check above
+          const response = await fetch(url, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              `Network response was not ok: ${response.statusText}`,
+            );
+          }
+
+          const result = await response.json();
+
+          if (result.status === "success") {
+            alert(
+              `Thank you, ${(form as any).name.value.trim()}! Your message has been sent.`,
+            );
+            (form as HTMLFormElement).reset();
+          } else {
+            throw new Error(result.message || "An unknown error occurred.");
+          }
+        });
+      } catch (error) {
+        console.error("Submission Error:", error);
+        alert(`Submission failed: ${(error as Error).message}`);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit";
+        }
+      }
+    });
+  }
+</script>

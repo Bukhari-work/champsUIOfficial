@@ -1,0 +1,99 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+
+// 1a. Layout
+import Base from "@/layouts/Base.astro";
+
+// 1b. i18n & Types
+import { useTranslations } from "@/i18n/utils.ts";
+import type { BaseLayoutProps } from "@/types.ts";
+import { i18n } from "@/config.ts";
+
+// 1c. Components
+import CardNews from "@/components/CardNews.astro";
+import PageHeader from "@/components/PageHeader.astro";
+// import PostSidebar from "@/components/blocks/PostSidebar.astro";
+import NewsList from "@/components/NewsList.astro";
+
+// 1d. Config & Libs
+import { SETTINGS } from "@/config.ts";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { getAllTaxonomy, getTaxonomy } from "@/lib/taxonomyParser.astro";
+import { sortByDate } from "@/lib/utils/sortFunctions";
+
+// =================================================================================
+// 2. STATIC PATHS
+// =================================================================================
+
+// Generate a static page for each supported language
+export async function getStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+// Get and validate the language from the URL parameter
+const { lang } = Astro.params;
+if (!i18n.locales.includes(lang)) {
+  throw new Error(
+    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+  );
+}
+
+// =================================================================================
+// 3. DATA FETCHING & PREPARATION
+// =================================================================================
+
+const NEWS_FOLDER = "news";
+const allPosts = await getSinglePage(NEWS_FOLDER);
+
+// Post Sorting & Pagination
+const sortedPosts = sortByDate(allPosts).filter(
+  (post) => post.id && post.id.startsWith(`${lang}/`),
+);
+const currentPosts = sortedPosts.slice(0, SETTINGS.highlight);
+
+// Taxonomies
+const allCategories = await getAllTaxonomy(NEWS_FOLDER, "categories");
+const allTags = await getAllTaxonomy(NEWS_FOLDER, "tags");
+const categories = await getTaxonomy(NEWS_FOLDER, "categories");
+const tags = await getTaxonomy(NEWS_FOLDER, "tags");
+
+// =================================================================================
+// 4. i18n & LAYOUT PROPS
+// =================================================================================
+
+const t = useTranslations(lang);
+
+// Define content for Base layout (SEO, etc.)
+const content: BaseLayoutProps["content"] = {
+  title: t("news.page.title"),
+  description: t("news.page.description"),
+};
+---
+
+<Base {content} makara>
+  <PageHeader title={t("news.page.title")} />
+
+  <section class="mx-auto max-w-7xl p-6 xl:gap-16">
+    <div class="grid h-fit gap-4 lg:grid-cols-3">
+      {
+        currentPosts.map((post) => (
+          <div class="slide-fade-in col-span-1 mb-6">
+            <CardNews data={post} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section
+    class="mx-auto grid max-w-6xl grid-cols-1 gap-6 p-2 pb-24 lg:grid-cols-5 xl:gap-16"
+  >
+    <div class="lg:col-span-5">
+      <NewsList posts={sortedPosts} />
+    </div>
+  </section>
+</Base>

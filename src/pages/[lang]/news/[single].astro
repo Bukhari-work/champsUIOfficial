@@ -1,0 +1,207 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+
+// 1a. Layout
+import Base from "@/layouts/Base.astro"; // Changed from Main
+import type { BaseLayoutProps } from "@/types.ts"; // Added for Base layout
+
+// 1b. Astro Libs
+import { render } from "astro:content";
+import { getEntries } from "astro:content";
+
+// 1c. Components
+import Avatar from "@/components/ui-astro/Avatar.astro";
+import CardNewsSm from "@/components/CardNewsSm.astro";
+import Share from "@/components/Share.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import GalleryDeck from "@/layouts/DeckGallery.astro";
+import Button from "@/components/ui-astro/Button.astro";
+
+// 1d. Libs & Utils
+import { getSinglePage } from "@/lib/contentParser.astro";
+import dateFormat from "@/lib/utils/dateFormat";
+import similarItems from "@/lib/utils/similarItems";
+import { humanize, markdownify, formatName } from "@/lib/utils/textConverter";
+import { i18n } from "@/config.ts";
+import type { Language } from "@/i18n/ui.ts";
+import { getLangFromUrl } from "@/i18n/utils.ts"; // Added for lang-aware links
+
+// 1e. Icons
+import { FaArrowLeftLong } from "react-icons/fa6";
+
+// =================================================================================
+// 2. STATIC PATHS
+// =================================================================================
+
+export async function getStaticPaths() {
+  const NEWS_FOLDER = "news";
+  const posts = await getSinglePage(NEWS_FOLDER);
+
+  // Create a path for each post, using the lang and slug from its own ID
+  const paths = posts
+    .map((post) => {
+      const idParts = post.id.split("/"); // e.g., ['en', 'post-slug']
+
+      // Basic validation
+      if (idParts.length < 2) {
+        console.warn(
+          `[getStaticPaths] Skipping post with invalid ID: ${post.id}`,
+        );
+        return null;
+      }
+
+      const lang = idParts[0] as Language;
+      const slug = idParts[1]; // Assumes slug is just the second part
+
+      // Validate that the lang from the post ID is a valid locale
+      if (!i18n.locales.includes(lang)) {
+        console.warn(
+          `[getStaticPaths] Skipping post with unknown lang '${lang}' in ID: ${post.id}`,
+        );
+        return null;
+      }
+
+      return {
+        params: {
+          lang: lang,
+          single: slug,
+        },
+        props: { post },
+      };
+    })
+    .filter((path) => path !== null); // Filter out any nulls from skipped posts
+
+  return paths;
+}
+
+// =================================================================================
+// 3. DATA FETCHING & PREPARATION
+// =================================================================================
+
+const { post } = Astro.props;
+const lang = getLangFromUrl(Astro.url); // Get current language
+
+// Prepare content for Base layout
+const { title, description, authors, categories, images, date, tags } =
+  post.data;
+const content: BaseLayoutProps["content"] = {
+  title: title,
+  description: description,
+};
+
+const COLLECTION_FOLDER = "news";
+
+// Optimize performance with parallel execution
+const [posts, renderedContent] = await Promise.all([
+  getSinglePage(COLLECTION_FOLDER),
+  render(post),
+]);
+
+const similarPosts = similarItems(post, posts);
+const { Content, headings } = renderedContent;
+const people = await getEntries<"people">(authors);
+---
+
+<Base {content}>
+  <section class="row justify-center">
+    <PageHeader title="News" />
+
+    <!-- Grid Container -->
+    <div class="mx-auto grid max-w-6xl items-start xl:grid-cols-[3fr_1fr]">
+      <!-- Main Section -->
+      <article class="mx-auto flex flex-col px-2 pt-8 pb-16">
+        <a
+          href={`/${lang}/news`}
+          class="center link my-5 flex w-fit items-center gap-2 text-sm"
+        >
+          <FaArrowLeftLong />back to News
+        </a>
+        <h1
+          set:html={markdownify(title)}
+          class="font-lexend text-primary mb-4 scroll-mt-24 text-5xl font-semibold"
+        />
+        <div class="ml-2">
+          <ul class="flex flex-col gap-5 py-3 lg:flex-row lg:gap-0">
+            {
+              people.map((author) => (
+                <li class="mr-6 inline-flex flex-row">
+                  <Avatar
+                    image={author.data.image?.src}
+                    alt={author.data.image?.alt}
+                    resolution={128}
+                  />
+                  <a
+                    class="link ml-2 self-center text-sm"
+                    href={`/${lang}/people/${author.id}`}
+                  >
+                    {formatName(humanize(author.id))}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <div class="text-foreground/70 font-mono text-sm">
+            {date && dateFormat(date)}
+          </div>
+        </div>
+        <hr
+          class="bg-primary/10 dark:bg-primary/40 my-8 !h-px !border-0 border-t"
+        />
+        <div class="prose dark:prose-invert min-w-full">
+          {images && <GalleryDeck images={images} />}
+          <Content />
+        </div>
+        <div
+          class="border-border mx-auto my-10 flex w-full flex-col justify-between gap-2 rounded-2xl border p-2 md:flex-row"
+        >
+          <div class="flex items-center">
+            <h5 class="mr-3">Categories :</h5>
+            <ul class="flex flex-wrap gap-2">
+              {
+                categories.map((category: string) => (
+                  <li>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="inline-block"
+                    >
+                      {humanize(category)}
+                    </Button>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="flex items-center">
+            <h5 class="mr-3">Share :</h5>
+            <Share
+              title={title}
+              description={description}
+              collection={post.collection}
+              slug={post.id}
+            />
+          </div>
+        </div>
+      </article>
+      <!-- ToC -->
+      <TableOfContents headings={headings} />
+    </div>
+
+    <!-- Related posts -->
+    <div class="mx-auto max-w-6xl p-6 xl:gap-16">
+      <h2 class="mb-12 text-center">Related Posts</h2>
+      <div class="grid h-fit gap-4 lg:grid-cols-3">
+        {
+          similarPosts.map((post) => (
+            <div class="slide-fade-in col-span-1 mb-6 lg:mb-14">
+              <CardNewsSm data={post} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

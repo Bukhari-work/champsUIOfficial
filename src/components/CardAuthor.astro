@@ -1,0 +1,46 @@
+---
+import { SETTINGS } from "@/config.ts";
+import { cn } from "@/lib/utils.ts";
+
+import Social from "@/components/Social.astro";
+import Button from "@/components/ui-astro/Button.astro";
+import Card from "@/components/blocks/Card.astro";
+
+const { people_folder } = SETTINGS;
+const { data, className } = Astro.props;
+const { name, responsibility, description, image, social } = data.data;
+
+// Split the data.id (e.g., "en/john-doe") into its parts
+const [lang, slug] = data.id.split("/");
+
+// Construct the desired URL: /[lang]/people/[id]
+const profileHref = `/${lang}/about/${people_folder}/${slug}`;
+---
+
+<Card
+  href={profileHref}
+  title={name}
+  headingLevel="h2"
+  imageMeta={image}
+  imageAlt={name}
+  class={cn("text-left", className)}
+>
+  <h3 class="mt-1 text-sm font-light">
+    {responsibility}
+  </h3>
+
+  <div class="mt-2 border-t pt-2">
+    <p class="mt-2 mb-4 line-clamp-3">{description}</p>
+  </div>
+  <Social socialLinks={social} />
+
+  <div slot="footer">
+    <Button
+      variant="default"
+      href={profileHref}
+      className="bg-primary/60 dark:bg-primary dark:hover:bg-primary/60 w-full"
+    >
+      View Profile
+    </Button>
+  </div>
+</Card>

@@ -1,0 +1,64 @@
+---
+import { humanize } from "@/lib/utils/textConverter";
+
+const { className }: { className?: string } = Astro.props;
+
+// --- MODIFICATIONS START ---
+const knownLangs = ["en", "id"];
+
+const pathname = Astro.url.pathname;
+const pathnameParts = pathname.split("/").filter((x) => x);
+
+let langPrefix = "";
+let paths = pathnameParts;
+
+// Check if the first part of the path is a known language code
+if (pathnameParts.length > 0 && knownLangs.includes(pathnameParts[0])) {
+  // It is a language code. Store it as a prefix.
+  langPrefix = `/${pathnameParts[0]}`;
+  // The actual paths for breadcrumbs are everything *after* the lang code.
+  paths = pathnameParts.slice(1);
+}
+
+// The "Home" link should point to the language root if it exists, otherwise the site root.
+let parts = [
+  {
+    label: "Home",
+    href: langPrefix || "/",
+    "aria-label": pathname === (langPrefix || "/") ? "page" : undefined,
+  },
+];
+
+// Build the rest of the breadcrumbs
+paths.forEach((label: string, i: number) => {
+  // Re-build the href by combining the language prefix and the path segments
+  const href = `${langPrefix}/${paths.slice(0, i + 1).join("/")}`;
+
+  // The original logic to skip "page" routes and humanize the label
+  label !== "page" &&
+    parts.push({
+      label: humanize(label.replace(".html", "").replace(/[-_]/g, " ")) || "",
+      href,
+      "aria-label": pathname === href ? "page" : undefined,
+    });
+});
+---
+
+<nav aria-label="Breadcrumb" class={className}>
+  <ol class="inline-flex" role="list">
+    {
+      parts.map(({ label, ...attrs }, index) => (
+        <li class="mx-1 capitalize" role="listitem">
+          {index > 0 && <span class="mr-1 inline-block">/</span>}
+          {index !== parts.length - 1 ? (
+            <a class="text-primary/95" {...attrs}>
+              {label}
+            </a>
+          ) : (
+            <span>{label}</span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

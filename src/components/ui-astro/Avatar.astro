@@ -1,0 +1,21 @@
+---
+import { Image } from "astro:assets";
+
+const { image, alt, resolution = 100, loading, size = "sm" } = Astro.props;
+---
+
+<Image
+  src={image ? image : "/images/about-us.webp"}
+  height={resolution}
+  width={resolution}
+  alt={alt ? alt : "Avatar"}
+  loading={loading}
+  class:list={[
+    "min-w-fit rounded-sm bg-black/20 object-cover outline-2 outline-offset-2 outline-inherit transition-transform duration-300 hover:scale-105",
+    {
+      "size-14": size === "lg",
+      "size-6": size === "sm",
+    },
+  ]}
+  aria-hidden="true"
+/>

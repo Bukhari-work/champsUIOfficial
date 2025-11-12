@@ -1,0 +1,177 @@
+---
+// =================================================================================
+// 1. IMPORTS
+// =================================================================================
+
+// 1a. i18n & Config
+import { useTranslations } from "@/i18n/utils.ts";
+import type { Language } from "@/i18n/ui.ts";
+import { i18n } from "@/config.ts";
+import { navigation } from "@/navigation.ts";
+
+// 1b. Layout & Components
+import type { PageMetadata, SideBarProps } from "@/types.ts";
+import AboutLayout from "@/layouts/AboutLayout.astro";
+import { MarqueePartners } from "@/layouts/blocks/MarqueePartners.tsx";
+
+// =================================================================================
+// 2. ROUTING & LANGUAGE VALIDATION
+// =================================================================================
+
+export async function getStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const { lang } = Astro.params;
+if (!i18n.locales.includes(lang)) {
+  throw new Error(
+    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+  );
+}
+
+// =================================================================================
+// 3. IMAGE & DATA PREPARATION
+// =================================================================================
+
+// --- Initialize Partner Images (Your glob logic) ---
+const imagesGovernment = import.meta.glob(
+  "public/images/partners/governments-partner/*.{jpeg,jpg,png,webp,svg}",
+);
+const imagePathsGovernment = Object.keys(imagesGovernment).map((path) =>
+  path.replace("/public", ""),
+);
+
+const imagesHospitals = import.meta.glob(
+  "public/images/partners/hospitals-partner/*.{jpeg,jpg,png,webp,svg}",
+);
+const imagePathsHospitals = Object.keys(imagesHospitals).map((path) =>
+  path.replace("/public", ""),
+);
+
+const imagesOrganizations = import.meta.glob(
+  "public/images/partners/organizations-partner/*.{jpeg,jpg,png,webp,svg}",
+);
+const imagePathsOrganizations = Object.keys(imagesOrganizations).map((path) =>
+  path.replace("/public", ""),
+);
+
+const imagesPublicHealthCenters = import.meta.glob(
+  "public/images/partners/public-health-centers-partner/*.{jpeg,jpg,png,webp,svg}",
+);
+const imagePathsPublicHealthCenters = Object.keys(
+  imagesPublicHealthCenters,
+).map((path) => path.replace("/public", ""));
+
+const imagesPrivate = import.meta.glob(
+  "public/images/partners/private-partner/*.{jpeg,jpg,png,webp,svg}",
+);
+const imagePathsPrivate = Object.keys(imagesPrivate).map((path) =>
+  path.replace("/public", ""),
+);
+
+const imagesUniversities = import.meta.glob(
+  "public/images/partners/universities-partner/*.{jpeg,jpg,png,webp,svg}",
+);
+const imagePathsUniversities = Object.keys(imagesUniversities).map((path) =>
+  path.replace("/public", ""),
+);
+
+// --- Translations ---
+const t = useTranslations(lang as Language);
+const nav = navigation[lang as keyof typeof navigation];
+
+// --- Page Metadata ---
+const content: PageMetadata = {
+  title: t("sidebar.whatWeDo.item.partners"),
+  description: t("partners.meta.description"), // New key
+};
+
+// --- Sidebar Data (Re-uses the same 'What We Do' sidebar) ---
+const sideBar: SideBarProps = {
+  title: t(nav.bars.whatWeDo.titleKey),
+  menuItems: nav.bars.whatWeDo.links.map((item) => ({
+    text: t(item.textKey),
+    href: item.href,
+    "aria-label": t(item.textKey),
+  })),
+};
+---
+
+<AboutLayout {content} {sideBar}>
+  <h1
+    class="font-lexend text-primary mt-8 mb-6 w-fit scroll-mt-24 text-6xl font-semibold"
+  >
+    {t("partners.title")}
+  </h1>
+  <div class="max-w-3xl">
+    <p>
+      {t("partners.description")}
+    </p>
+  </div>
+
+  <div class="not-prose mt-16 space-y-16">
+    <section id="government">
+      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+        {t("partners.gov")}
+      </h2>
+      <MarqueePartners imagePaths={imagePathsGovernment} duration="60" />
+    </section>
+
+    <section id="hospitals">
+      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+        {t("partners.hospitals")}
+      </h2>
+      <MarqueePartners
+        imagePaths={imagePathsHospitals}
+        duration="60"
+        reverse={true}
+      />
+    </section>
+
+    <section id="phc">
+      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+        {t("partners.phc")}
+      </h2>
+      <MarqueePartners
+        imagePaths={imagePathsPublicHealthCenters}
+        duration="40"
+      />
+    </section>
+
+    <section id="organizations">
+      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+        {t("partners.orgs")}
+      </h2>
+      <MarqueePartners
+        imagePaths={imagePathsOrganizations}
+        duration="40"
+        reverse={true}
+      />
+    </section>
+
+    <section id="private">
+      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+        {t("partners.private")}
+      </h2>
+      <MarqueePartners imagePaths={imagePathsPrivate} duration="40" />
+    </section>
+
+    <section id="universities">
+      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+        {t("partners.universities")}
+      </h2>
+      <MarqueePartners
+        imagePaths={imagePathsUniversities}
+        duration="40"
+        reverse={true}
+      />
+    </section>
+
+    <p class="prose dark:prose-invert mt-16 self-center text-center">
+      {t("experiences.contactPrompt")}
+      <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
+    </p>
+  </div>
+</AboutLayout>

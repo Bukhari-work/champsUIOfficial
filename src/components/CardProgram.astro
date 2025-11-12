@@ -1,0 +1,25 @@
+---
+import { plainify } from "@/lib/utils/textConverter";
+import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
+import Card from "@/components/blocks/Card.astro";
+// import Button from "@/components/ui-astro/Button.astro"; // Uncomment if you use the button
+
+const { data } = Astro.props;
+const { title, description, icon } = data;
+---
+
+<Card title={title} headingLevel="h3" class="text-start">
+  <div slot="media">
+    {
+      icon && (
+        <div class="relative flex h-16 w-16 items-center justify-center rounded-lg bg-white/60 shadow-sm">
+          <DynamicIcon icon={icon} className="text-3xl" />
+        </div>
+      )
+    }
+  </div>
+
+  <div class="text-muted-foreground mb-4 text-sm">
+    <p class="line-clamp-3">{plainify(description)}</p>
+  </div>
+</Card>

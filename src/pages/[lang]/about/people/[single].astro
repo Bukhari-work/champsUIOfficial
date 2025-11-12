@@ -1,0 +1,203 @@
+---
+// Imports from original [single].astro
+import Base from "@/layouts/Base.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import { i18n } from "@/config.ts";
+import type { Language } from "@/i18n/ui.ts";
+import { getLangFromUrl } from "@/i18n/utils.ts";
+import { getSinglePage } from "@/lib/contentParser.astro";
+
+// Imports from original CardAuthorLg.astro
+import { SETTINGS } from "@/config.ts";
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+import { cn } from "@/lib/utils.ts";
+import Social from "@/components/Social.astro";
+import Button from "@/components/ui-astro/Button.astro";
+
+// --- Static Paths Function (from [single].astro) ---
+export async function getStaticPaths() {
+  const PEOPLE_FOLDER = "people";
+  const people = await getSinglePage(PEOPLE_FOLDER);
+
+  // Create a path for each post, using the lang and slug from its own ID
+  const paths = people
+    .map((person) => {
+      const idParts = person.id.split("/"); // e.g., ['en', 'post-slug']
+
+      // Basic validation
+      if (idParts.length < 2) {
+        console.warn(
+          `[getStaticPaths] Skipping post with invalid ID: ${person.id}`,
+        );
+        return null;
+      }
+
+      const lang = idParts[0] as Language;
+      const slug = idParts[1];
+
+      // Validate that the lang from the post ID is a valid locale
+      if (!i18n.locales.includes(lang)) {
+        console.warn(
+          `[getStaticPaths] Skipping post with unknown lang '${lang}' in ID: ${person.id}`,
+        );
+        return null;
+      }
+
+      return {
+        params: {
+          lang: lang,
+          single: slug,
+        },
+        props: { person },
+      };
+    })
+    .filter((path) => path !== null); // Filter out any nulls from skipped posts
+
+  return paths;
+}
+
+// --- Props and Variables (Merged) ---
+
+// Prop from [single].astro
+const { person } = Astro.props;
+// const { lang, single } = Astro.params; // No longer needed for links
+
+// Variables from CardAuthorLg.astro
+const { people_folder } = SETTINGS;
+const {
+  name,
+  responsibility, // For the card subheader
+  role, // For the PageHeader
+  image,
+  social,
+} = person.data;
+const { Content } = await render(person);
+
+// Generate unique IDs (from CardAuthorLg.astro)
+const uniqueId = person.id.replace(/[^a-zA-Z0-9]/g, ""); // Sanitize ID
+const contentBoxId = `contentBox-${uniqueId}`;
+const toggleButtonId = `toggleButton-${uniqueId}`;
+const fadeOverlayId = `fadeOverlay-${uniqueId}`;
+
+// Attributes from [single].astro
+const content = { title: name };
+
+// 'personUrl' variable removed as it is no longer used
+---
+
+<Base content={content} makara>
+  {/* PageHeader from original [single].astro, using 'role' */}
+  <PageHeader title={role} />
+
+  <section class="mx-auto flex max-w-6xl flex-col px-2 py-16">
+    {/* --- Start of HTML from CardAuthorLg.astro --- */}
+    <article
+      class={cn(
+        "group hover:border-primary bg-background relative isolate grid grid-cols-1 gap-6 overflow-hidden rounded-xl border-2 p-6 duration-100  hover:shadow-xl dark:shadow-primary/20",
+      )}
+      transition:name={`person-card-${person.id}`}
+    >
+      <div class="lg:grid lg:grid-cols-[1fr_2fr] lg:gap-8">
+        <div
+          class="flex flex-col items-center text-center lg:items-start lg:text-left"
+        >
+          {
+            image && (
+              // *** UPDATED: Removed <a> tag ***
+              <div class="relative mb-6 h-75 w-75 self-center overflow-hidden rounded-xl lg:mt-6 lg:shrink-0">
+                <Image
+                  class="size-full object-cover"
+                  src={image.src}
+                  alt={name}
+                  width={445}
+                  height={230}
+                  format="webp"
+                  transition:name={`person-image-${person.id}`}
+                />
+              </div>
+            )
+          }
+
+          <header class="mb-4">
+            {/* *** UPDATED: Removed <a> tag *** */}
+            <h2 class="group-hover:text-primary text-xl font-bold">
+              <span transition:name={`person-name-${person.id}`}>{name}</span>
+            </h2>
+            <h3
+              class="text-text/80 mt-1 text-sm font-light"
+              transition:name={`person-role-${person.id}`}
+            >
+              {responsibility}
+            </h3>
+          </header>
+          <Social
+            socialLinks={social}
+            className="my-4 flex-wrap justify-center lg:justify-start"
+          />
+        </div>
+
+        <div
+          class="flex flex-col justify-start text-left lg:border-l-2 lg:pl-8"
+        >
+          <div class="relative mt-2 pt-2">
+            <div
+              id={contentBoxId}
+              class="prose dark:prose-invert max-w-none overflow-hidden transition-[max-height] duration-500 ease-in-out"
+              style="max-height: 450px"
+            >
+              <Content />
+              <div
+                id={fadeOverlayId}
+                class="from-background absolute bottom-0 left-0 h-32 w-full bg-gradient-to-t to-transparent transition-opacity duration-500 ease-in-out"
+              >
+              </div>
+            </div>
+            <div class="mt-4 flex w-full justify-center lg:justify-start">
+              <Button
+                class="z-10"
+                id={toggleButtonId}
+                onclick={`toggleContent('${contentBoxId}', '${toggleButtonId}', '${fadeOverlayId}')`}
+                variant="outline"
+              >
+                Read more
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+    {/* --- End of HTML from CardAuthorLg.astro --- */}
+
+    {/* --- Start of Script from CardAuthorLg.astro --- */}
+    <script is:inline>
+      function toggleContent(contentBoxId, toggleButtonId, fadeOverlayId) {
+        const contentBox = document.getElementById(contentBoxId);
+        const toggleButton = document.getElementById(toggleButtonId);
+        const fadeOverlay = document.getElementById(fadeOverlayId);
+
+        if (!contentBox || !toggleButton || !fadeOverlay) return;
+
+        const isExpanded = contentBox.classList.contains("expanded");
+
+        if (!isExpanded) {
+          // Expand
+          contentBox.style.maxHeight = contentBox.scrollHeight + "px";
+          contentBox.classList.add("expanded");
+          toggleButton.textContent = "Read less";
+          fadeOverlay.classList.add("opacity-0"); // Fade out
+        } else {
+          // Collapse
+          contentBox.style.maxHeight = "450px";
+          contentBox.classList.remove("expanded");
+          toggleButton.textContent = "Read more";
+          fadeOverlay.classList.remove("opacity-0"); // Fade in
+        }
+      }
+    </script>
+    {/* --- End of Script from CardAuthorLg.astro --- */}
+  </section>
+
+  {/* Footer content from original [single].astro */}
+  <div class="row justify-center pt-14 pb-16"></div>
+</Base>
