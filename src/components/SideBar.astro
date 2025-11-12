@@ -8,6 +8,13 @@ const { title, menuItems, className } = Astro.props;
 // Get the current page's path to determine the active link
 const { pathname } = Astro.url;
 
+const cleanPath = (path: string) => {
+  if (path === "/") return path;
+  return path.endsWith("/") ? path.slice(0, -1) : path;
+};
+
+const currentPath = cleanPath(pathname);
+
 // Define classes for the active link state
 const activeLinkClasses =
   "border-primary/50 bg-primary/5 dark:border-primary/40 dark:bg-primary/12 text-primary";
@@ -23,6 +30,9 @@ const activeLinkClasses =
     <ul class="lg:text-md flex overflow-x-auto text-sm lg:flex-col">
       {
         menuItems.map((item) => {
+          const isActive =
+            item.href && currentPath.endsWith(item.href.toString());
+
           return (
             <li class="flex w-full flex-1">
               <a
@@ -30,8 +40,8 @@ const activeLinkClasses =
                 class:list={[
                   "lg-py-1 hover:bg-primary/5 dark:hover:bg-primary/12 w-full shrink-0 border-b p-2.5 text-center text-nowrap focus-visible:[outline-offset:-4px]! lg:border-b-0 lg:border-l lg:px-4 lg:text-left",
                   {
-                    [activeLinkClasses]:
-                      item.href && pathname.endsWith(item.href.toString()),
+                    "border-primary/50 bg-primary/5 dark:border-primary/40 dark:bg-primary/12 text-primary":
+                      isActive,
                   },
                 ]}
               >
