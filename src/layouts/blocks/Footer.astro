@@ -52,27 +52,30 @@ const t = useTranslations(lang);
         />
         <div class="flex flex-col gap-1 pt-4 text-sm">
           {
-            secondaryLinks.map(({ text, href }) => (
-              <a
-                class="underline decoration-black/20 underline-offset-4 hover:decoration-black dark:decoration-white/50 dark:hover:decoration-white"
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                set:html={text}
-              />
-            ))
+            secondaryLinks.map(
+              ({ textKey, href }) =>
+                textKey && (
+                  <a
+                    class="underline decoration-black/20 underline-offset-4 hover:decoration-black dark:decoration-white/50 dark:hover:decoration-white"
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t(textKey)},
+                    <br />
+                    Universitas Indonesia
+                  </a>
+                ),
+            )
           }
         </div>
       </div>
       {
         links.map(({ titleKey, links }) => (
           <div class="text-foreground col-span-6 md:col-span-3 lg:col-span-2">
-            <div class="mb-3 font-medium">
-              {titleKey ? t(titleKey) : titleKey}
-            </div>
+            <div class="mb-3 font-medium">{titleKey ? t(titleKey) : links}</div>
             {links?.length && (
               <ul class="text-sm">
-                {/* --- MODIFIED ---: Map over links and translate text */}
                 {links.map(({ text, textKey, href, target, rel }) => (
                   <li class="mb-2">
                     <a

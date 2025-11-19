@@ -92,8 +92,8 @@ export const navigation = {
 export const sharedFooter = {
   secondaryLinks: [
     {
-      text: "Faculty of Public Health</br>Universitas Indonesia<br/>",
-      href: "#", // Add your Google Maps link here
+      textKey: "footer.secondary",
+      href: "https://share.google/ItznTaDxWjFuOkGUM",
     },
   ],
   contact: {

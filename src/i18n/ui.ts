@@ -16,6 +16,7 @@ export const ui = {
     "button.latestProgram": "Latest Program",
 
     // Footer
+    "footer.secondary": "Faculty of Public Health",
     "footer.title.about": "About Us",
     "footer.title.whatWeDo": "What We Do",
     "footer.title.contact": "Contact",
@@ -136,7 +137,7 @@ export const ui = {
     "about.experts.seniorResearchers": "Senior Researchers",
 
     // About section sidebar
-    "sidebar.about.title": "CHAMPS",
+    "sidebar.about.title": "About",
     "sidebar.about.item.vision": "Vision",
     "sidebar.about.item.mission": "Mission",
     "sidebar.about.item.values": "Values",
@@ -216,7 +217,7 @@ export const ui = {
       "Monitoring, evaluation, and strategy to ensure CSR initiatives create lasting change.",
 
     // What We Do section sidebar
-    "sidebar.whatWeDo.title": "CHAMPS",
+    "sidebar.whatWeDo.title": "What We Do",
     "sidebar.whatWeDo.item.whatWeDo": "What We Do",
     "sidebar.whatWeDo.item.experiences": "Experiences",
     "sidebar.whatWeDo.item.partners": "Our Partners",
@@ -301,6 +302,7 @@ export const ui = {
     "button.latestProgram": "Program Terbaru",
 
     // Footer
+    "footer.secondary": "Fakultas Kesehatan Masyarakat",
     "footer.title.contact": "Kontak",
     "footer.copyright": `© ${new Date().getFullYear()} CHAMPS UI. Hak cipta dilindungi.`,
 
@@ -420,7 +422,7 @@ export const ui = {
     "about.experts.seniorResearchers": "Peneliti Senior",
 
     // Sidebar untuk bagian Tentang
-    "sidebar.about.title": "CHAMPS",
+    "sidebar.about.title": "Tentang",
     "sidebar.about.item.vision": "Visi",
     "sidebar.about.item.mission": "Misi",
     "sidebar.about.item.values": "Nilai",
@@ -502,7 +504,7 @@ export const ui = {
       "Pemantauan, evaluasi, dan strategi untuk memastikan inisiatif CSR menciptakan perubahan yang langgeng.",
 
     // Sidebar untuk bagian Apa yang kami lakukan
-    "sidebar.whatWeDo.title": "CHAMPS",
+    "sidebar.whatWeDo.title": "Layanan",
     "sidebar.whatWeDo.item.whatWeDo": "Layanan Kami",
     "sidebar.whatWeDo.item.experiences": "Pengalaman",
     "sidebar.whatWeDo.item.partners": "Partner Kami",
