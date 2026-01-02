@@ -8,7 +8,6 @@ import ThemeToggle from "@/components/ThemeToggle.astro";
 import NavDrawer from "@/components/NavDrawer.astro";
 import Button from "@/components/ui-astro/Button.astro";
 import { Image } from "astro:assets";
-// 1. Import the LanguageToggle component
 import LanguageToggle from "@/components/LanguageToggle.astro";
 
 type TranslationKeys = keyof (typeof ui)[typeof i18n.defaultLocale];
@@ -19,34 +18,64 @@ const t = useTranslations(lang as Language);
 const nav = navigation[lang as keyof typeof navigation];
 const homeUrl = nav.header[0]?.href || `/${lang}/`;
 
-const { pathname } = Astro.url;
+const normalize = (p: string) => (p === "/" ? "/" : p.replace(/\/+$/, ""));
+const pathname = normalize(Astro.url.pathname);
+const isActiveHref = (href?: string) => {
+  if (!href) return false;
+  const target = normalize(href);
+
+  // Treat "/{lang}" and "/{lang}/" as the home route
+  const homeA = normalize(`/${lang}`);
+  const homeB = normalize(`/${lang}/`);
+  const isHome = target === homeA || target === homeB;
+
+  if (isHome) return pathname === homeA || pathname === homeB;
+
+  return pathname === target || pathname.startsWith(`${target}/`);
+};
 ---
 
 <header
   id="site-header"
-  class="bg-background/90 fixed top-0 z-30 w-screen border-b backdrop-blur-sm"
+  data-scrolled="false"
+  class:list={[
+    // Layout
+    "fixed inset-x-0 top-0 z-30 w-screen",
+    // Visuals (default: subtle, no border)
+    "bg-background/40 supports-[backdrop-filter]:bg-background/60 backdrop-blur-sm",
+    "border-b border-transparent",
+    // When scrolled (toggled via data attribute)
+    "data-[scrolled=true]:border-border/100",
+  ]}
 >
   <div class="relative mx-3 flex h-full grow md:mx-8 lg:mx-12">
     <nav
       aria-label="Main navigation"
-      class="mx-auto flex w-full items-center justify-between px-3 md:max-w-7xl md:px-6"
+      class="mx-auto flex h-16 w-full items-center justify-between px-3 md:max-w-7xl md:px-6"
     >
-      <a href={homeUrl} class="flex items-center">
+      <a href={homeUrl} class="flex items-center" aria-label="Homepage">
         <span class="sr-only">Homepage</span>
+
+        <!-- Dark mode logo -->
         <Image
-          src="/images/Logo-landscape-black.png"
+          src="/images/Logo-landscape-black.webp"
           alt="Company Logo"
           width={150}
-          height={150}
+          height={48}
           class="hidden p-2 transition-transform duration-300 hover:scale-105 dark:block"
+          loading="eager"
+          decoding="async"
         />
 
+        <!-- Light mode logo -->
         <Image
-          src="/images/Logo-landscape-white.png"
+          src="/images/Logo-landscape-white.webp"
           alt="Company Logo"
           width={150}
-          height={150}
-          class="p-2 transition-transform duration-300 hover:scale-105 dark:hidden"
+          height={48}
+          class="block p-2 transition-transform duration-300 hover:scale-105 dark:hidden"
+          loading="eager"
+          decoding="async"
         />
       </a>
 
@@ -86,7 +115,7 @@ const { pathname } = Astro.url;
           nav.callToAction && (
             <Button
               size="default"
-              className="bg-primary/80 my-auto  transition-colors duration-800"
+              className="my-auto bg-primary/80 transition-colors duration-200"
               href={nav.callToAction.href}
             >
               {t(nav.callToAction.textKey)}
@@ -103,7 +132,7 @@ const { pathname } = Astro.url;
           nav.callToAction && (
             <Button
               size="sm"
-              className="bg-primary/60 mr-2 align-middle transition-colors duration-800"
+              className="mr-2 bg-primary/60 align-middle transition-colors duration-200"
               href={nav.callToAction.href}
             >
               {t(nav.callToAction.textKey)}
@@ -116,6 +145,7 @@ const { pathname } = Astro.url;
           size="sm"
           data-aw-show-nav
           className="align-middle"
+          aria-label="Open menu"
         />
       </div>
     </nav>
@@ -133,20 +163,52 @@ const { pathname } = Astro.url;
 <NavDrawer lang={lang} />
 
 <script is:inline>
-  const addBorder = () => {
-    const header = document.getElementById("site-header");
-    if (header) {
-      const scrollThreshold = 50; // Adjust this value as needed
-      window.addEventListener("scroll", () => {
-        if (window.scrollY > scrollThreshold) {
-          header.classList.add("border-b");
-        } else {
-          header.classList.remove("border-b");
-        }
-      });
-    }
-  };
+  (() => {
+    let cleanup;
 
-  window.addEventListener("load", addBorder);
-  document.addEventListener("astro:after-swap", addBorder);
+    const setup = () => {
+      const header = document.getElementById("site-header");
+      if (!header) return;
+
+      const threshold = 8;
+      let ticking = false;
+
+      const update = () => {
+        const scrolled = window.scrollY > threshold;
+        header.dataset.scrolled = scrolled ? "true" : "false";
+      };
+
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          update();
+        });
+      };
+
+      update();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      cleanup = () => {
+        window.removeEventListener("scroll", onScroll);
+      };
+    };
+
+    const run = () => {
+      cleanup?.();
+      setup();
+    };
+
+    // Initial load
+    if (document.readyState === "loading") {
+      window.addEventListener("DOMContentLoaded", run, { once: true });
+    } else {
+      run();
+    }
+
+    // Astro client-side navigation
+    document.addEventListener("astro:after-swap", run);
+    document.addEventListener("astro:before-swap", () => cleanup?.());
+  })();
 </script>
