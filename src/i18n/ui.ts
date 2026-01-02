@@ -41,17 +41,27 @@ export const ui = {
       "The foundation of health development must be based on policy considerations that encourage the fulfilment of society's health needs in an effective, efficient, equitable, and sustainable manner.",
 
     // Homepage - Stats Section
-    "stats.title": "CHAMPS UI IN NUMBERS in 2024",
-    "stats.subtitle":
-      "16 Research, Training, Workshops, Strategic Plans, and Satisfaction Surveys Proposal Developed",
-    "stats.item1": "Research/Studies Conducted",
-    "stats.item2": "Training and Capacity Buildings Organized",
-    "stats.item3": "Policy Development and Strategic Planning",
-    "stats.item4": "Consultancy Services Provided",
-    "stats.item5": "Community Empowerment",
-    "stats.item6": "Audience with Higher Stakeholders",
-    "stats.item7": "Conferences and Public Engagement",
-    "stats.item8": "Training/ Workshop Modules Developed",
+    "stats.title": "CHAMPS UI IN NUMBERS in 2025",
+    "stats.subtitle": "19 total activities delivered across four core areas",
+
+    "stats.item1": "Consultation & Assistance",
+    "stats.item2": "Research",
+    "stats.item3": "Capacity Building & Training",
+    "stats.item4": "Conference, Seminar & Policy Dialogue",
+
+    "stats.description1":
+      "Strategic planning, program evaluation, and satisfaction surveys",
+    "stats.description2":
+      "Malaria mortality, access to essential medicines, and clinical data policy",
+    "stats.description3":
+      "AI literacy and data usage & post-training evaluations",
+    "stats.description4":
+      "Fostering dialogue on equitable and sustainable health services",
+
+    // Homepage - Video Section
+    "video.title": "CHAMPS UI Kaleidoscope",
+    "video.subtitle":
+      "Reflection of our shared commitment, collaboration, and progress.",
 
     // Homepage - News Section
     "news.latest": "Latest News",
@@ -325,17 +335,27 @@ export const ui = {
       "Landasan pembangunan kesehatan harus didasarkan pada pertimbangan kebijakan yang mendorong pemenuhan kebutuhan kesehatan masyarakat secara efektif, efisien, berkeadilan, dan berkelanjutan.",
 
     // Homepage - Stats Section
-    "stats.title": "CHAMPS UI DALAM ANGKA di 2024",
-    "stats.subtitle":
-      "16 Proposal Penelitian, Pelatihan, Lokakarya, Rencana Strategis, dan Survei Kepuasan Dikembangkan",
-    "stats.item1": "Riset/Studi yang Dilakukan",
-    "stats.item2": "Pelatihan dan Peningkatan Kapasitas yang Diselenggarakan",
-    "stats.item3": "Pengembangan Kebijakan dan Perencanaan Strategis",
-    "stats.item4": "Layanan Konsultasi yang Diberikan",
-    "stats.item5": "Pemberdayaan Masyarakat",
-    "stats.item6": "Audiensi dengan Pemangku Kepentingan Tingkat Tinggi",
-    "stats.item7": "Konferensi dan Keterlibatan Publik",
-    "stats.item8": "Modul Pelatihan/ Lokakarya yang Dikembangkan",
+    "stats.title": "CHAMPS UI DALAM ANGKA 2025",
+    "stats.subtitle": "19 Kegiatan yang dilaksanakan dalam empat bidang utama",
+
+    "stats.item1": "Konsultasi & Pendampingan",
+    "stats.item2": "Riset",
+    "stats.item3": "Peningkatan Kapasitas & Pelatihan",
+    "stats.item4": "Konferensi, Seminar & Dialog Kebijakan",
+
+    "stats.description1":
+      "Perencanaan strategis, evaluasi program, dan survei kepuasan",
+    "stats.description2":
+      "Mortalitas malaria, akses terhadap obat esensial, dan kebijakan data klinis",
+    "stats.description3":
+      "Literasi AI dan pemanfaatan data serta evaluasi pascapelatihan",
+    "stats.description4":
+      "Mendorong dialog untuk layanan kesehatan yang adil dan berkelanjutan",
+
+    // Homepage - Video Section
+    "video.title": "CHAMPS UI Kaleidoscope",
+    "video.subtitle":
+      "Refleksi dari komitmen, kolaborasi, dan kemajuan bersama kami.",
 
     // Homepage - News Section
     "news.latest": "Berita Terbaru",

@@ -91,6 +91,7 @@ export interface SideBarProps extends HTMLAttributes<"div"> {
 export type Stat = {
   amount?: number | string;
   icon?: string;
+  description?: string;
 } & ({ title: string; titleKey?: never } | { title?: never; titleKey: Key });
 
 // =================================================================

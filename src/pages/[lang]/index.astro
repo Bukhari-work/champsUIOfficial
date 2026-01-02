@@ -14,6 +14,7 @@ import { i18n } from "@/config.ts";
 import Base from "@/layouts/Base.astro";
 import Hero from "@/layouts/blocks/Hero.astro";
 import Stats from "@/layouts/blocks/Stats.astro";
+import Headline from "@/components/ui-astro/Headline.astro";
 import { MarqueeHome } from "@/layouts/blocks/MarqueeHome.tsx";
 
 // 1d. UI Components
@@ -59,6 +60,8 @@ const allPosts = await getSinglePage(NEWS_FOLDER);
 const currentPosts = sortByDate(allPosts)
   .filter((post) => post.id && post.id.startsWith(`${lang}/`))
   .slice(0, 3);
+
+const ytPatternId = `pattern-${crypto.randomUUID().slice(0, 8)}`;
 
 // =================================================================================
 // 4. PAGE METADATA FOR INDEX
@@ -124,16 +127,86 @@ const content = {
     title={t("stats.title")}
     subtitle={t("stats.subtitle")}
     stats={[
-      { title: t("stats.item1"), amount: "4" },
-      { title: t("stats.item2"), amount: "3" },
-      { title: t("stats.item3"), amount: "2" },
-      { title: t("stats.item4"), amount: "3" },
-      { title: t("stats.item5"), amount: "2" },
-      { title: t("stats.item6"), amount: "1" },
-      { title: t("stats.item7"), amount: "1" },
-      { title: t("stats.item8"), amount: "2" },
+      {
+        title: t("stats.item1"),
+        amount: "13",
+        description: t("stats.description1"),
+      },
+      {
+        title: t("stats.item2"),
+        amount: "3",
+        description: t("stats.description2"),
+      },
+      {
+        title: t("stats.item3"),
+        amount: "2",
+        description: t("stats.description3"),
+      },
+      {
+        title: t("stats.item4"),
+        amount: "1",
+        description: t("stats.description4"),
+      },
     ]}
   />
+
+  <div
+    class="via-primary/30 h-px w-full bg-gradient-to-r from-transparent to-transparent"
+  >
+  </div>
+
+  <section class="not-prose mx-auto my-20 max-w-6xl p-6">
+    <article
+      class={cn(
+        "group hover:border-primary bg-background relative isolate flex flex-col gap-6 overflow-hidden rounded-xl border-2 p-6 duration-100 hover:[box-shadow:_var(--sh-alt)]",
+      )}
+    >
+      {/* SVG background pattern */}
+      <svg
+        class="text-primary pointer-events-none invisible absolute inset-0 z-[-1] size-full [mask-image:linear-gradient(to_left,_#ffffffad,_transparent)] opacity-100 select-none group-hover:visible dark:opacity-80"
+        aria-hidden="true"
+      >
+        <defs>
+          <pattern
+            id={ytPatternId}
+            width="4"
+            height="4"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(45)"
+          >
+            <line
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="4"
+              stroke="currentColor"
+              stroke-width="1.5"></line>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#${ytPatternId})`}></rect>
+      </svg>
+
+      {/* Optional header (delete if you don't want it) */}
+      <header class="space-y-2">
+        <Headline title={t("video.title")} subtitle={t("video.subtitle")} />
+      </header>
+
+      {/* Media */}
+      <div class="bg-muted/10 relative overflow-hidden rounded-lg border">
+        <div class="relative aspect-video w-full">
+          <iframe
+            class="absolute inset-0 h-full w-full"
+            src="https://www.youtube.com/embed/byjpp35gmXw?si=GkcNdr42RM0xRhSp"
+            title="YouTube video player"
+            frameborder="0"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </article>
+  </section>
 
   <div
     class="via-primary/30 h-px w-full bg-gradient-to-r from-transparent to-transparent"
