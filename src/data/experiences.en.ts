@@ -465,5 +465,128 @@ export const experiencesEn: ExperienceItem[] = [
     title: "Employee Satisfaction Survey",
     location: "Fatmawati Hospital",
     icon: "IoHappy",
+  }, // ===== 2025 =====
+  {
+    year: 2025,
+    title:
+      "Estimation of Malaria-Related Mortality Through Mortality Audits and Mathematical Modelling",
+    location: "World Health Organization",
+    icon: "FaChartLine",
+  },
+  {
+    year: 2025,
+    title:
+      "Technical Assistance on Health Program Governance: West Aceh, Gayo Lues, and Bener Meriah Districts",
+    location: "Ministry of Health",
+    icon: "FaCommentMedical",
+  },
+  {
+    year: 2025,
+    title: "Data collection of Malaria Mortality Research",
+    icon: "FaClipboardList",
+  },
+  {
+    year: 2025,
+    title: "Assessment of Health Workforce and Health Facility Readiness",
+    location: "Central Papua Province",
+    icon: "FaHospitalUser",
+  },
+  {
+    year: 2025,
+    title: "PDPI Strategic Plan Development 2026-2030",
+    location: "PDPI",
+    icon: "FaClipboard",
+  },
+  {
+    year: 2025,
+    title: "Jury Member for the Outstanding Health Worker Assessment",
+    location: "North Jakarta Health Office",
+    icon: "FaClipboardCheck",
+  },
+  {
+    year: 2025,
+    title:
+      "Resource Person for the Regional Health Work and Budget Planning (RANKESDA) Training",
+    location: "Ministry of Health",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2025,
+    title:
+      "Post-Training Evaluation on: (1) Integrated Services for Persons with Disabilities (2) Agent of Change for Non-Communicable Diseases",
+    location: "PUSLATKESDA DKI JAKARTA",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2025,
+    title:
+      "National Health Scientific Seminar Forum: Advancing Equitable, High-Quality, and Sustainable Health Services",
+    icon: "FaGlobe",
+  },
+  {
+    year: 2025,
+    title:
+      "Evaluation of Tuberculosis Control Program Implementation as a Basis for Developing the Regional Action Plan",
+    location: "Bappeda of Depok City",
+    icon: "FaVials",
+  },
+  {
+    year: 2025,
+    title:
+      "Study on Data Ownership in Clinical Trials and Its Implications for International Collaboration",
+    location: "Ministry of Health",
+    icon: "FaFileContract",
+  },
+  {
+    year: 2025,
+    title:
+      "Comparative Health System Analysis of Access to Essential Medicines in Low- and Middle-Income Countries (LMICs)",
+    location: "BRIGHT Grant Tsinghua University",
+    icon: "FaPills",
+  },
+  {
+    year: 2025,
+    title: "UNILA Hospital Strategic Plan Development 2026-2030",
+    location: "University of Lampung",
+    icon: "FaClipboard",
+  },
+  {
+    year: 2025,
+    title:
+      "Assessment of Alignment of Health Sector Master Plan (RIBK) at Provincial, District, and City Health Offices",
+    location: "Ministry of Health",
+    icon: "FaClipboardCheck",
+  },
+  {
+    year: 2025,
+    title:
+      "Workshop on AI Literacy and the Use of BPJS Sample Data for Scientific Publications",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2025,
+    title: "(1) Patient Satisfaction Survey (2) Employee Satisfaction Survey",
+    location:
+      "Persahabatan Hospital; Harapan Kita Hospital; Fatmawati Hospital",
+    icon: "FaUserCheck",
+  },
+  {
+    year: 2025,
+    title:
+      "Development of an Academic Paper for the Draft Regional Regulation on Health Service Delivery",
+    location: "Depok City Health Office",
+    icon: "FaFileSignature",
+  },
+  {
+    year: 2025,
+    title: "Employee Satisfaction Survey",
+    location: "Persahabatan Hospital",
+    icon: "IoHappy",
+  },
+  {
+    year: 2025,
+    title: "Employee Satisfaction Survey",
+    location: "Harapan Kita Hospital",
+    icon: "IoHappy",
   },
 ];

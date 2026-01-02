@@ -460,4 +460,127 @@ export const experiencesId: ExperienceItem[] = [
     location: "RS Fatmawati",
     icon: "IoHappy",
   },
+  // ===== 2025 =====
+  {
+    year: 2025,
+    title:
+      "Estimasi Mortalitas Terkait Malaria melalui Audit Kematian dan Pemodelan Matematis",
+    location: "World Health Organization",
+    icon: "FaChartLine",
+  },
+  {
+    year: 2025,
+    title:
+      "Asistensi Teknis Tata Kelola Program Kesehatan: Kab. Aceh Barat, Kab. Gayo Lues, dan Kab. Bener Meriah",
+    location: "Kementerian Kesehatan",
+    icon: "FaCommentMedical",
+  },
+  {
+    year: 2025,
+    title: "Pengumpulan data penelitian mortalitas malaria",
+    icon: "FaClipboardList",
+  },
+  {
+    year: 2025,
+    title: "Asesmen Ketenagaan Kesehatan dan Kesiapan Fasilitas Kesehatan",
+    location: "Provinsi Papua Tengah",
+    icon: "FaHospitalUser",
+  },
+  {
+    year: 2025,
+    title: "Penyusunan Rencana Strategis PDPI 2026-2030",
+    location: "PDPI",
+    icon: "FaClipboard",
+  },
+  {
+    year: 2025,
+    title: "Juri Penilaian Tenaga Kesehatan Teladan",
+    location: "Suku Dinas Kesehatan Jakarta Utara",
+    icon: "FaClipboardCheck",
+  },
+  {
+    year: 2025,
+    title:
+      "Narasumber Pelatihan Perencanaan Kerja dan Anggaran Kesehatan Daerah (RANKESDA)",
+    location: "Kementerian Kesehatan",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2025,
+    title:
+      "Evaluasi Pasca-Pelatihan: (1) Layanan Terintegrasi bagi Penyandang Disabilitas (2) Agen Perubahan Penyakit Tidak Menular",
+    location: "PUSLATKESDA DKI JAKARTA",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2025,
+    title:
+      "Forum Seminar Ilmiah Kesehatan Nasional: Mendorong Layanan Kesehatan yang Berkeadilan, Bermutu Tinggi, dan Berkelanjutan",
+    icon: "FaGlobe",
+  },
+  {
+    year: 2025,
+    title:
+      "Evaluasi Pelaksanaan Program Pengendalian Tuberkulosis sebagai Dasar Penyusunan Rencana Aksi Daerah",
+    location: "Bappeda Kota Depok",
+    icon: "FaVials",
+  },
+  {
+    year: 2025,
+    title:
+      "Kajian Kepemilikan Data dalam Uji Klinik dan Implikasinya bagi Kolaborasi Internasional",
+    location: "Kementerian Kesehatan",
+    icon: "FaFileContract",
+  },
+  {
+    year: 2025,
+    title:
+      "Analisis Perbandingan Sistem Kesehatan terkait Akses Obat Esensial di Negara Berpendapatan Rendah dan Menengah (LMICs)",
+    location: "BRIGHT Grant Tsinghua University",
+    icon: "FaPills",
+  },
+  {
+    year: 2025,
+    title: "Penyusunan Rencana Strategis RS UNILA 2026-2030",
+    location: "Universitas Lampung",
+    icon: "FaClipboard",
+  },
+  {
+    year: 2025,
+    title:
+      "Asesmen Kesesuaian Rencana Induk Bidang Kesehatan (RIBK) di tingkat Provinsi, Kabupaten, dan Kota",
+    location: "Kementerian Kesehatan",
+    icon: "FaClipboardCheck",
+  },
+  {
+    year: 2025,
+    title:
+      "Workshop Literasi AI dan Pemanfaatan Data Sampel BPJS untuk Publikasi Ilmiah",
+    icon: "FaChalkboard",
+  },
+  {
+    year: 2025,
+    title: "(1) Survei Kepuasan Pasien (2) Survei Kepuasan Pegawai",
+    location: "RS Persahabatan; RS Harapan Kita; RS Fatmawati",
+    icon: "FaUserCheck",
+  },
+  {
+    year: 2025,
+    title:
+      "Penyusunan Naskah Akademik untuk Rancangan Peraturan Daerah tentang Penyelenggaraan Pelayanan Kesehatan",
+    location: "Dinas Kesehatan Kota Depok",
+    icon: "FaFileSignature",
+  },
+  {
+    year: 2025,
+    title: "Survei Kepuasan Pegawai",
+    location: "RS Persahabatan",
+    icon: "IoHappy",
+  },
+  {
+    year: 2025,
+    title: "Survei Kepuasan Pegawai",
+    location: "RS Harapan Kita",
+    icon: "IoHappy",
+  },
 ];
