@@ -16,7 +16,7 @@ export const routes = {
     "what-we-do/experiences": "what-we-do/experiences",
     "what-we-do/partners": "what-we-do/partners",
 
-    projects: "projects",
+    projects: "projects/tna",
     // Sub-pages for Projects
     "projects/ghld": "projects/ghld",
     "projects/sempls": "projects/sempls",
@@ -39,7 +39,7 @@ export const routes = {
     "what-we-do/experiences": "what-we-do/experiences",
     "what-we-do/partners": "what-we-do/partners",
 
-    projects: "projects",
+    projects: "projects/tna",
     // Sub-pages for Projects
     "projects/ghld": "projects/ghld",
     "projects/sempls": "projects/sempls",

@@ -13,7 +13,7 @@ export const ui = {
     "nav.contact": "Contact",
 
     // Call to Action Button
-    "button.latestProgram": "Latest Program",
+    "button.latestProgram": "Questionnaire",
 
     // Footer
     "footer.secondary": "Faculty of Public Health",
@@ -309,7 +309,7 @@ export const ui = {
     "nav.contact": "Kontak",
 
     // Call to Action Button
-    "button.latestProgram": "Program Terbaru",
+    "button.latestProgram": "Kuesioner",
 
     // Footer
     "footer.secondary": "Fakultas Kesehatan Masyarakat",

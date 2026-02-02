@@ -30,17 +30,17 @@ speakers:
   - name: "Prof. Tjandra Yoga Aditama"
     title: "Former Regional Coordinator of Health Security and Emergency Response, WHO SEARO"
     image:
-      src: /images/projects/ghld-speaker-1.webp
+      src: /images/projects/tna-champs.webp
       alt: "Prof. dr. Tjandra Yoga Aditama"
   - name: "Dr. Agustin Kusumayati"
     title: "President of the Asia Pacific Academic Consortium for Public Health (APACPH)"
     image:
-      src: /images/projects/ghld-speaker-2.webp
+      src: /images/projects/tna-champs.webp
       alt: "Dr. Agustin Kusumayati"
   - name: "Dr. Raditya M. Kusumaningprang"
     title: "Counsellor at the Ministry of Foreign Affairs, Republic of Indonesia"
     image:
-      src: /images/projects/ghld-speaker-3.webp
+      src: /images/projects/tna-champs.webp
       alt: "Raditya M. Kusumaningprang"
 
 sidebarDetails:
@@ -69,7 +69,7 @@ sidebarRegister:
   buttonText: "Register Here"
   deadline: "Submission Deadline: 26 October 2025"
   qrCode:
-    src: /images/projects/ghld-qr-code.jpg
+    src: /images/projects/tna-champs.webp
     alt: "QR Code for GHLD 2025 Application Form"
 
 sidebarContact:

@@ -5,7 +5,7 @@ import type { Language } from "./i18n/ui";
 export const SITE = {
   company: "CHAMPS UI",
   base_href: "https://www.champs-ui.org",
-  favicon: "/images/favicon.svg",
+  favicon: "/images/favicon.png",
   logo: "/images/logo.svg",
   logo_darkmode: "/images/logo-darkmode.svg",
   logo_width: "30",
