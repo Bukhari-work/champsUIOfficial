@@ -1,4 +1,4 @@
- run export const routes = {
+export const routes = {
   en: {
     home: "/",
     news: "news",
