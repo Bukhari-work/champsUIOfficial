@@ -1,4 +1,4 @@
-export const routes = {
+ run export const routes = {
   en: {
     home: "/",
     news: "news",
@@ -16,7 +16,7 @@ export const routes = {
     "what-we-do/experiences": "what-we-do/experiences",
     "what-we-do/partners": "what-we-do/partners",
 
-    projects: "projects/tna",
+    projects: "projects/tna-champs-ui",
     // Sub-pages for Projects
     "projects/ghld": "projects/ghld",
     "projects/sempls": "projects/sempls",
@@ -39,7 +39,7 @@ export const routes = {
     "what-we-do/experiences": "what-we-do/experiences",
     "what-we-do/partners": "what-we-do/partners",
 
-    projects: "projects/tna",
+    projects: "projects/tna-champs-ui",
     // Sub-pages for Projects
     "projects/ghld": "projects/ghld",
     "projects/sempls": "projects/sempls",
