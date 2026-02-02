@@ -73,80 +73,100 @@ const projects = defineCollection({
     headtitle: z.string().optional(),
     subtitle: z.string().optional(),
 
-    // --- Main Content Blocks ---
-    // 'About' section will be the main Markdown body
-    takeaways: z.object({
-      heading: z.string(),
-      intro: z.string(),
-      items: z.array(z.string()),
-    }),
-    audience: z.object({
-      heading: z.string(),
-      items: z.array(z.string()),
-    }),
-    audienceNotes: z.array(
-      z.object({
-        icon: z.string(), // Icon name (e.g., "LuLanguages")
-        text: z.string(),
-      }),
-    ),
-    speakers: z.array(
-      z.object({
-        name: z.string(),
-        title: z.string(),
-        image: z
+    // --- Main Content Blocks (OPTIONAL by type) ---
+    takeaways: z
+      .object({
+        heading: z.string(),
+        intro: z.string(),
+        items: z.array(z.string()),
+      })
+      .optional(),
+
+    audience: z
+      .object({
+        heading: z.string(),
+        items: z.array(z.string()),
+      })
+      .optional(),
+
+    audienceNotes: z
+      .array(
+        z.object({
+          icon: z.string(),
+          text: z.string(),
+        }),
+      )
+      .optional(),
+
+    speakers: z
+      .array(
+        z.object({
+          name: z.string(),
+          title: z.string(),
+          image: z
+            .object({
+              src: z.string(),
+              alt: z.string(),
+            })
+            .optional(),
+        }),
+      )
+      .optional(),
+
+    // --- Sidebar ---
+    sidebarDetails: z
+      .object({
+        heading: z.string(),
+        items: z.array(
+          z.object({
+            icon: z.string(),
+            text: z.string(),
+          }),
+        ),
+      })
+      .optional(),
+
+    sidebarFee: z
+      .object({
+        heading: z.string(),
+        items: z.array(
+          z.object({
+            icon: z.string().optional(),
+            details: z.string().optional(),
+            price: z.string(),
+          }),
+        ),
+        includes: z.string().optional(),
+        excludes: z.string().optional(),
+      })
+      .optional(),
+
+    sidebarRegister: z
+      .object({
+        href: z.string().url(),
+        buttonText: z.string(),
+        deadline: z.string().optional(),
+        qrCode: z
           .object({
             src: z.string(),
             alt: z.string(),
           })
           .optional(),
-      }),
-    ),
+      })
+      .optional(),
 
-    // --- Sidebar ---
-    sidebarDetails: z.object({
-      heading: z.string(),
-      items: z.array(
-        z.object({
-          icon: z.string(),
-          text: z.string(),
-        }),
-      ),
-    }),
-    sidebarFee: z.object({
-      heading: z.string(),
-      // Array to support multiple price tiers
-      items: z.array(
-        z.object({
-          icon: z.string().optional(),
-          details: z.string().optional(), // "Until 26 Oct 2025"
-          price: z.string(),
-        }),
-      ),
-      includes: z.string(),
-      excludes: z.string(),
-    }),
-    sidebarRegister: z.object({
-      href: z.string().url(),
-      buttonText: z.string(),
-      deadline: z.string(),
-      qrCode: z
-        .object({
-          src: z.string(),
-          alt: z.string(),
-        })
-        .optional(),
-    }),
-    sidebarContact: z.object({
-      heading: z.string(),
-      links: z.array(
-        z.object({
-          href: z.string().url(),
-          icon: z.string(), // Icon name (e.g., "FaWhatsapp")
-          text: z.string(),
-        }),
-      ),
-    }),
+    sidebarContact: z
+      .object({
+        heading: z.string(),
+        links: z.array(
+          z.object({
+            href: z.string().url(),
+            icon: z.string(),
+            text: z.string(),
+          }),
+        ),
+      })
+      .optional(),
   }),
 });
 
