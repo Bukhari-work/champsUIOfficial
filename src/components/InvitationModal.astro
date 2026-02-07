@@ -1,0 +1,88 @@
+---
+interface Props {
+  storageKey?: string;
+}
+
+const { storageKey = "champs-tna-invitation-dismissed" } = Astro.props;
+---
+
+<div
+  id="invitation-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="invitation-title"
+>
+  <!-- Modal Panel -->
+  <div
+    id="invitation-panel"
+    class="bg-background relative w-full max-w-2xl scale-95 rounded-3xl p-6 opacity-0 shadow-2xl transition-all duration-300"
+  >
+    <!-- Close Button -->
+    <button
+      id="close-invitation"
+      aria-label="Close invitation"
+      class="bg-background text-muted-foreground hover:text-foreground absolute top-4 right-4 rounded-full border p-2 shadow transition hover:scale-105"
+    >
+      ✕
+    </button>
+
+    <!-- Content -->
+    <slot />
+  </div>
+</div>
+
+<script>
+  const key = "{storageKey}";
+
+  const modal = document.getElementById("invitation-modal");
+  const panel = document.getElementById("invitation-panel");
+  const closeBtn = document.getElementById("close-invitation");
+
+  function show() {
+    if (!modal || !panel) return;
+
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+
+    requestAnimationFrame(() => {
+      panel.classList.remove("scale-95", "opacity-0");
+      panel.classList.add("scale-100", "opacity-100");
+    });
+  }
+
+  function hide() {
+    if (!modal || !panel) return;
+
+    panel.classList.add("scale-95", "opacity-0");
+
+    setTimeout(() => {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      sessionStorage.setItem(key, "true");
+    }, 200);
+  }
+
+  // Init
+  if (modal) {
+    const dismissed = sessionStorage.getItem(key);
+
+    if (!dismissed) {
+      show();
+    }
+
+    closeBtn?.addEventListener("click", hide);
+
+    // Click backdrop
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) hide();
+    });
+
+    // ESC
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+        hide();
+      }
+    });
+  }
+</script>
