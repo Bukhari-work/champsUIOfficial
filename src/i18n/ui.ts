@@ -36,6 +36,12 @@ export const ui = {
     "hero.action.contact": "Contact Us",
     "hero.action.expertise": "Our Expertise",
 
+    // Homepage - TNA Invitation Modal
+    "tna.modal.title": "CHAMPS UI Training Needs Assessment",
+    "tna.modal.description":
+      "We invite institutions to participate in our Training Needs Assessment survey to help shape future capacity-building programs.",
+    "tna.modal.cta": "View Invitation",
+
     // Homepage - Quote Section
     "quote.champs":
       "The foundation of health development must be based on policy considerations that encourage the fulfilment of society's health needs in an effective, efficient, equitable, and sustainable manner.",
@@ -329,6 +335,12 @@ export const ui = {
       "Menjembatani Penelitian, Kebijakan, dan Praktik untuk Pelayanan Kesehatan Masa Depan",
     "hero.action.contact": "Hubungi Kami",
     "hero.action.expertise": "Keahlian Kami",
+
+    // Homepage - TNA Invitation Modal
+    "tna.modal.title": "Survei Analisis Kebutuhan Pelatihan CHAMPS UI",
+    "tna.modal.description":
+      "Kami mengundang institusi untuk berpartisipasi dalam survei Analisis Kebutuhan Pelatihan guna membantu merancang program penguatan kapasitas ke depan.",
+    "tna.modal.cta": "Lihat Undangan",
 
     // Homepage - Quote Section
     "quote.champs":

@@ -20,6 +20,7 @@ import { MarqueeHome } from "@/layouts/blocks/MarqueeHome.tsx";
 // 1d. UI Components
 import CardNewsSm from "@/components/CardNewsSm.astro";
 import Quote from "@/components/ui-astro/Quote.astro";
+import InvitationModal from "@/components/InvitationModal.astro";
 
 // 1e. Content & Data Utilities
 import { getSinglePage } from "@/lib/contentParser.astro";
@@ -234,4 +235,21 @@ const content = {
       }
     </div>
   </section>
+
+  <InvitationModal storageKey={`tna-invitation-${lang}`}>
+    <h2 id="invitation-title" class="text-2xl font-semibold">
+      {t("tna.modal.title")}
+    </h2>
+
+    <p class="text-muted-foreground mt-4">
+      {t("tna.modal.description")}
+    </p>
+
+    <a
+      href={`/${lang}/projects/tna-champs-ui`}
+      class="bg-primary text-primary-foreground mt-6 inline-flex rounded-xl px-6 py-3 font-medium hover:opacity-90"
+    >
+      {t("tna.modal.cta")}
+    </a>
+  </InvitationModal>
 </Base>
