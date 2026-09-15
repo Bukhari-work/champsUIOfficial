@@ -40,7 +40,7 @@ export async function getStaticPaths() {
 
       return {
         params: {
-          lang: lang,
+          lang: lang === i18n.defaultLocale ? undefined : lang,
           single: slug,
         },
         props: { post },
@@ -74,7 +74,9 @@ const { Content } = renderedContent;
         <DynamicIcon icon="LuInfo" className="text-primary size-6" />
         <span
           >{
-            Astro.params.lang === "en" ? "The Invitation" : "Tentang Undangan"
+            (Astro.params.lang ?? i18n.defaultLocale) === "en"
+              ? "The Invitation"
+              : "Tentang Undangan"
           }</span
         >
       </h2>
@@ -99,7 +101,7 @@ const { Content } = renderedContent;
                 <div class="flex items-start gap-3">
                   <DynamicIcon
                     icon="FaRegCircleCheck"
-                    className="text-primary mt-1.5 size-4 flex-shrink-0"
+                    className="text-primary mt-1.5 size-4 shrink-0"
                   />
                   <p class="m-0 text-base">{item}</p>
                 </div>
@@ -124,7 +126,7 @@ const { Content } = renderedContent;
               <div class="flex items-start gap-4">
                 <DynamicIcon
                   icon="LuUserCheck"
-                  className="text-primary mt-1 size-5 flex-shrink-0"
+                  className="text-primary mt-1 size-5 shrink-0"
                 />
                 <p class="m-0">{item}</p>
               </div>
@@ -133,10 +135,7 @@ const { Content } = renderedContent;
           {data.audienceNotes &&
             data.audienceNotes.map((note) => (
               <div class="border-primary bg-primary/10 mt-4 flex items-center gap-3 rounded-lg border p-4">
-                <DynamicIcon
-                  icon={note.icon}
-                  className="size-6 flex-shrink-0"
-                />
+                <DynamicIcon icon={note.icon} className="size-6 shrink-0" />
                 <p class="m-0 text-sm" set:html={note.text} />
               </div>
             ))}
@@ -155,7 +154,9 @@ const { Content } = renderedContent;
               className="text-primary size-6"
             />
             <span>
-              {Astro.params.lang === "en" ? "Key Speakers" : "Narasumber"}
+              {(Astro.params.lang ?? i18n.defaultLocale) === "en"
+                ? "Key Speakers"
+                : "Narasumber"}
             </span>
           </h2>
           <div class="not-prose mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

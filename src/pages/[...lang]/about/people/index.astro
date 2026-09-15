@@ -10,8 +10,7 @@ import { getSinglePage } from "@/lib/contentParser.astro";
 import type { CollectionEntry } from "astro:content";
 
 import AboutLayout from "@/layouts/AboutLayout.astro";
-import DeckPeople from "@/layouts/DeckPeople.astro";
-import CardAuthor from "@/components/CardAuthor.astro";
+import PeopleDeck from "@/layouts/DeckPeople.astro";
 import { navigation } from "@/navigation";
 
 // =================================================================================
@@ -20,11 +19,11 @@ import { navigation } from "@/navigation";
 
 export async function getStaticPaths() {
   return i18n.locales.map((lang) => ({
-    params: { lang },
+    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
   }));
 }
 
-const { lang } = Astro.params;
+const { lang = i18n.defaultLocale } = Astro.params;
 if (!i18n.locales.includes(lang)) {
   throw new Error(
     `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
@@ -59,13 +58,9 @@ const allPeople: CollectionEntry<"people">[] =
 const people: CollectionEntry<"people">[] = allPeople.filter((person) =>
   person.id.startsWith(`${lang}/`),
 );
-
-const experts = people.filter(
-  (person) => person.data.responsibility === "Senior Expert",
-);
-const researcher = people.filter(
-  (person) => person.data.responsibility === "Senior Researcher",
-);
+const advisors = people.filter((person) => person.data.role === "Advisors");
+const leadership = people.filter((person) => person.data.role === "Leadership");
+const teamMembers = people.filter((person) => person.data.role === "The Team");
 
 const sortPeopleByIndex = (peopleArray: CollectionEntry<"people">[]) => {
   return peopleArray.sort((a, b) => {
@@ -77,31 +72,32 @@ const sortPeopleByIndex = (peopleArray: CollectionEntry<"people">[]) => {
 };
 
 // --- Sort People Data ---
-const sortedExperts = sortPeopleByIndex(experts);
-const sortedResearchers = sortPeopleByIndex(researcher);
+const sortedAdvisors = sortPeopleByIndex(advisors);
+const sortedLeadership = sortPeopleByIndex(leadership);
+const sortedTeamMembers = sortPeopleByIndex(teamMembers);
 
-const content = { title: t("sidebar.about.item.experts") };
+const content = { title: t("sidebar.about.item.team") };
 ---
 
 <AboutLayout {content} {sideBar} large>
   <h1
     class="font-lexend text-primary mt-8 mb-2 w-fit scroll-mt-24 text-6xl font-semibold"
   >
-    {t("about.experts.title")}
+    {t("about.team.title")}
   </h1>
   <div class="w-full">
     <div>
-      <h2 class="text-3xl">{t("about.experts.seniorExperts")}</h2>
-      <div
-        class="not-prose grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
-      >
-        {sortedExperts.map((person) => <CardAuthor data={person} />)}
+      <h2 class="text-3xl">{t("about.team.advisors")}</h2>
+      <div class="not-prose">
+        <PeopleDeck people={sortedAdvisors} />
       </div>
-      <h2 class="text-3xl">{t("about.experts.seniorResearchers")}</h2>
-      <div
-        class="not-prose grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
-      >
-        {sortedResearchers.map((person) => <CardAuthor data={person} />)}
+      <h2 class="text-3xl">{t("about.team.leadership")}</h2>
+      <div class="not-prose">
+        <PeopleDeck people={sortedLeadership} />
+      </div>
+      <h2 class="text-3xl">{t("about.team.ourteam")}</h2>
+      <div class="not-prose mb-24">
+        <PeopleDeck people={sortedTeamMembers} />
       </div>
     </div>
   </div>

@@ -46,7 +46,7 @@ export async function getStaticPaths() {
 
       return {
         params: {
-          lang: lang,
+          lang: lang === i18n.defaultLocale ? undefined : lang,
           single: slug,
         },
         props: { person },

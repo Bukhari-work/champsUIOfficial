@@ -3,18 +3,20 @@ import Button from "@/components/ui-astro/Button.astro";
 import Base from "@/layouts/Base.astro";
 
 // 1c. Static Path Generation
-import { ui } from "@/i18n/ui.ts";
+import { i18n } from "@/config.ts";
 
 // =================================================================================
 // 2.  STATIC PATHS
 // =================================================================================
 
 export function getStaticPaths() {
-  return Object.keys(ui).map((lang) => {
-    return {
-      params: { lang: lang },
-    };
-  });
+  return i18n.locales
+    .filter((lang) => lang !== i18n.defaultLocale)
+    .map((lang) => {
+      return {
+        params: { lang: lang },
+      };
+    });
 }
 const content = {
   title: "404 Not Found",

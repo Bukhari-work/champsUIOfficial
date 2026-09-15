@@ -20,11 +20,11 @@ import { MarqueePartners } from "@/layouts/blocks/MarqueePartners.tsx";
 
 export async function getStaticPaths() {
   return i18n.locales.map((lang) => ({
-    params: { lang },
+    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
   }));
 }
 
-const { lang } = Astro.params;
+const { lang = i18n.defaultLocale } = Astro.params;
 if (!i18n.locales.includes(lang)) {
   throw new Error(
     `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,

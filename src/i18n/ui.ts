@@ -620,4 +620,4 @@ export const headerNavKeys = [
 export type Language = keyof typeof ui;
 
 // Show the default Language in the path
-export const showDefaultLang = true;
+export const showDefaultLang = false;

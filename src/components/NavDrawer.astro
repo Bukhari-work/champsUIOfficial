@@ -1,5 +1,5 @@
 ---
-import { useTranslations } from "@/i18n/utils";
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
 import type { Language } from "@/i18n/ui";
 import { navigation } from "@/navigation"; // 1. Import the navigation object
 import Drawer from "@/components/ui-astro/Drawer.astro";
@@ -28,7 +28,9 @@ const currentLang = i18n.locales.includes(potentialLang as Language)
 
 const otherLangs = i18n.locales.filter((lang) => lang !== currentLang);
 
-const pathWithoutLocale = "/" + pathname.split("/").slice(2).join("/");
+const pathWithoutLocale = i18n.locales.includes(potentialLang as Language)
+  ? "/" + pathname.split("/").slice(2).join("/")
+  : pathname;
 ---
 
 <Drawer
@@ -84,7 +86,10 @@ const pathWithoutLocale = "/" + pathname.split("/").slice(2).join("/");
     </Button>
     {
       otherLangs.map((lang) => {
-        const targetPath = `/${lang}${pathWithoutLocale}`;
+        const targetPath =
+          getLocalizedPath(pathWithoutLocale, lang) +
+          Astro.url.search +
+          Astro.url.hash;
         return (
           <Button variant="outline" href={targetPath}>
             {t("drawer.language")}

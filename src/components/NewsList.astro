@@ -1,4 +1,5 @@
 ---
+import { getLocalizedPath } from "@/i18n/utils";
 import dateFormat from "@/lib/utils/dateFormat";
 
 export interface Author {
@@ -50,7 +51,10 @@ const { posts, categories, activeCategory = "All Posts" } = Astro.props;
       return (
         <a
           class="group hover:border-primary hover:bg-primary/10 relative isolate flex flex-col items-start justify-between gap-2 rounded border border-transparent p-2 hover:[box-shadow:_var(--sh-alt)] lg:min-h-[42px] lg:flex-row lg:items-center"
-          href={`news/${post.id.split("/")[1]}`}
+          href={getLocalizedPath(
+            `/news/${post.id.split("/")[1]}`,
+            post.id.split("/")[0],
+          )}
         >
           {/* SVG background pattern on hover */}
           <svg class="text-primary pointer-events-none invisible absolute inset-0 [z-index:-1] size-full [mask-image:linear-gradient(to_left,_#ffffffad,_transparent)] opacity-100 select-none group-hover:visible dark:opacity-80">

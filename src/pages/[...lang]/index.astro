@@ -1,4 +1,5 @@
 ---
+import { getLocalizedPath } from "@/i18n/utils";
 // =================================================================================
 // 1. IMPORTS
 // =================================================================================
@@ -34,12 +35,12 @@ import { cn } from "@/lib/utils.ts";
 // Generate a static page for each supported language
 export async function getStaticPaths() {
   return i18n.locales.map((lang) => ({
-    params: { lang },
+    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
   }));
 }
 
 // Get and validate the language from the URL parameter
-const { lang } = Astro.params;
+const { lang = i18n.defaultLocale } = Astro.params;
 if (!i18n.locales.includes(lang)) {
   throw new Error(
     `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
@@ -71,7 +72,7 @@ const ytPatternId = `pattern-${crypto.randomUUID().slice(0, 8)}`;
 const content = {
   title: t("nav.home"),
   description: t("site.description"),
-  image: "/og-images/champs-homepage.png", // NOTE: Create this social sharing image (1200x630px)
+  image: "/images/champs-homepage.webp", // NOTE: Create this social sharing image (1200x630px)
   imageAlt: t("hero.subtitle"),
   canonical: Astro.url.href,
 };
@@ -91,7 +92,7 @@ const content = {
         {
           text: t("hero.action.expertise"),
           icon: "FaUsers",
-          href: `/${lang}/what-we-do`,
+          href: getLocalizedPath(`/what-we-do`, lang),
           size: "lg",
         },
       ]}
@@ -223,7 +224,7 @@ const content = {
   >
     <header class="mb-4 flex flex-wrap items-baseline justify-between">
       <p class="text-3xl font-bold">{t("news.latest")}</p>
-      <a class="link" href={`/${lang}/news`}>{t("news.all")}</a>
+      <a class="link" href={getLocalizedPath(`/news`, lang)}>{t("news.all")}</a>
     </header>
     <div class="grid h-fit gap-4 lg:grid-cols-3">
       {
@@ -246,7 +247,7 @@ const content = {
     </p>
 
     <a
-      href={`/${lang}/projects/tna-champs-ui`}
+      href={getLocalizedPath(`/projects/tna-champs-ui`, lang)}
       class="bg-primary text-primary-foreground mt-6 inline-flex rounded-xl px-6 py-3 font-medium hover:opacity-90"
     >
       {t("tna.modal.cta")}

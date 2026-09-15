@@ -17,11 +17,11 @@ import { navigation } from "@/navigation.ts";
 // This block is copied from your example to enable i18n routing
 export async function getStaticPaths() {
   return i18n.locales.map((lang) => ({
-    params: { lang },
+    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
   }));
 }
 
-const { lang } = Astro.params;
+const { lang = i18n.defaultLocale } = Astro.params;
 if (!i18n.locales.includes(lang)) {
   throw new Error(
     `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,

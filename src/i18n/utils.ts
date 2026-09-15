@@ -39,3 +39,9 @@ export function getTranslatedPath(key: RouteKey, lang: Language): string {
     ? path // e.g., /about
     : `/${lang}${path}`; // e.g., /en/about or /id/tentang
 }
+
+// Build a URL for any path, including content detail pages.
+export function getLocalizedPath(path: string, lang: string): string {
+  const pathname = path.startsWith("/") ? path : `/${path}`;
+  return lang === defaultLang ? pathname : `/${lang}${pathname}`;
+}

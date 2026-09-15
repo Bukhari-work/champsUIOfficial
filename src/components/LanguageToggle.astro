@@ -1,4 +1,5 @@
 ---
+import { getLocalizedPath } from "@/i18n/utils";
 import { i18n } from "@/config.ts";
 import type { Language } from "@/i18n/ui.ts";
 import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
@@ -27,7 +28,7 @@ const otherLangs = i18n.locales.filter((l) => l !== currentLang);
 
 const items = otherLangs.map((lang) => ({
   lang,
-  href: `/${lang}${pathWithoutLocale}${suffix}`,
+  href: `${getLocalizedPath(pathWithoutLocale, lang)}${suffix}`,
 }));
 ---
 
@@ -55,7 +56,7 @@ const items = otherLangs.map((lang) => ({
   </summary>
 
   <div
-    class="border-border bg-popover text-popover-foreground absolute top-full right-0 z-10 mt-2 hidden min-w-[7rem] origin-top-right rounded-md border py-1 shadow-md group-open:block"
+    class="border-border bg-popover text-popover-foreground absolute top-full right-0 z-10 mt-2 hidden min-w-28 origin-top-right rounded-md border py-1 shadow-md group-open:block"
     role="menu"
   >
     {

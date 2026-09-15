@@ -1,4 +1,5 @@
 ---
+import { getLocalizedPath } from "@/i18n/utils";
 import { SETTINGS } from "@/config.ts";
 import dateFormat from "@/lib/utils/dateFormat";
 import { plainify } from "@/lib/utils/textConverter";
@@ -15,7 +16,10 @@ const firstImage = data.data.images?.[0];
 ---
 
 <Card
-  href={`/${data.id.split("/")[0]}/${news_folder}/${data.id.split("/")[1]}`}
+  href={getLocalizedPath(
+    `/${news_folder}/${data.id.split("/")[1]}`,
+    data.id.split("/")[0],
+  )}
   title={title}
   imageMeta={firstImage}
   imageAlt={firstImage.alt}
@@ -38,7 +42,10 @@ const firstImage = data.data.images?.[0];
   <div slot="footer">
     <Button
       variant="default"
-      href={`/${data.id.split("/")[0]}/${news_folder}/${data.id.split("/")[1]}`}
+      href={getLocalizedPath(
+        `/${news_folder}/${data.id.split("/")[1]}`,
+        data.id.split("/")[0],
+      )}
       className="bg-primary/60 px-3 py-1 text-xs"
     >
       Read More

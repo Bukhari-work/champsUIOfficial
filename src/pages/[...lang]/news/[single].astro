@@ -1,4 +1,5 @@
 ---
+import { getLocalizedPath } from "@/i18n/utils";
 // =================================================================================
 // 1. IMPORTS
 // =================================================================================
@@ -66,7 +67,7 @@ export async function getStaticPaths() {
 
       return {
         params: {
-          lang: lang,
+          lang: lang === i18n.defaultLocale ? undefined : lang,
           single: slug,
         },
         props: { post },
@@ -114,7 +115,7 @@ const people = await getEntries<"people">(authors);
       <!-- Main Section -->
       <article class="mx-auto flex flex-col px-2 pt-8 pb-16">
         <a
-          href={`/${lang}/news`}
+          href={getLocalizedPath(`/news`, lang)}
           class="center link my-5 flex w-fit items-center gap-2 text-sm"
         >
           <FaArrowLeftLong />back to News
@@ -135,7 +136,7 @@ const people = await getEntries<"people">(authors);
                   />
                   <a
                     class="link ml-2 self-center text-sm"
-                    href={`/${lang}/people/${author.id}`}
+                    href={getLocalizedPath(`/people/${author.id}`, lang)}
                   >
                     {formatName(humanize(author.id))}
                   </a>
@@ -148,7 +149,7 @@ const people = await getEntries<"people">(authors);
           </div>
         </div>
         <hr
-          class="bg-primary/10 dark:bg-primary/40 my-8 !h-px !border-0 border-t"
+          class="bg-primary/10 dark:bg-primary/40 my-8 h-px! border-0! border-t"
         />
         <div class="prose dark:prose-invert min-w-full">
           {images && <GalleryDeck images={images} />}

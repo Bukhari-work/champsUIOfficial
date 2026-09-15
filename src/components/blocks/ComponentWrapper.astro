@@ -19,8 +19,8 @@ const {
 const WrapperTag = as;
 ---
 
-<WrapperTag class="not-prose relative scroll-mt-[72px]" {...id ? { id } : {}}>
-  <div class="pointer-events-none absolute inset-0 -z-[1]" aria-hidden="true">
+<WrapperTag class="not-prose relative scroll-mt-18" {...id ? { id } : {}}>
+  <div class="pointer-events-none absolute inset-0 z-[-1]" aria-hidden="true">
     <slot name="bg">
       <div
         class={flatBackground

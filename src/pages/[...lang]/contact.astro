@@ -10,7 +10,7 @@ import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
 import ContactForm from "@/layouts/ContactForm.astro";
 
 // 1b. Config & i18n
-import { SETTINGS } from "@/config.ts"; // Assuming you still need this for contact_form_url
+import { SETTINGS, i18n } from "@/config.ts"; // Assuming you still need this for contact_form_url
 import { getLangFromUrl, useTranslations } from "@/i18n/utils.ts";
 import type { BaseLayoutProps } from "@/types.ts";
 
@@ -24,7 +24,7 @@ import { ui } from "@/i18n/ui.ts";
 export function getStaticPaths() {
   return Object.keys(ui).map((lang) => {
     return {
-      params: { lang: lang },
+      params: { lang: lang === i18n.defaultLocale ? undefined : lang },
     };
   });
 }
