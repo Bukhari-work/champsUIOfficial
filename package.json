@@ -2,6 +2,9 @@
   "name": "astro-app",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -9,14 +12,14 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/react": "^4.4.2",
+    "@astrojs/mdx": "^8.0.1",
+    "@astrojs/react": "^6.0.5",
     "@radix-ui/react-slot": "^1.2.3",
-    "@tailwindcss/vite": "^4.1.13",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/canvas-confetti": "^1.9.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
-    "astro": "^5.17.1",
+    "astro": "^7.3.2",
     "astro-seo": "^0.8.4",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
@@ -30,7 +33,7 @@
     "react-icons": "^5.5.0",
     "swiper": "^12.0.2",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.13"
+    "tailwindcss": "^4.3.3"
   },
   "packageManager": "pnpm@10.18.2+sha512.9fb969fa749b3ade6035e0f109f0b8a60b5d08a1a87fdf72e337da90dcc93336e2280ca4e44f2358a649b83c17959e9993e777c2080879f3801e6f0d999ad3dd",
   "devDependencies": {

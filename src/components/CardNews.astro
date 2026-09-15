@@ -28,7 +28,7 @@ const firstImage = data.data.images?.[0];
           {categories.map((category: string) => (
             <a
               href={`/tags/${slugify(category)}`}
-              class="text-primary border-primary bg-primary/5 flex h-[18px] w-fit shrink-0 items-center gap-1.5 rounded-xs border border-dotted px-1 font-mono text-[0.625rem] leading-6"
+              class="text-primary border-primary bg-primary/5 flex h-4.5 w-fit shrink-0 items-center gap-1.5 rounded-xs border border-dotted px-1 font-mono text-[0.625rem] leading-6"
             >
               {humanize(category)}
             </a>

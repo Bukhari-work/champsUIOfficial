@@ -6,6 +6,8 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
+  // Preserve the HTML whitespace behavior used before Astro 7.
+  compressHTML: true,
   prefetch: {
     prefetchAll: true,
   },

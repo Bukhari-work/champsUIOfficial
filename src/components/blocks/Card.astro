@@ -31,7 +31,7 @@ const Wrapper = href ? "a" : "div";
 
 <article
   class={cn(
-    "group hover:border-primary bg-background relative isolate flex flex-col overflow-hidden duration-100 hover:[box-shadow:_var(--sh-alt)]",
+    "group hover:border-primary bg-background relative isolate flex flex-col overflow-hidden duration-100 hover:[box-shadow:var(--sh-alt)]",
     isSmall
       ? "gap-3 rounded-lg border p-4 hover:-translate-y-2"
       : "gap-6 rounded-xl border-2 p-6 hover:-translate-y-3",
@@ -40,7 +40,7 @@ const Wrapper = href ? "a" : "div";
 >
   {/* SVG background pattern */}
   <svg
-    class="text-primary pointer-events-none invisible absolute inset-0 z-[-1] size-full [mask-image:linear-gradient(to_left,_#ffffffad,_transparent)] opacity-100 select-none group-hover:visible dark:opacity-80"
+    class="text-primary mask[linear-gradient(to_left,#ffffffad,transparent)] pointer-events-none invisible absolute inset-0 z-[-1] size-full opacity-100 select-none group-hover:visible dark:opacity-80"
   >
     <defs>
       <pattern
