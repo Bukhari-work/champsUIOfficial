@@ -31,16 +31,14 @@ const Wrapper = href ? "a" : "div";
 
 <article
   class={cn(
-    "group hover:border-primary bg-background relative isolate flex flex-col overflow-hidden duration-100 hover:[box-shadow:var(--sh-alt)]",
-    isSmall
-      ? "gap-3 rounded-lg border p-4 hover:-translate-y-2"
-      : "gap-6 rounded-xl border-2 p-6 hover:-translate-y-3",
+    "group hover:border-primary focus-within:border-primary bg-background relative isolate flex flex-col overflow-hidden transition-[transform,box-shadow,border-color] duration-150 hover:[box-shadow:var(--sh-alt)] focus-within:[box-shadow:var(--sh-alt)] motion-safe:hover:-translate-y-1 motion-safe:focus-within:-translate-y-1 motion-reduce:transition-none",
+    isSmall ? "gap-3 rounded-lg border p-4" : "gap-6 rounded-xl border-2 p-6",
     className,
   )}
 >
   {/* SVG background pattern */}
   <svg
-    class="text-primary mask[linear-gradient(to_left,#ffffffad,transparent)] pointer-events-none invisible absolute inset-0 z-[-1] size-full opacity-100 select-none group-hover:visible dark:opacity-80"
+    class="text-primary pointer-events-none invisible absolute inset-0 z-[-1] size-full opacity-15 transition-opacity select-none group-focus-within:visible group-focus-within:opacity-25 group-hover:visible group-hover:opacity-25 motion-reduce:transition-none"
   >
     <defs>
       <pattern
@@ -93,12 +91,16 @@ const Wrapper = href ? "a" : "div";
       <header>
         <Heading
           class={cn(
-            "group-hover:text-primary font-bold",
+            "group-hover:text-primary group-focus-within:text-primary font-bold",
             isSmall ? "text-base font-semibold" : "text-xl",
             href && "line-clamp-2",
           )}
         >
-          <Wrapper href={href}>{title}</Wrapper>
+          <Wrapper
+            href={href}
+            class="focus-visible:outline-primary focus-visible:decoration-primary focus-visible:underline focus-visible:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+            >{title}</Wrapper
+          >
         </Heading>
       </header>
 

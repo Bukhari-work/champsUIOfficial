@@ -111,9 +111,11 @@ const people = await getEntries<"people">(authors);
     <PageHeader title="News" />
 
     <!-- Grid Container -->
-    <div class="mx-auto grid max-w-6xl items-start xl:grid-cols-[3fr_1fr]">
+    <div
+      class="mx-auto grid max-w-6xl min-w-0 items-start xl:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]"
+    >
       <!-- Main Section -->
-      <article class="mx-auto flex flex-col px-2 pt-8 pb-16">
+      <article class="mx-auto flex w-full min-w-0 flex-col px-2 pt-8 pb-16">
         <a
           href={getLocalizedPath(`/news`, lang)}
           class="center link my-5 flex w-fit items-center gap-2 text-sm"
@@ -151,8 +153,12 @@ const people = await getEntries<"people">(authors);
         <hr
           class="bg-primary/10 dark:bg-primary/40 my-8 h-px! border-0! border-t"
         />
-        <div class="prose dark:prose-invert min-w-full">
-          {images && <GalleryDeck images={images} />}
+        <div class="prose dark:prose-invert w-full max-w-none min-w-0">
+          {
+            images && images.length > 0 && (
+              <GalleryDeck images={images} {lang} />
+            )
+          }
           <Content />
         </div>
         <div

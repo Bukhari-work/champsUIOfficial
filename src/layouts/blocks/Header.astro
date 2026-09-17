@@ -5,11 +5,9 @@ import { i18n } from "@/config.ts";
 import { ui } from "@/i18n/ui";
 import type { Language } from "@/i18n/ui.ts";
 import { useTranslations } from "@/i18n/utils.ts";
-import ThemeToggle from "@/components/ThemeToggle.astro";
 import NavDrawer from "@/components/NavDrawer.astro";
 import Button from "@/components/ui-astro/Button.astro";
 import { Image } from "astro:assets";
-import LanguageToggle from "@/components/LanguageToggle.astro";
 
 type TranslationKeys = keyof (typeof ui)[typeof i18n.defaultLocale];
 
@@ -129,9 +127,6 @@ const isActiveHref = (href?: string | URL | null): boolean => {
             </Button>
           )
         }
-
-        <ThemeToggle className="mx-2 self-center" />
-        <LanguageToggle />
       </div>
 
       <div id="mobile-menu" class="flex items-center gap-2 lg:hidden">

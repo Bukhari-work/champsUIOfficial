@@ -1,10 +1,9 @@
 ---
-import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import { useTranslations } from "@/i18n/utils";
 import type { Language } from "@/i18n/ui";
 import { navigation } from "@/navigation"; // 1. Import the navigation object
 import Drawer from "@/components/ui-astro/Drawer.astro";
 import { ChevronRight } from "lucide-react";
-import { i18n } from "@/config.ts";
 
 // Component Imports
 import Button from "@/components/ui-astro/Button.astro";
@@ -19,18 +18,6 @@ const mainMenu = navigation[lang].header.map((item) => ({
 }));
 
 const { pathname } = Astro.url;
-
-// --- Step 1: Determine the current language ---
-const potentialLang = pathname.split("/")[1];
-const currentLang = i18n.locales.includes(potentialLang as Language)
-  ? (potentialLang as Language)
-  : i18n.defaultLocale;
-
-const otherLangs = i18n.locales.filter((lang) => lang !== currentLang);
-
-const pathWithoutLocale = i18n.locales.includes(potentialLang as Language)
-  ? "/" + pathname.split("/").slice(2).join("/")
-  : pathname;
 ---
 
 <Drawer
@@ -69,33 +56,6 @@ const pathWithoutLocale = i18n.locales.includes(potentialLang as Language)
           )}
         </>
       ))
-    }
-    <Button
-      variant="outline"
-      className="hidden dark:block"
-      data-aw-toggle-color-scheme
-    >
-      {t("drawer.theme.light")}
-    </Button>
-    <Button
-      variant="outline"
-      className="dark:hidden"
-      data-aw-toggle-color-scheme
-    >
-      {t("drawer.theme.dark")}
-    </Button>
-    {
-      otherLangs.map((lang) => {
-        const targetPath =
-          getLocalizedPath(pathWithoutLocale, lang) +
-          Astro.url.search +
-          Astro.url.hash;
-        return (
-          <Button variant="outline" href={targetPath}>
-            {t("drawer.language")}
-          </Button>
-        );
-      })
     }
     <Button variant="ghost" data-aw-close-nav>
       {t("drawer.close")}

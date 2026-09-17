@@ -1,144 +1,148 @@
 ---
-export interface Props {
-  images: {
-    src: string;
-    alt: string;
-  }[];
-}
+import type { Language } from "@/i18n/ui";
+import { getLangFromUrl } from "@/i18n/utils";
+import DynamicIcon from "@/components/blocks/DynamicIcon";
 
-const { images } = Astro.props;
+export interface Props {
+  images?: { src: string; alt: string }[];
+  lang?: Language;
+}
+const { images = [], lang = getLangFromUrl(Astro.url) } = Astro.props;
+const photos = images
+  .filter((image) => image.src.trim())
+  .map((image) => ({
+    ...image,
+    // Some content paths contain duplicate slashes; preserve remote URLs.
+    src:
+      image.src.startsWith("/") && !image.src.startsWith("//")
+        ? image.src.replace(/\/{2,}/g, "/")
+        : image.src,
+  }));
+const copy =
+  lang === "id"
+    ? {
+        gallery: "Galeri foto",
+        previous: "Foto sebelumnya",
+        next: "Foto berikutnya",
+        count: "Foto {current} dari {total}",
+        slide: "Foto {{index}} dari {{slidesLength}}",
+        carousel: "Karusel",
+        photo: "Foto",
+      }
+    : {
+        gallery: "Photo gallery",
+        previous: "Previous photo",
+        next: "Next photo",
+        count: "Photo {current} of {total}",
+        slide: "Photo {{index}} of {{slidesLength}}",
+        carousel: "Carousel",
+        photo: "Photo",
+      };
+const buttonClass =
+  "bg-primary/10 text-primary hover:bg-primary/20 focus-visible:outline-primary inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-default disabled:opacity-40";
 ---
 
-<section class="relative w-full">
-  <div
-    class="from-background pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-1/4 bg-gradient-to-r md:block"
-  >
-  </div>
-  <div
-    class="from-background pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-1/4 bg-gradient-to-l md:block"
-  >
-  </div>
-
-  <div class="article-image-slider swiper mx-auto overflow-hidden rounded-xl">
-    <div class="swiper-wrapper items-center">
-      {
-        images.map((image) => (
-          <div class="swiper-slide !w-[100%] md:!w-[80%]">
-            <img
-              src={image.src}
-              alt={image.alt}
-              class="h-auto w-full rounded-lg object-cover shadow-xl"
-              loading="lazy"
-            />
+{
+  photos.length > 0 && (
+    <gallery-deck
+      class="not-prose my-6 block w-full max-w-full min-w-0 **:[[hidden]]:hidden!"
+      data-copy={JSON.stringify(copy)}
+      data-language={lang}
+      role="region"
+      aria-label={copy.gallery}
+    >
+      <div class="relative">
+        <div
+          class="article-image-slider swiper focus-visible:outline-primary w-full min-w-0 overflow-hidden rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 [&:not(.swiper-initialized)]:snap-x [&:not(.swiper-initialized)]:snap-mandatory [&:not(.swiper-initialized)]:overflow-x-auto"
+          data-gallery-slider
+          tabindex={photos.length > 1 ? "0" : undefined}
+          aria-label={copy.gallery}
+        >
+          <div class="swiper-wrapper items-center">
+            {photos.map((photo, index) => (
+              <div
+                class:list={[
+                  "swiper-slide pointer-events-auto! shrink-0 snap-center",
+                  photos.length > 1 ? "w-full! md:w-4/5!" : "w-full!",
+                ]}
+              >
+                <div class="bg-muted/30 relative aspect-16/10 max-h-128 overflow-hidden rounded-lg">
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    width="1600"
+                    height="1000"
+                    class="absolute inset-0 m-0 h-full w-full object-contain"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    draggable="false"
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-        ))
-      }
-    </div>
-
-    <!-- Pagination buttons -->
-    <div class="relative flex h-11 items-center justify-center">
-      <div
-        class:list={[
-          "article-slider-pagination",
-          "items-center text-center align-middle font-light",
-        ]}
-      >
+        </div>
+        {photos.length > 1 && (
+          <>
+            <div
+              class="from-background pointer-events-none absolute inset-y-0 left-0 z-10 hidden w-1/12 bg-linear-to-r md:block"
+              aria-hidden="true"
+            />
+            <div
+              class="from-background pointer-events-none absolute inset-y-0 right-0 z-10 hidden w-1/12 bg-linear-to-l md:block"
+              aria-hidden="true"
+            />
+          </>
+        )}
       </div>
-      <!-- Navigation buttons -->
-      <div
-        class:list={[
-          "swiper-button-prev flex",
-          "absolute left-1/4 z-10 mx-10 h-11 w-11",
-          "bg-primary/10 transform cursor-pointer items-center justify-center rounded-full text-xl select-none hover:bg-black/60 dark:hover:bg-white/60",
-        ]}
-      >
-        &#10094;
-      </div>
-      <div
-        class:list={[
-          "swiper-button-next flex",
-          "absolute right-1/4 z-10 mx-10 h-11 w-11",
-          "bg-primary/10 transform cursor-pointer items-center justify-center rounded-full text-xl select-none hover:bg-black/60 dark:hover:bg-white/60",
-        ]}
-      >
-        &#10095;
-      </div>
-    </div>
-  </div>
-</section>
+      {photos.length > 1 && (
+        <div
+          class="mt-3 flex items-center justify-center gap-4"
+          data-gallery-controls
+          data-pagefind-ignore
+          hidden
+        >
+          <button
+            type="button"
+            class={buttonClass}
+            data-gallery-prev
+            aria-label={copy.previous}
+          >
+            <DynamicIcon
+              icon="LuChevronLeft"
+              className="size-5"
+              aria-hidden="true"
+            />
+          </button>
+          <p
+            class="text-muted-foreground m-0 min-w-28 text-center text-xs tabular-nums"
+            data-gallery-status
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {copy.count
+              .replace("{current}", "1")
+              .replace("{total}", String(photos.length))}
+          </p>
+          <button
+            type="button"
+            class={buttonClass}
+            data-gallery-next
+            aria-label={copy.next}
+          >
+            <DynamicIcon
+              icon="LuChevronRight"
+              className="size-5"
+              aria-hidden="true"
+            />
+          </button>
+        </div>
+      )}
+    </gallery-deck>
+  )
+}
 
 <script>
-  import Swiper from "swiper";
-  import "swiper/css";
-  import type { Swiper as SwiperType } from "swiper";
-  import { Navigation, Pagination, EffectCoverflow } from "swiper/modules";
-
-  let swiperInstance: SwiperType | null = null;
-
-  // Function to clean up the Swiper instance before page navigation
-  function destroySwiper() {
-    if (swiperInstance) {
-      swiperInstance.destroy(true, true);
-      swiperInstance = null;
-    }
-  }
-
-  // Function to initialize the Swiper instance
-  function initSwiper() {
-    // Ensure we don't initialize it twice
-    if (swiperInstance) return;
-
-    swiperInstance = new Swiper(".article-image-slider", {
-      // Use the new modules
-      modules: [Navigation, Pagination, EffectCoverflow],
-
-      // Main Settings
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto", // Let Swiper determine slides based on width
-      loop: true,
-
-      // Coverflow Effect settings
-      breakpoints: {
-        // For small screens (default settings)
-        0: {
-          coverflowEffect: {
-            rotate: 0,
-            stretch: 0,
-            depth: 0,
-            modifier: 1,
-            slideShadows: false,
-          },
-        },
-        // For large screens (viewport width >= 1024px)
-        1024: {
-          coverflowEffect: {
-            rotate: 0,
-            stretch: 50,
-            depth: 50,
-            modifier: -1,
-            slideShadows: false,
-          },
-        },
-      },
-
-      // Pagination settings (fraction style)
-      pagination: {
-        el: ".article-slider-pagination",
-        type: "fraction",
-      },
-
-      // Navigation settings
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-        addIcons: false,
-      },
-    });
-  }
-
-  // Use Astro's lifecycle events for robust initialization and cleanup
-  document.addEventListener("astro:page-load", initSwiper);
-  document.addEventListener("astro:before-swap", destroySwiper);
+  import "@/scripts/gallery-deck";
 </script>

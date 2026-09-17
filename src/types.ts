@@ -71,6 +71,7 @@ export interface Headline {
   title?: string;
   subtitle?: string;
   tagline?: string;
+  classes?: Record<string, string | Record<string, string>>;
 }
 
 /** Base properties for a UI component or page section. */

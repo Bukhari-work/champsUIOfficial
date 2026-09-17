@@ -12,15 +12,11 @@ import type { BaseLayoutProps } from "@/types.ts";
 import { i18n } from "@/config.ts";
 
 // 1c. Components
-import CardNews from "@/components/CardNews.astro";
 import PageHeader from "@/components/PageHeader.astro";
-// import PostSidebar from "@/components/blocks/PostSidebar.astro";
-import NewsList from "@/components/NewsList.astro";
+import NewsDirectory from "@/components/NewsDirectory.astro";
 
 // 1d. Config & Libs
-import { SETTINGS } from "@/config.ts";
 import { getSinglePage } from "@/lib/contentParser.astro";
-import { getAllTaxonomy, getTaxonomy } from "@/lib/taxonomyParser.astro";
 import { sortByDate } from "@/lib/utils/sortFunctions";
 
 // =================================================================================
@@ -53,13 +49,6 @@ const allPosts = await getSinglePage(NEWS_FOLDER);
 const sortedPosts = sortByDate(allPosts).filter(
   (post) => post.id && post.id.startsWith(`${lang}/`),
 );
-const currentPosts = sortedPosts.slice(0, SETTINGS.highlight);
-
-// Taxonomies
-const allCategories = await getAllTaxonomy(NEWS_FOLDER, "categories");
-const allTags = await getAllTaxonomy(NEWS_FOLDER, "tags");
-const categories = await getTaxonomy(NEWS_FOLDER, "categories");
-const tags = await getTaxonomy(NEWS_FOLDER, "tags");
 
 // =================================================================================
 // 4. i18n & LAYOUT PROPS
@@ -76,24 +65,7 @@ const content: BaseLayoutProps["content"] = {
 
 <Base {content} makara>
   <PageHeader title={t("news.page.title")} />
-
-  <section class="mx-auto max-w-7xl p-6 xl:gap-16">
-    <div class="grid h-fit gap-4 lg:grid-cols-3">
-      {
-        currentPosts.map((post) => (
-          <div class="slide-fade-in col-span-1 mb-6">
-            <CardNews data={post} />
-          </div>
-        ))
-      }
-    </div>
-  </section>
-
-  <section
-    class="mx-auto grid max-w-6xl grid-cols-1 gap-6 p-2 pb-24 lg:grid-cols-5 xl:gap-16"
-  >
-    <div class="lg:col-span-5">
-      <NewsList posts={sortedPosts} />
-    </div>
-  </section>
+  <div class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-10">
+    <NewsDirectory posts={sortedPosts} {lang} />
+  </div>
 </Base>

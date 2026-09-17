@@ -2,79 +2,53 @@
 import { getLocalizedPath } from "@/i18n/utils";
 import { i18n } from "@/config.ts";
 import type { Language } from "@/i18n/ui.ts";
-import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
 
 const { pathname, search, hash } = Astro.url;
 
-const isLocale = (v: string): v is Language =>
-  (i18n.locales as readonly string[]).includes(v);
+const isLocale = (value: string): value is Language =>
+  (i18n.locales as readonly string[]).includes(value);
 
 const segments = pathname.split("/").filter(Boolean);
-
 const maybeLocale = segments[0] ?? "";
 const currentLang: Language = isLocale(maybeLocale)
   ? maybeLocale
   : i18n.defaultLocale;
-
 const restSegments = isLocale(maybeLocale) ? segments.slice(1) : segments;
-
 const hadTrailingSlash = pathname.length > 1 && pathname.endsWith("/");
+
 let pathWithoutLocale = `/${restSegments.join("/")}`;
 if (pathWithoutLocale !== "/" && hadTrailingSlash) pathWithoutLocale += "/";
 
 const suffix = `${search}${hash}`;
-
-const otherLangs = i18n.locales.filter((l) => l !== currentLang);
-
-const items = otherLangs.map((lang) => ({
+const items = i18n.locales.map((lang) => ({
   lang,
   href: `${getLocalizedPath(pathWithoutLocale, lang)}${suffix}`,
 }));
 ---
 
-<details class="group relative" aria-label="Language switcher">
-  <summary
-    class="border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring focus-visible:ring-offset-background inline-flex cursor-pointer list-none items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-semibold shadow-sm transition [-webkit-tap-highlight-color:transparent] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-  >
-    <DynamicIcon icon="LuLanguages" />
-    <span>{currentLang.toUpperCase()}</span>
-
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      width="16"
-      height="16"
-      class="text-muted-foreground transition-transform duration-200 group-open:rotate-180"
-      aria-hidden="true"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-        clip-rule="evenodd"></path>
-    </svg>
-  </summary>
-
-  <div
-    class="border-border bg-popover text-popover-foreground absolute top-full right-0 z-10 mt-2 hidden min-w-28 origin-top-right rounded-md border py-1 shadow-md group-open:block"
-    role="menu"
-  >
-    {
-      items.map(({ lang, href }) => (
+<div
+  class="border-border bg-muted/70 grid h-10 w-24 grid-cols-2 rounded-xl border p-1 shadow-inner"
+  role="group"
+  aria-label="Language switcher"
+>
+  {
+    items.map(({ lang, href }) => {
+      const isCurrent = lang === currentLang;
+      return (
         <a
           href={href}
-          class="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block px-4 py-2 text-sm font-medium no-underline focus:outline-none"
-          role="menuitem"
+          class:list={[
+            "focus-visible:ring-ring flex items-center justify-center rounded-lg text-xs font-bold tracking-wide transition focus-visible:ring-2 focus-visible:outline-none",
+            isCurrent
+              ? "bg-background text-primary shadow-sm"
+              : "text-muted-foreground hover:text-foreground",
+          ]}
+          aria-current={isCurrent ? "page" : undefined}
+          lang={lang}
         >
           {lang.toUpperCase()}
         </a>
-      ))
-    }
-  </div>
-</details>
-
-<style>
-  summary::-webkit-details-marker {
-    display: none;
+      );
+    })
   }
-</style>
+</div>
