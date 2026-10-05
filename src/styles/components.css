@@ -1,3 +1,8 @@
+/* Keep the primary tint, but paint it over an opaque background. */
+@utility bg-primary-soft {
+  @apply bg-background from-primary/5 to-primary/5 bg-linear-to-r;
+}
+
 @layer components {
   .drawer {
     @apply contents h-auto;
