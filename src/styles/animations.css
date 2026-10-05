@@ -1,27 +1,26 @@
 /* /styles/animations.css */
 
 @theme {
-  --animate-marquee: marquee var(--duration) infinite linear;
-  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
   --animate-fade-in: fadeInUp 1s ease-in-out both;
   --animate-fade-out: fadeOutDown 1s ease-in-out both;
 }
 
-@keyframes marquee {
+/* Required by the officially installed Bejamas Marquee component. */
+@keyframes marquee-x {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(calc(-100% - var(--gap)));
+    transform: translateX(-100%);
   }
 }
 
-@keyframes marquee-vertical {
+@keyframes marquee-y {
   from {
     transform: translateY(0);
   }
   to {
-    transform: translateY(calc(-100% - var(--gap)));
+    transform: translateY(-100%);
   }
 }
 

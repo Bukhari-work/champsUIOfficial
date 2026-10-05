@@ -9,7 +9,7 @@ import { getSidebar } from "@/navigation.ts";
 
 import type { PageMetadata } from "@/types.ts";
 import SidebarLayout from "@/layouts/SidebarLayout.astro";
-import { MarqueePartners } from "@/components/partners/MarqueePartners.tsx";
+import MarqueePartners from "@/components/partners/MarqueePartners.astro";
 
 export async function getStaticPaths() {
   return getLocaleStaticPaths();
@@ -90,57 +90,42 @@ const sideBar = getSidebar(lang, "whatWeDo");
       <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
         {t("partners.gov")}
       </h2>
-      <MarqueePartners imagePaths={imagePathsGovernment} duration="60" />
+      <MarqueePartners imagePaths={imagePathsGovernment} />
     </section>
 
     <section id="hospitals">
       <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
         {t("partners.hospitals")}
       </h2>
-      <MarqueePartners
-        imagePaths={imagePathsHospitals}
-        duration="60"
-        reverse={true}
-      />
+      <MarqueePartners imagePaths={imagePathsHospitals} reverse={true} />
     </section>
 
     <section id="phc">
       <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
         {t("partners.phc")}
       </h2>
-      <MarqueePartners
-        imagePaths={imagePathsPublicHealthCenters}
-        duration="40"
-      />
+      <MarqueePartners imagePaths={imagePathsPublicHealthCenters} />
     </section>
 
     <section id="organizations">
       <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
         {t("partners.orgs")}
       </h2>
-      <MarqueePartners
-        imagePaths={imagePathsOrganizations}
-        duration="40"
-        reverse={true}
-      />
+      <MarqueePartners imagePaths={imagePathsOrganizations} reverse={true} />
     </section>
 
     <section id="private">
       <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
         {t("partners.private")}
       </h2>
-      <MarqueePartners imagePaths={imagePathsPrivate} duration="40" />
+      <MarqueePartners imagePaths={imagePathsPrivate} />
     </section>
 
     <section id="universities">
       <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
         {t("partners.universities")}
       </h2>
-      <MarqueePartners
-        imagePaths={imagePathsUniversities}
-        duration="40"
-        reverse={true}
-      />
+      <MarqueePartners imagePaths={imagePathsUniversities} reverse={true} />
     </section>
 
     <p class="prose dark:prose-invert mt-16 self-center text-center">

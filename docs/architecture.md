@@ -22,7 +22,7 @@ src/
     partners/             Partner marquee
     programs/             Program cards
     ui-astro/             Astro UI primitives
-    ui/                   React UI primitives and framework-neutral variants
+    ui/                   Registry primitives and framework-neutral variants
   lib/                    TypeScript data-access and utility functions
   i18n/                   Translations, locale validation, and localized paths
   scripts/                Browser behavior and transition lifecycle handlers
@@ -39,6 +39,16 @@ generic component is not necessary just to shorten a page.
 - React components keep React's `className` convention.
 - Button variants live in `components/ui/button-variants.ts`, independently of
   either rendering framework. Both button implementations use the same variants.
+- The Astro marquee in `components/ui/marquee/` was installed with
+  `pnpm dlx bejamas@latest add marquee`. Its styles come from
+  `bejamas/tailwind.css`, with the marquee keyframes in `styles/animations.css`;
+  the photo and partner wrappers preserve the site's edge
+  fades and add hover pausing. The primitive's reduced-motion behavior and
+  hidden duplicate track remain intact. Image optimization remains a separate task.
+- Partner marquees share a `speed` in pixels per second (40 by default), rather
+  than a fixed loop duration. `scripts/partner-marquee.ts` measures the track and
+  updates its duration on resize; its custom element disconnects the observer
+  when removed during page transitions.
 - Prefer Tailwind utilities, theme colors, standard sizing/shadows, and named
   responsive breakpoints. Preserve functional selectors and accessible focus states.
 

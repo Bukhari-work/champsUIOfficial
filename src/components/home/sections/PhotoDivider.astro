@@ -1,7 +1,7 @@
 ---
 import type { Language } from "@/i18n/ui";
 import { useTranslations } from "@/i18n/utils";
-import { PhotoMarquee } from "../shared/PhotoMarquee";
+import PhotoMarquee from "../shared/PhotoMarquee.astro";
 interface Props {
   lang: Language;
 }
@@ -20,7 +20,7 @@ const t = useTranslations(lang);
   </figcaption>
   <div
     id="home-photo-strip"
-    class="[&:hover_.animate-marquee]:paused"
+    class="[&:hover_.marquee-content]:paused"
     aria-hidden="true"
   >
     <PhotoMarquee />
