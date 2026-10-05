@@ -1,0 +1,59 @@
+---
+import type { Language } from "@/i18n/ui";
+import { useTranslations, getLocalizedPath } from "@/i18n/utils";
+import Stats from "@/layouts/blocks/Stats.astro";
+import SectionHeading from "../shared/SectionHeading.astro";
+import Kaleidoscope from "../shared/Kaleidoscope.astro";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section
+  class="bg-primary/5 border-y"
+  data-home-section="results"
+  aria-labelledby="results-title"
+>
+  <Stats
+    id="home-results"
+    classes={{ container: "max-w-6xl py-14 md:py-20 lg:pt-20" }}
+    stats={[
+      {
+        title: t("stats.item1"),
+        amount: "13",
+        description: t("stats.description1"),
+      },
+      {
+        title: t("stats.item2"),
+        amount: "3",
+        description: t("stats.description2"),
+      },
+      {
+        title: t("stats.item3"),
+        amount: "2",
+        description: t("stats.description3"),
+      },
+      {
+        title: t("stats.item4"),
+        amount: "1",
+        description: t("stats.description4"),
+      },
+    ]}
+  >
+    <SectionHeading
+      slot="headline"
+      number="02"
+      label={t("home.story.year")}
+      title={t("home.story.resultsTitle")}
+      id="results-title"
+      description={t("stats.subtitle")}
+      href={getLocalizedPath("/what-we-do/experiences", lang)}
+      linkText={t("home.story.experience")}
+    />
+  </Stats>
+  <div class="mx-auto max-w-6xl px-5 pb-14 sm:px-6 sm:pb-20">
+    <Kaleidoscope {lang} />
+  </div>
+</section>

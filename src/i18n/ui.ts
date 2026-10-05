@@ -36,6 +36,60 @@ export const ui = {
     "hero.action.contact": "Contact Us",
     "hero.action.expertise": "Our Expertise",
 
+    // Homepage
+    "home.story.bridge": "Rooted in academia. Connected to the real world.",
+    "home.story.approach": "Our approach",
+    "home.story.research": "Research",
+    "home.story.policy": "Policy",
+    "home.story.practice": "Practice",
+    "home.story.expertiseTitle": "Many ways to make a meaningful difference.",
+    "home.story.services": "All our services",
+    "home.story.year": "Our work in 2025",
+    "home.story.resultsTitle": "Shared effort. Real progress.",
+    "home.story.experience": "Explore our experience",
+    "home.story.purpose": "Our purpose",
+    "home.story.purposeTitle": "Better health is a collective effort.",
+    "home.story.purposeBody":
+      "Since 2006, CHAMPS has connected academic expertise with the needs of governments, health institutions, and communities. Our home is the Faculty of Public Health at Universitas Indonesia. Our purpose reaches far beyond it.",
+    "home.story.about": "Get to know CHAMPS",
+    "home.story.photoAlt":
+      "CHAMPS UI colleagues and partners connecting at an event",
+    "home.story.galleryBridge": "The people and moments behind the work.",
+    "home.story.news": "From CHAMPS",
+    "home.story.newsTitle": "Ideas, insights & action.",
+    "home.story.newsBody":
+      "Follow the research, partnerships, and conversations moving our work forward.",
+    "home.story.watch": "Watch the kaleidoscope on YouTube",
+    "home.video.recapTitle": "CHAMPS UI Kaleidoscope 2025",
+    "home.video.recapDescription":
+      "A look back at the people, partnerships, and progress of 2025.",
+    "home.video.expand": "Watch video",
+    "home.video.collapse": "Close video",
+    "home.story.next": "Let’s move forward",
+    "home.hero.photoAlt":
+      "Participants gathered at a CHAMPS UI event in an auditorium",
+    "home.hero.title1": "Big ideas.",
+    "home.hero.title2": "Shared purpose.",
+    "home.hero.title3": "Healthier lives.",
+    "home.hero.photoCaption": "Stronger, together.",
+    "home.hero.people": "Meet the people behind our work",
+    "home.expertise.subtitle":
+      "Connecting knowledge, people, and practice across four areas of expertise.",
+    "home.expertise.research":
+      "Evidence to guide better decisions for public health.",
+    "home.expertise.consultation":
+      "Expert guidance for stronger health institutions and systems.",
+    "home.expertise.capacity":
+      "Practical skills for the next generation of health leaders.",
+    "home.expertise.csr":
+      "Partnerships that support healthier, more resilient communities.",
+    "home.gallery.title": "Our work, our people",
+    "home.gallery.subtitle":
+      "A shared commitment to better health, in practice.",
+    "home.collaboration.title": "Better health starts with collaboration.",
+    "home.collaboration.description":
+      "Work with CHAMPS UI to turn research and shared ideas into meaningful change.",
+
     // Homepage - TNA Invitation Modal
     "tna.modal.title": "CHAMPS UI Training Needs Assessment",
     "tna.modal.description":
@@ -335,6 +389,61 @@ export const ui = {
       "Menjembatani Penelitian, Kebijakan, dan Praktik untuk Pelayanan Kesehatan Masa Depan",
     "hero.action.contact": "Hubungi Kami",
     "hero.action.expertise": "Keahlian Kami",
+
+    // Homepage - Community layout
+    "home.story.bridge": "Berakar pada akademia. Terhubung dengan dunia nyata.",
+    "home.story.approach": "Pendekatan kami",
+    "home.story.research": "Riset",
+    "home.story.policy": "Kebijakan",
+    "home.story.practice": "Praktik",
+    "home.story.expertiseTitle": "Beragam cara untuk membawa perubahan.",
+    "home.story.services": "Semua layanan",
+    "home.story.year": "Karya kami di 2025",
+    "home.story.resultsTitle": "Upaya bersama. Kemajuan nyata.",
+    "home.story.experience": "Jelajahi pengalaman kami",
+    "home.story.purpose": "Tujuan kami",
+    "home.story.purposeTitle": "Kesehatan lebih baik adalah upaya bersama.",
+    "home.story.purposeBody":
+      "Sejak 2006, CHAMPS menghubungkan keahlian akademik dengan kebutuhan pemerintah, institusi kesehatan, dan masyarakat. Kami bernaung di Fakultas Kesehatan Masyarakat Universitas Indonesia, dengan tujuan yang menjangkau lebih luas.",
+    "home.story.about": "Kenali CHAMPS lebih dekat",
+    "home.story.photoAlt":
+      "Tim dan mitra CHAMPS UI bertemu dalam sebuah kegiatan",
+    "home.story.galleryBridge": "Tim dan momen di balik karya kami.",
+    "home.story.news": "Dari CHAMPS",
+    "home.story.newsTitle": "Ide, wawasan & aksi.",
+    "home.story.newsBody":
+      "Ikuti riset, kemitraan, dan percakapan yang mendorong karya kami.",
+    "home.story.watch": "Tonton kaleidoskop di YouTube",
+    "home.video.recapTitle": "Kaleidoskop CHAMPS UI 2025",
+    "home.video.recapDescription":
+      "Kilasan tim, kemitraan, dan kemajuan bersama sepanjang 2025.",
+    "home.video.expand": "Tonton video",
+    "home.video.collapse": "Tutup video",
+    "home.story.next": "Mari melangkah bersama",
+    "home.hero.photoAlt":
+      "Peserta berkumpul dalam kegiatan CHAMPS UI di auditorium",
+    "home.hero.title1": "Ide besar.",
+    "home.hero.title2": "Tujuan bersama.",
+    "home.hero.title3": "Hidup lebih sehat.",
+    "home.hero.photoCaption": "Lebih kuat, bersama.",
+    "home.hero.people": "Kenali tim di balik karya kami",
+    "home.expertise.subtitle":
+      "Menghubungkan pengetahuan, manusia, dan praktik dalam empat bidang keahlian.",
+    "home.expertise.research":
+      "Bukti ilmiah untuk keputusan kesehatan masyarakat yang lebih baik.",
+    "home.expertise.consultation":
+      "Pendampingan ahli untuk institusi dan sistem kesehatan yang lebih kuat.",
+    "home.expertise.capacity":
+      "Keterampilan praktis untuk generasi pemimpin kesehatan berikutnya.",
+    "home.expertise.csr":
+      "Kemitraan untuk masyarakat yang lebih sehat dan tangguh.",
+    "home.gallery.title": "Karya kami, tim kami",
+    "home.gallery.subtitle":
+      "Komitmen bersama untuk kesehatan yang lebih baik, dalam praktik.",
+    "home.collaboration.title":
+      "Kesehatan yang lebih baik dimulai dari kolaborasi.",
+    "home.collaboration.description":
+      "Berkolaborasi dengan CHAMPS UI untuk mengubah riset dan gagasan bersama menjadi perubahan nyata.",
 
     // Homepage - TNA Invitation Modal
     "tna.modal.title": "Survei Analisis Kebutuhan Pelatihan CHAMPS UI",

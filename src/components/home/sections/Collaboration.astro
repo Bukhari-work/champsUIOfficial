@@ -1,0 +1,38 @@
+---
+import type { Language } from "@/i18n/ui";
+import { useTranslations, getLocalizedPath } from "@/i18n/utils";
+import Button from "@/components/ui-astro/Button.astro";
+import SectionHeading from "../shared/SectionHeading.astro";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section
+  class="mx-auto mb-16 max-w-6xl px-5 sm:px-6"
+  aria-labelledby="collaboration-title"
+  data-home-section="collaboration"
+>
+  <div
+    class="bg-primary/5 flex flex-col items-start gap-6 rounded-xl border p-6 sm:p-10 md:flex-row md:items-center md:justify-between"
+  >
+    <div class="max-w-2xl">
+      <SectionHeading
+        number="05"
+        label={t("home.story.next")}
+        title={t("home.collaboration.title")}
+        description={t("home.collaboration.description")}
+        id="collaboration-title"
+      />
+    </div>
+    <Button
+      href={getLocalizedPath("/contact", lang)}
+      text={t("hero.action.contact")}
+      icon="FaArrowRightLong"
+      size="lg"
+      className="h-12 shrink-0 rounded-xl"
+    />
+  </div>
+</section>

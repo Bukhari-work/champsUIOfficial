@@ -89,6 +89,7 @@ const Wrapper = href ? "a" : "div";
   <div class="flex flex-1 flex-col justify-between">
     <section>
       <header>
+        <slot name="eyebrow" />
         <Heading
           class={cn(
             "group-hover:text-primary group-focus-within:text-primary font-bold",

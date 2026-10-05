@@ -1,0 +1,28 @@
+---
+import type { Language } from "@/i18n/ui";
+import { useTranslations } from "@/i18n/utils";
+import { PhotoMarquee } from "../shared/PhotoMarquee";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<figure class="bg-primary/5 border-y py-6">
+  <figcaption class="mx-auto mb-5 max-w-6xl px-5 sm:px-6">
+    <p class="text-primary text-xs font-medium tracking-widest uppercase">
+      {t("home.gallery.title")}
+    </p>
+    <p class="text-muted-foreground mt-2 text-xs leading-relaxed">
+      {t("home.story.galleryBridge")}
+    </p>
+  </figcaption>
+  <div
+    id="home-photo-strip"
+    class="[&:hover_.animate-marquee]:paused"
+    aria-hidden="true"
+  >
+    <PhotoMarquee />
+  </div>
+</figure>

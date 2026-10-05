@@ -21,7 +21,9 @@ const {
   containerClass={`max-w-5xl mx-auto lg:pt-4 ${classes?.container ?? ""}`}
 >
   <slot name="bg" slot="bg" />
-  <Headline title={title} subtitle={subtitle} tagline={tagline} />
+  <slot name="headline">
+    <Headline title={title} subtitle={subtitle} tagline={tagline} />
+  </slot>
 
   <div
     class="grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-4 lg:gap-x-0 lg:gap-y-8"
@@ -32,7 +34,7 @@ const {
           class:list={[
             "intersect-once motion-safe:md:intersect:animate-fade-in intersect-quarter transition-none motion-safe:md:opacity-0",
             "p-4",
-            "border-primary border-b last:border-b-0 [&:nth-last-child(2)]:border-b-0",
+            "border-primary border-b last:border-b-0 nth-last-2:border-b-0",
             "lg:border-b-0 lg:border-l lg:nth-[4n+1]:border-none",
             "flex flex-col justify-center text-center",
           ]}

@@ -1,0 +1,71 @@
+---
+import type { Language } from "@/i18n/ui";
+import { useTranslations } from "@/i18n/utils";
+import DynamicIcon from "@/components/blocks/DynamicIcon";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const copy = (en: string, id: string) => (lang === "id" ? id : en);
+const steps = [
+  {
+    label: t("home.story.research"),
+    icon: "FaMagnifyingGlass",
+    caption: copy("Build the evidence.", "Membangun bukti."),
+  },
+  {
+    label: t("home.story.policy"),
+    icon: "FaFileLines",
+    caption: copy("Inform decisions.", "Mendukung keputusan."),
+  },
+  {
+    label: t("home.story.practice"),
+    icon: "FaHandshake",
+    caption: copy("Put knowledge to work.", "Menerapkan pengetahuan."),
+  },
+];
+---
+
+<div class="bg-background" data-home-section="approach">
+  <div class="mx-auto max-w-6xl px-5 pt-2 sm:px-6">
+    <div
+      class="border-primary/20 bg-primary/5 rounded-xl border p-5 md:px-7 md:py-6"
+    >
+      <div
+        class="mb-5 flex flex-col items-baseline justify-between gap-2 md:flex-row md:gap-4"
+      >
+        <p
+          class="text-primary m-0 text-xs font-medium tracking-widest uppercase"
+        >
+          {t("home.story.approach")}
+        </p>
+        <p class="text-muted-foreground text-xs leading-relaxed">
+          {t("home.story.bridge")}
+        </p>
+      </div>
+      <ol
+        class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-0"
+        aria-label={t("home.story.approach")}
+      >
+        {
+          steps.map((step) => (
+            <li class="border-primary/20 flex items-center gap-3 not-first:border-t not-first:pt-4 sm:flex-col sm:items-start sm:gap-2 sm:px-3 sm:not-first:border-t-0 sm:not-first:border-l sm:not-first:pt-0 sm:first:pl-0 sm:last:pr-0 md:flex-row md:items-center md:gap-3 md:px-4 lg:px-7">
+              <span class="text-primary shrink-0" aria-hidden="true">
+                <DynamicIcon icon={step.icon} className="size-5" />
+              </span>
+              <div>
+                <p class="text-foreground text-xs leading-relaxed font-medium md:text-sm">
+                  {step.label}
+                </p>
+                <p class="text-muted-foreground mt-2 text-xs leading-relaxed">
+                  {step.caption}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</div>
