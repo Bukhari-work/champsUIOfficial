@@ -1,39 +1,21 @@
 ---
-// =================================================================================
-// 1. IMPORTS
-// =================================================================================
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  useTranslations,
+} from "@/i18n/utils";
 
-// 1a. i18n & Config
-import { useTranslations } from "@/i18n/utils.ts";
-import type { Language } from "@/i18n/ui.ts";
-import { i18n } from "@/config.ts";
-import { navigation } from "@/navigation.ts";
+import { getSidebar } from "@/navigation.ts";
 
-// 1b. Layout & Components
-import type { PageMetadata, SideBarProps } from "@/types.ts";
-import AboutLayout from "@/layouts/AboutLayout.astro";
-import { MarqueePartners } from "@/layouts/blocks/MarqueePartners.tsx";
-
-// =================================================================================
-// 2. ROUTING & LANGUAGE VALIDATION
-// =================================================================================
+import type { PageMetadata } from "@/types.ts";
+import SidebarLayout from "@/layouts/SidebarLayout.astro";
+import { MarqueePartners } from "@/components/partners/MarqueePartners.tsx";
 
 export async function getStaticPaths() {
-  return i18n.locales.map((lang) => ({
-    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
-  }));
+  return getLocaleStaticPaths();
 }
 
-const { lang = i18n.defaultLocale } = Astro.params;
-if (!i18n.locales.includes(lang)) {
-  throw new Error(
-    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
-  );
-}
-
-// =================================================================================
-// 3. IMAGE & DATA PREPARATION
-// =================================================================================
+const lang = getPageLanguage(Astro.params.lang);
 
 // --- Initialize Partner Images (Your glob logic) ---
 const imagesGovernment = import.meta.glob(
@@ -79,8 +61,7 @@ const imagePathsUniversities = Object.keys(imagesUniversities).map((path) =>
 );
 
 // --- Translations ---
-const t = useTranslations(lang as Language);
-const nav = navigation[lang as keyof typeof navigation];
+const t = useTranslations(lang);
 
 // --- Page Metadata ---
 const content: PageMetadata = {
@@ -89,17 +70,10 @@ const content: PageMetadata = {
 };
 
 // --- Sidebar Data (Re-uses the same 'What We Do' sidebar) ---
-const sideBar: SideBarProps = {
-  title: t(nav.bars.whatWeDo.titleKey),
-  menuItems: nav.bars.whatWeDo.links.map((item) => ({
-    text: t(item.textKey),
-    href: item.href,
-    "aria-label": t(item.textKey),
-  })),
-};
+const sideBar = getSidebar(lang, "whatWeDo");
 ---
 
-<AboutLayout {content} {sideBar}>
+<SidebarLayout {content} {sideBar}>
   <h1
     class="font-lexend text-primary mt-8 mb-6 w-fit scroll-mt-24 text-6xl font-semibold"
   >
@@ -174,4 +148,4 @@ const sideBar: SideBarProps = {
       <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
     </p>
   </div>
-</AboutLayout>
+</SidebarLayout>

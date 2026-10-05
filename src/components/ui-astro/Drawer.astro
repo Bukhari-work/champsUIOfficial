@@ -39,7 +39,7 @@ const slot = await Astro.slots.render("default");
   <div class="drawer-backdrop"></div>
 </Element>
 <Button
-  className={cn("drawer-trigger", triggerClass)}
+  class={cn("drawer-trigger", triggerClass)}
   data-drawer-target={id}
   variant={triggerVariant}
   size={triggerSize}

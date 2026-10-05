@@ -1,45 +1,25 @@
 ---
-import { getLocalizedPath } from "@/i18n/utils";
-// =================================================================================
-// 1. IMPORTS
-// =================================================================================
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  getLocalizedPath,
+  useTranslations,
+} from "@/i18n/utils";
 
-// 1a. Layouts & Components
 import Base from "@/layouts/Base.astro";
-import PageHeader from "@/components/PageHeader.astro";
-import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
+import PageHeader from "@/components/shared/PageHeader.astro";
+import DynamicIcon from "@/components/shared/DynamicIcon.tsx";
 import Button from "@/components/ui-astro/Button.astro";
 
-// 1b. i18n & Config
-import { useTranslations } from "@/i18n/utils.ts";
-import type { Language } from "@/i18n/ui.ts";
-import { i18n } from "@/config.ts";
-
-// 1c. Utilities
 import { slugify } from "@/lib/utils/textConverter";
 
-// =================================================================================
-// 2. ROUTING & LANGUAGE VALIDATION
-// =================================================================================
-
 export async function getStaticPaths() {
-  return i18n.locales.map((lang) => ({
-    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
-  }));
+  return getLocaleStaticPaths();
 }
 
-const { lang = i18n.defaultLocale } = Astro.params;
-if (!i18n.locales.includes(lang)) {
-  throw new Error(
-    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
-  );
-}
+const lang = getPageLanguage(Astro.params.lang);
 
-// =================================================================================
-// 3. DATA & PROPS PREPARATION
-// =================================================================================
-
-const t = useTranslations(lang as Language);
+const t = useTranslations(lang);
 
 // Content for SEO and Header, now using translation keys
 const content = {
@@ -154,7 +134,7 @@ const workshops = workshopsData.map((workshop) => ({
                     <Button
                       variant="default"
                       href={workshop.url}
-                      className="bg-primary/60 dark:bg-primary dark:hover:bg-primary/60"
+                      class="bg-primary/60 dark:bg-primary dark:hover:bg-primary/60"
                     >
                       {t("projects.learnMore")}
                     </Button>

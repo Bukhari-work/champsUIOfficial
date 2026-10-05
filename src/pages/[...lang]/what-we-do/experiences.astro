@@ -1,39 +1,22 @@
 ---
-// =================================================================================
-// 1. IMPORTS
-// =================================================================================
-import { useTranslations } from "@/i18n/utils.ts";
-import type { Language } from "@/i18n/ui.ts";
-import { i18n } from "@/config.ts";
-import type { SideBarProps } from "@/types.ts";
-import AboutLayout from "@/layouts/AboutLayout.astro";
-import ExperiencesPath from "@/layouts/PathExperiences.astro";
-import { navigation } from "@/navigation.ts";
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  useTranslations,
+} from "@/i18n/utils";
 
-// =================================================================================
-// 2. ROUTING & LANGUAGE VALIDATION
-// =================================================================================
+import SidebarLayout from "@/layouts/SidebarLayout.astro";
+import ExperiencesPath from "@/components/experiences/ExperienceTimeline.astro";
+import { getSidebar } from "@/navigation.ts";
 
 // This block is copied from your example to enable i18n routing
 export async function getStaticPaths() {
-  return i18n.locales.map((lang) => ({
-    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
-  }));
+  return getLocaleStaticPaths();
 }
 
-const { lang = i18n.defaultLocale } = Astro.params;
-if (!i18n.locales.includes(lang)) {
-  throw new Error(
-    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
-  );
-}
+const lang = getPageLanguage(Astro.params.lang);
 
-// =================================================================================
-// 3. DATA & PROPS PREPARATION
-// =================================================================================
-
-const t = useTranslations(lang as Language);
-const nav = navigation[lang as keyof typeof navigation];
+const t = useTranslations(lang);
 
 // --- Page Metadata ---
 // We use translation keys specific to the "Experiences" page
@@ -46,17 +29,10 @@ const content = {
 // --- Sidebar Data ---
 // We re-use the *same* sidebar as the 'whatWeDo' index page
 // for consistent navigation within this section.
-const sideBar: SideBarProps = {
-  title: t(nav.bars.whatWeDo.titleKey),
-  menuItems: nav.bars.whatWeDo.links.map((item) => ({
-    text: t(item.textKey),
-    href: item.href,
-    "aria-label": t(item.textKey),
-  })),
-};
+const sideBar = getSidebar(lang, "whatWeDo");
 ---
 
-<AboutLayout {content} {sideBar}>
+<SidebarLayout {content} {sideBar}>
   <h1
     class="font-lexend text-primary mt-8 mb-6 w-fit scroll-mt-24 text-6xl font-semibold"
   >
@@ -81,4 +57,4 @@ const sideBar: SideBarProps = {
     {t("experiences.contactPrompt")}
     <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
   </p>
-</AboutLayout>
+</SidebarLayout>

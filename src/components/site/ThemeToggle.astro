@@ -1,0 +1,28 @@
+---
+import DynamicIcon from "@/components/shared/DynamicIcon";
+
+const { class: className = "" }: { class?: string } = Astro.props;
+---
+
+<button
+  type="button"
+  class={`border-border bg-muted/70 focus-visible:ring-ring relative grid h-10 w-24 cursor-pointer grid-cols-2 rounded-xl border p-1 shadow-inner transition focus-visible:ring-2 focus-visible:outline-none ${className}`}
+  data-aw-toggle-color-scheme
+  aria-label="Toggle color theme"
+>
+  <span
+    class="bg-background absolute top-1 left-1 h-8 w-[calc(50%-0.25rem)] rounded-lg shadow-sm transition-transform duration-300 ease-out dark:translate-x-full"
+    aria-hidden="true"></span>
+  <span
+    class="text-primary dark:text-muted-foreground relative z-10 flex items-center justify-center"
+  >
+    <DynamicIcon icon="LuSun" className="h-4 w-4" aria-hidden="true" />
+    <span class="sr-only">Light theme</span>
+  </span>
+  <span
+    class="text-muted-foreground dark:text-primary relative z-10 flex items-center justify-center"
+  >
+    <DynamicIcon icon="LuMoon" className="h-4 w-4" aria-hidden="true" />
+    <span class="sr-only">Dark theme</span>
+  </span>
+</button>

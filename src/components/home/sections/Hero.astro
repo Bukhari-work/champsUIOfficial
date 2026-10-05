@@ -3,7 +3,7 @@ import { Image } from "astro:assets";
 import type { Language } from "@/i18n/ui";
 import { useTranslations, getLocalizedPath } from "@/i18n/utils";
 import Button from "@/components/ui-astro/Button.astro";
-import DynamicIcon from "@/components/blocks/DynamicIcon";
+import DynamicIcon from "@/components/shared/DynamicIcon";
 interface Props {
   lang: Language;
 }
@@ -53,7 +53,7 @@ const t = useTranslations(lang);
         rel="noopener noreferrer"
         icon="FaWhatsapp"
         size="lg"
-        className="h-12 rounded-xl px-5"
+        class="h-12 rounded-xl px-5"
       />
       <Button
         text={t("hero.action.expertise")}
@@ -61,7 +61,7 @@ const t = useTranslations(lang);
         icon="FaArrowRightLong"
         variant="outline"
         size="lg"
-        className="border-primary/20 text-primary hover:bg-primary/10 hover:text-primary h-12 rounded-xl px-5"
+        class="border-primary/20 text-primary hover:bg-primary/10 hover:text-primary h-12 rounded-xl px-5"
       />
     </div>
     <a

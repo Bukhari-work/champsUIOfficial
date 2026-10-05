@@ -1,8 +1,8 @@
 ---
 import type { Language } from "@/i18n/ui";
 import { useTranslations, getLocalizedPath } from "@/i18n/utils";
-import CardNewsSm from "@/components/CardNewsSm.astro";
-import { getSinglePage } from "@/lib/contentParser.astro";
+import CardNewsSm from "@/components/news/CardNewsSm.astro";
+import { getSinglePage } from "@/lib/contentParser.ts";
 import { sortByDate } from "@/lib/utils/sortFunctions";
 import SectionHeading from "../shared/SectionHeading.astro";
 interface Props {

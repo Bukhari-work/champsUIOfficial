@@ -2,8 +2,8 @@
 // This file defines the site's navigation structure using keys from ui.ts.
 // It's the single source of truth for what links appear and where they go.
 
-import type { NavLink, NavLinkGroup } from "./types";
-import { getTranslatedPath } from "./i18n/utils"; // Import the path helper
+import type { NavLink, NavLinkGroup, SideBarProps } from "./types";
+import { getTranslatedPath, useTranslations } from "./i18n/utils";
 import type { Language } from "./i18n/ui"; // Import the Language type
 
 /**
@@ -87,6 +87,22 @@ export const navigation = {
   en: getNavStructure("en"),
   id: getNavStructure("id"),
 };
+
+export function getSidebar(
+  lang: Language,
+  section: keyof (typeof navigation)[Language]["bars"],
+): SideBarProps {
+  const t = useTranslations(lang);
+  const group = navigation[lang].bars[section];
+  return {
+    title: t(group.titleKey),
+    menuItems: group.links.map((item) => ({
+      text: t(item.textKey),
+      href: item.href,
+      "aria-label": t(item.textKey),
+    })),
+  };
+}
 
 // Contains shared, non-translatable, or globally structured footer data
 export const sharedFooter = {

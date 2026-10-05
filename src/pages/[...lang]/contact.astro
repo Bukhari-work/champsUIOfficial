@@ -1,49 +1,30 @@
 ---
-// =================================================================================
-// 1. IMPORTS
-// =================================================================================
-
-// 1a. Layout & Components
 import Base from "@/layouts/Base.astro";
-import PageHeader from "@/components/PageHeader.astro";
-import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
-import ContactForm from "@/layouts/ContactForm.astro";
+import PageHeader from "@/components/shared/PageHeader.astro";
+import DynamicIcon from "@/components/shared/DynamicIcon.tsx";
+import ContactForm from "@/components/contact/ContactForm.astro";
 
-// 1b. Config & i18n
-import { SETTINGS, i18n } from "@/config.ts"; // Assuming you still need this for contact_form_url
-import { getLangFromUrl, useTranslations } from "@/i18n/utils.ts";
+import { SETTINGS } from "@/config.ts";
+import {
+  getLangFromUrl,
+  useTranslations,
+  getLocaleStaticPaths,
+} from "@/i18n/utils";
 import type { BaseLayoutProps } from "@/types.ts";
 
-// 1c. Static Path Generation
-import { ui } from "@/i18n/ui.ts";
-
-// =================================================================================
-// 2.  STATIC PATHS
-// =================================================================================
-
 export function getStaticPaths() {
-  return Object.keys(ui).map((lang) => {
-    return {
-      params: { lang: lang === i18n.defaultLocale ? undefined : lang },
-    };
-  });
+  return getLocaleStaticPaths();
 }
-// =================================================================================
-// 3. LAYOUT LOGIC & DATA PREPARATION
-// =================================================================================
 
-// 3a. Get language and translation function
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// 3b. Define SEO content for Base.astro
 const content: BaseLayoutProps["content"] = {
   title: t("contact.seo.title"),
   description: t("contact.seo.description"),
   // canonical: "https://www.champs-ui.org/contact" // Optional: uncomment if needed
 };
 
-// 3c. Define data for contact details
 const contactDetails = {
   title: t("contact.details.title"), // "Email and Website"
   items: [
@@ -65,7 +46,6 @@ const contactDetails = {
   ],
 };
 
-// 3d. Define data for social media
 const socials = {
   title: t("contact.socials.title"), // "Social Media"
   items: [
@@ -97,7 +77,6 @@ const socials = {
   ],
 };
 
-// 3e. Define data for address
 const address = {
   title: t("contact.address.title"), // "Address"
   line1: t("contact.address.line1"), // "Room 312, Building G, 3rd Floor of"

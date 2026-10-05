@@ -1,18 +1,15 @@
 ---
-// Imports from original [single].astro
 import Base from "@/layouts/Base.astro";
-import PageHeader from "@/components/PageHeader.astro";
-import { i18n } from "@/config.ts";
+import PageHeader from "@/components/shared/PageHeader.astro";
+import { i18n, SETTINGS } from "@/config";
 import type { Language } from "@/i18n/ui.ts";
-import { getLangFromUrl } from "@/i18n/utils.ts";
-import { getSinglePage } from "@/lib/contentParser.astro";
 
-// Imports from original CardAuthorLg.astro
-import { SETTINGS } from "@/config.ts";
+import { getSinglePage } from "@/lib/contentParser.ts";
+
 import { Image } from "astro:assets";
 import { render } from "astro:content";
 import { cn } from "@/lib/utils.ts";
-import Social from "@/components/Social.astro";
+import Social from "@/components/shared/Social.astro";
 import Button from "@/components/ui-astro/Button.astro";
 
 // --- Static Paths Function (from [single].astro) ---
@@ -57,13 +54,8 @@ export async function getStaticPaths() {
   return paths;
 }
 
-// --- Props and Variables (Merged) ---
-
-// Prop from [single].astro
 const { person } = Astro.props;
-// const { lang, single } = Astro.params; // No longer needed for links
 
-// Variables from CardAuthorLg.astro
 const { people_folder } = SETTINGS;
 const {
   name,
@@ -74,16 +66,13 @@ const {
 } = person.data;
 const { Content } = await render(person);
 
-// Generate unique IDs (from CardAuthorLg.astro)
+// Generate unique IDs for the profile controls.
 const uniqueId = person.id.replace(/[^a-zA-Z0-9]/g, ""); // Sanitize ID
 const contentBoxId = `contentBox-${uniqueId}`;
 const toggleButtonId = `toggleButton-${uniqueId}`;
 const fadeOverlayId = `fadeOverlay-${uniqueId}`;
 
-// Attributes from [single].astro
 const content = { title: name };
-
-// 'personUrl' variable removed as it is no longer used
 ---
 
 <Base content={content} makara>
@@ -91,7 +80,6 @@ const content = { title: name };
   <PageHeader title={role} />
 
   <section class="mx-auto flex max-w-6xl flex-col px-2 py-16">
-    {/* --- Start of HTML from CardAuthorLg.astro --- */}
     <article
       class={cn(
         "group hover:border-primary bg-background relative isolate grid grid-cols-1 gap-6 overflow-hidden rounded-xl border-2 p-6 duration-100  hover:shadow-xl dark:shadow-primary/20",
@@ -133,7 +121,7 @@ const content = { title: name };
           </header>
           <Social
             socialLinks={social}
-            className="my-4 flex-wrap justify-center lg:justify-start"
+            class="my-4 flex-wrap justify-center lg:justify-start"
           />
         </div>
 
@@ -167,9 +155,6 @@ const content = { title: name };
         </div>
       </div>
     </article>
-    {/* --- End of HTML from CardAuthorLg.astro --- */}
-
-    {/* --- Start of Script from CardAuthorLg.astro --- */}
     <script is:inline>
       function toggleContent(contentBoxId, toggleButtonId, fadeOverlayId) {
         const contentBox = document.getElementById(contentBoxId);
@@ -195,7 +180,6 @@ const content = { title: name };
         }
       }
     </script>
-    {/* --- End of Script from CardAuthorLg.astro --- */}
   </section>
 
   {/* Footer content from original [single].astro */}

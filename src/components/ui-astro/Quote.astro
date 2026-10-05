@@ -3,13 +3,13 @@ import { cn } from "@/lib/utils";
 
 interface Props {
   quote: string;
-  className?: string;
+  class?: string;
 }
 
-const { quote, className } = Astro.props;
+const { quote, class: className } = Astro.props;
 ---
 
-<div class={cn("my-7 flex flex-col rounded-lg p-7", `${className}`)}>
+<div class={cn("my-7 flex flex-col rounded-lg p-7", className)}>
   <svg
     width="33"
     height="20"

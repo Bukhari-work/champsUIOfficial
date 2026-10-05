@@ -1,28 +1,27 @@
 ---
 import type { Language } from "@/i18n/ui";
 import { useTranslations } from "@/i18n/utils";
-import DynamicIcon from "@/components/blocks/DynamicIcon";
+import DynamicIcon from "@/components/shared/DynamicIcon";
 interface Props {
   lang: Language;
 }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const copy = (en: string, id: string) => (lang === "id" ? id : en);
 const steps = [
   {
     label: t("home.story.research"),
     icon: "FaMagnifyingGlass",
-    caption: copy("Build the evidence.", "Membangun bukti."),
+    caption: t("home.story.researchCaption"),
   },
   {
     label: t("home.story.policy"),
     icon: "FaFileLines",
-    caption: copy("Inform decisions.", "Mendukung keputusan."),
+    caption: t("home.story.policyCaption"),
   },
   {
     label: t("home.story.practice"),
     icon: "FaHandshake",
-    caption: copy("Put knowledge to work.", "Menerapkan pengetahuan."),
+    caption: t("home.story.practiceCaption"),
   },
 ];
 ---

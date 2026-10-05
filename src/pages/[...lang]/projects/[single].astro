@@ -1,13 +1,13 @@
 ---
-import { getSinglePage } from "@/lib/contentParser.astro";
+import { getSinglePage } from "@/lib/contentParser.ts";
 import type { Language } from "@/i18n/ui.ts";
 import { i18n } from "@/config.ts";
 import { render } from "astro:content";
 
-import ProjectPage from "@/layouts/ProjectsLayout.astro";
-import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
+import ProjectPage from "@/layouts/ProjectLayout.astro";
+import DynamicIcon from "@/components/shared/DynamicIcon.tsx";
 import Button from "@/components/ui-astro/Button.astro";
-import SpeakerCard from "@/components/CardSpeaker.astro";
+import SpeakerCard from "@/components/people/CardSpeaker.astro";
 
 // 1. Generate a page for every entry in the 'projects' collection
 export async function getStaticPaths() {

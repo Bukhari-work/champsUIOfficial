@@ -1,0 +1,51 @@
+---
+import Base from "@/layouts/Base.astro";
+import SideBar from "@/components/site/SideBar.astro";
+import type { PageMetadata, SideBarProps } from "@/types";
+
+interface Props {
+  content: PageMetadata;
+  sideBar: SideBarProps;
+  variant?: "default" | "wide" | "with-aside";
+}
+
+const {
+  content,
+  sideBar,
+  variant = Astro.slots.has("aside") ? "with-aside" : "default",
+} = Astro.props;
+const hasAside = Astro.slots.has("aside");
+if (
+  (variant === "with-aside") !== hasAside ||
+  (variant === "wide" && hasAside)
+) {
+  throw new Error(
+    "SidebarLayout: use 'with-aside' when providing the aside slot.",
+  );
+}
+---
+
+<Base {content} makara>
+  <section class="mx-auto grid max-w-7xl grid-cols-7 gap-6 p-2 pb-24">
+    <SideBar
+      title={sideBar.title}
+      class={sideBar.class}
+      menuItems={sideBar.menuItems}
+    />
+    <article
+      class:list={[
+        "prose dark:prose-invert col-span-7 min-w-full px-2 text-justify font-light lg:px-8",
+        variant === "wide" ? "lg:col-span-6" : "lg:col-span-5",
+      ]}
+    >
+      <slot />
+    </article>
+    {
+      hasAside && (
+        <aside class="sticky top-24 col-span-1 hidden h-fit lg:block">
+          <slot name="aside" />
+        </aside>
+      )
+    }
+  </section>
+</Base>

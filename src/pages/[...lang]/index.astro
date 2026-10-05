@@ -1,7 +1,11 @@
 ---
-import { i18n } from "@/config";
-import type { Language } from "@/i18n/ui";
-import { useTranslations, getLocalizedPath } from "@/i18n/utils";
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  useTranslations,
+  getLocalizedPath,
+} from "@/i18n/utils";
+
 import Base from "@/layouts/Base.astro";
 import Hero from "@/components/home/sections/Hero.astro";
 import ApproachBand from "@/components/home/sections/ApproachBand.astro";
@@ -11,15 +15,12 @@ import Purpose from "@/components/home/sections/Purpose.astro";
 import PhotoDivider from "@/components/home/sections/PhotoDivider.astro";
 import News from "@/components/home/sections/News.astro";
 import Collaboration from "@/components/home/sections/Collaboration.astro";
-import InvitationModal from "@/components/InvitationModal.astro";
+import InvitationModal from "@/components/shared/InvitationModal.astro";
 
 export function getStaticPaths() {
-  return i18n.locales.map((lang) => ({
-    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
-  }));
+  return getLocaleStaticPaths();
 }
-const lang = (Astro.params.lang ?? i18n.defaultLocale) as Language;
-if (!i18n.locales.includes(lang)) throw new Error(`Invalid language: ${lang}`);
+const lang = getPageLanguage(Astro.params.lang);
 const t = useTranslations(lang);
 const content = {
   title: t("nav.home"),

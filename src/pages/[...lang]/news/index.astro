@@ -1,46 +1,27 @@
 ---
-// =================================================================================
-// 1. IMPORTS
-// =================================================================================
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  useTranslations,
+} from "@/i18n/utils";
 
-// 1a. Layout
 import Base from "@/layouts/Base.astro";
 
-// 1b. i18n & Types
-import { useTranslations } from "@/i18n/utils.ts";
 import type { BaseLayoutProps } from "@/types.ts";
-import { i18n } from "@/config.ts";
 
-// 1c. Components
-import PageHeader from "@/components/PageHeader.astro";
-import NewsDirectory from "@/components/NewsDirectory.astro";
+import PageHeader from "@/components/shared/PageHeader.astro";
+import NewsDirectory from "@/components/news/NewsDirectory.astro";
 
-// 1d. Config & Libs
-import { getSinglePage } from "@/lib/contentParser.astro";
+import { getSinglePage } from "@/lib/contentParser.ts";
 import { sortByDate } from "@/lib/utils/sortFunctions";
-
-// =================================================================================
-// 2. STATIC PATHS
-// =================================================================================
 
 // Generate a static page for each supported language
 export async function getStaticPaths() {
-  return i18n.locales.map((lang) => ({
-    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
-  }));
+  return getLocaleStaticPaths();
 }
 
 // Get and validate the language from the URL parameter
-const { lang = i18n.defaultLocale } = Astro.params;
-if (!i18n.locales.includes(lang)) {
-  throw new Error(
-    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
-  );
-}
-
-// =================================================================================
-// 3. DATA FETCHING & PREPARATION
-// =================================================================================
+const lang = getPageLanguage(Astro.params.lang);
 
 const NEWS_FOLDER = "news";
 const allPosts = await getSinglePage(NEWS_FOLDER);
@@ -49,10 +30,6 @@ const allPosts = await getSinglePage(NEWS_FOLDER);
 const sortedPosts = sortByDate(allPosts).filter(
   (post) => post.id && post.id.startsWith(`${lang}/`),
 );
-
-// =================================================================================
-// 4. i18n & LAYOUT PROPS
-// =================================================================================
 
 const t = useTranslations(lang);
 

@@ -1,5 +1,5 @@
 ---
-import { getLocalizedPath } from "@/i18n/utils";
+import { getLocalizedPath, getLangFromUrl } from "@/i18n/utils";
 // =================================================================================
 // 1. IMPORTS
 // =================================================================================
@@ -9,26 +9,25 @@ import Base from "@/layouts/Base.astro"; // Changed from Main
 import type { BaseLayoutProps } from "@/types.ts"; // Added for Base layout
 
 // 1b. Astro Libs
-import { render } from "astro:content";
-import { getEntries } from "astro:content";
+import { render, getEntries } from "astro:content";
 
 // 1c. Components
 import Avatar from "@/components/ui-astro/Avatar.astro";
-import CardNewsSm from "@/components/CardNewsSm.astro";
-import Share from "@/components/Share.astro";
-import PageHeader from "@/components/PageHeader.astro";
-import TableOfContents from "@/components/TableOfContents.astro";
-import GalleryDeck from "@/layouts/DeckGallery.astro";
+import CardNewsSm from "@/components/news/CardNewsSm.astro";
+import Share from "@/components/shared/Share.astro";
+import PageHeader from "@/components/shared/PageHeader.astro";
+import TableOfContents from "@/components/shared/TableOfContents.astro";
+import GalleryDeck from "@/components/shared/GalleryDeck.astro";
 import Button from "@/components/ui-astro/Button.astro";
 
 // 1d. Libs & Utils
-import { getSinglePage } from "@/lib/contentParser.astro";
+import { getSinglePage } from "@/lib/contentParser.ts";
 import dateFormat from "@/lib/utils/dateFormat";
 import similarItems from "@/lib/utils/similarItems";
 import { humanize, markdownify, formatName } from "@/lib/utils/textConverter";
 import { i18n } from "@/config.ts";
 import type { Language } from "@/i18n/ui.ts";
-import { getLangFromUrl } from "@/i18n/utils.ts"; // Added for lang-aware links
+// Added for lang-aware links
 
 // 1e. Icons
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -170,11 +169,7 @@ const people = await getEntries<"people">(authors);
               {
                 categories.map((category: string) => (
                   <li>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="inline-block"
-                    >
+                    <Button variant="outline" size="sm" class="inline-block">
                       {humanize(category)}
                     </Button>
                   </li>

@@ -6,6 +6,22 @@ import { routes } from "./routes";
 // Use the default language from the central configuration
 const defaultLang = i18n.defaultLocale;
 
+export function getLocaleStaticPaths() {
+  return i18n.locales.map((lang) => ({
+    params: { lang: lang === defaultLang ? undefined : lang },
+  }));
+}
+
+export function getPageLanguage(value: string | undefined): Language {
+  const lang = value ?? defaultLang;
+  if (!i18n.locales.includes(lang as Language)) {
+    throw new Error(
+      `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
+    );
+  }
+  return lang as Language;
+}
+
 export function getLangFromUrl(url: URL): Language {
   const [, lang] = url.pathname.split("/");
   if (lang in ui) return lang as Language;

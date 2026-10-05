@@ -1,31 +1,25 @@
 ---
 import type { HTMLAttributes } from "astro/types";
 import Element from "@/components/ui-astro/Element.astro";
-import DynamicIcon from "@/components/blocks/DynamicIcon.tsx";
-import { buttonVariants } from "@/components/ui/button.tsx";
+import DynamicIcon from "@/components/shared/DynamicIcon.tsx";
+import {
+  buttonVariants,
+  type ButtonVariantProps,
+} from "@/components/ui/button-variants";
 
 import { cn } from "@/lib/utils.ts";
 
 export interface Props
   extends HTMLAttributes<"button">,
     Omit<HTMLAttributes<"a">, "type">,
-    HTMLAttributes<"label"> {
-  className?: string | undefined;
-  variant?:
-    | "default"
-    | "secondary"
-    | "outline"
-    | "ghost"
-    | "destructive"
-    | "link"
-    | undefined;
-  size?: "default" | "sm" | "lg" | undefined;
+    HTMLAttributes<"label">,
+    ButtonVariantProps {
   text?: string | undefined;
   icon?: string | undefined;
 }
 
 const {
-  className,
+  class: className,
   variant = "default",
   size = "default",
   text,
@@ -39,9 +33,7 @@ const {
 ---
 
 <Element
-  class:list={cn(
-    buttonVariants({ variant: `${variant}`, size: `${size}`, className }),
-  )}
+  class:list={cn(buttonVariants({ variant, size, className }))}
   as={href ? "a" : rest.for ? "label" : "button"}
   {href}
   {target}

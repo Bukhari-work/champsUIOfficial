@@ -1,53 +1,29 @@
 ---
-// =================================================================================
-// 1. IMPORTS
-// =================================================================================
-import { useTranslations } from "@/i18n/utils.ts";
-import type { Language } from "@/i18n/ui.ts";
-import { i18n } from "@/config.ts";
-import type { SideBarProps } from "@/types.ts";
-import { getSinglePage } from "@/lib/contentParser.astro";
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  useTranslations,
+} from "@/i18n/utils";
+
+import { getSinglePage } from "@/lib/contentParser.ts";
 import type { CollectionEntry } from "astro:content";
 
-import AboutLayout from "@/layouts/AboutLayout.astro";
-import PeopleDeck from "@/layouts/DeckPeople.astro";
-import { navigation } from "@/navigation";
-
-// =================================================================================
-// 2. ROUTING & LANGUAGE VALIDATION
-// =================================================================================
+import SidebarLayout from "@/layouts/SidebarLayout.astro";
+import PeopleDeck from "@/components/people/PeopleDeck.astro";
+import { getSidebar } from "@/navigation";
 
 export async function getStaticPaths() {
-  return i18n.locales.map((lang) => ({
-    params: { lang: lang === i18n.defaultLocale ? undefined : lang },
-  }));
+  return getLocaleStaticPaths();
 }
 
-const { lang = i18n.defaultLocale } = Astro.params;
-if (!i18n.locales.includes(lang)) {
-  throw new Error(
-    `Invalid language: ${lang}. Check 'locales' in src/config.ts.`,
-  );
-}
+const lang = getPageLanguage(Astro.params.lang);
 
-// =================================================================================
-// 3. DATA & PROPS PREPARATION
-// =================================================================================
-
-const t = useTranslations(lang as Language);
-const nav = navigation[lang as keyof typeof navigation];
+const t = useTranslations(lang);
 const PEOPLE_FOLDER = "people";
 
 // --- Page & Sidebar Metadata ---
 
-const sideBar: SideBarProps = {
-  title: t(nav.bars.about.titleKey),
-  menuItems: nav.bars.about.links.map((item) => ({
-    text: t(item.textKey),
-    href: item.href,
-    "aria-label": t(item.textKey), // Use the textKey for proper translation
-  })),
-};
+const sideBar = getSidebar(lang, "about");
 
 // --- Fetch and Filter People Data ---
 // Fetch all non-draft people (from ALL languages)
@@ -79,7 +55,7 @@ const sortedTeamMembers = sortPeopleByIndex(teamMembers);
 const content = { title: t("sidebar.about.item.team") };
 ---
 
-<AboutLayout {content} {sideBar} large>
+<SidebarLayout {content} {sideBar} variant="wide">
   <h1
     class="font-lexend text-primary mt-8 mb-2 w-fit scroll-mt-24 text-6xl font-semibold"
   >
@@ -101,4 +77,4 @@ const content = { title: t("sidebar.about.item.team") };
       </div>
     </div>
   </div>
-</AboutLayout>
+</SidebarLayout>

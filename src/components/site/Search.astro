@@ -1,0 +1,237 @@
+---
+import type { Language } from "@/i18n/ui";
+import DynamicIcon from "@/components/shared/DynamicIcon";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const copy =
+  lang === "id"
+    ? {
+        title: "Cari di CHAMPS UI",
+        placeholder: "Cari berita, proyek, atau pakar…",
+        close: "Tutup pencarian",
+        clear: "Hapus pencarian",
+        idle: "Apa yang ingin Anda temukan?",
+        hint: "Jelajahi berita, proyek, dan tim pakar kami dengan kata kunci.",
+        loading: "Mencari…",
+        empty: "Tidak ada hasil untuk “{query}”. Coba kata kunci lain.",
+        count: "{count} hasil untuk “{query}”",
+        error: "Pencarian belum tersedia. Silakan coba lagi.",
+        more: "Tampilkan lebih banyak",
+        retry: "Coba lagi",
+        navigate: "untuk memilih",
+        open: "untuk membuka",
+        dismiss: "untuk menutup",
+        filters: "Jenis konten",
+        all: "Semua",
+        news: "Berita",
+        projects: "Proyek",
+        people: "Tim & Pakar",
+        browse: "{count} hasil",
+        emptyFilter:
+          "Tidak ada hasil yang cocok. Coba jenis konten atau kata kunci lain.",
+      }
+    : {
+        title: "Search CHAMPS UI",
+        placeholder: "Search news, projects, or experts…",
+        close: "Close search",
+        clear: "Clear search",
+        idle: "What would you like to find?",
+        hint: "Explore our news, projects, and team of experts with a keyword.",
+        loading: "Searching…",
+        empty: "No results for “{query}”. Try a different keyword.",
+        count: "{count} results for “{query}”",
+        error: "Search is unavailable right now. Please try again.",
+        more: "Show more results",
+        retry: "Try again",
+        navigate: "to navigate",
+        open: "to open",
+        dismiss: "to close",
+        filters: "Content type",
+        all: "All",
+        news: "News",
+        projects: "Projects",
+        people: "People",
+        browse: "{count} results",
+        emptyFilter:
+          "No matching results. Try another content type or keyword.",
+      };
+---
+
+<site-search
+  class="[&_button:focus-visible]:outline-primary [&_a:focus-visible]:outline-primary [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-2 [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-2 **:[[hidden]]:hidden!"
+  data-language={lang}
+  data-copy={JSON.stringify(copy)}
+  data-pagefind-ignore
+>
+  <dialog
+    class="bg-popover text-popover-foreground fixed inset-0 m-auto h-[min(42rem,calc(100dvh-2rem))] max-h-none w-[min(42rem,calc(100%-2rem))] max-w-none overflow-hidden rounded-[1.25rem] border p-0 shadow-[0_24px_80px_#0003] backdrop:bg-black/45 backdrop:backdrop-blur-[6px] max-[480px]:mt-4"
+    id="site-search-dialog"
+    aria-labelledby="site-search-title"
+  >
+    <div class="flex h-full min-h-0 flex-col">
+      <header
+        class="flex shrink-0 items-center justify-between gap-3 px-5 pt-5 pb-4"
+      >
+        <div class="flex items-center gap-3">
+          <span
+            class="bg-primary/10 text-primary grid place-items-center rounded-xl p-2.5"
+            ><DynamicIcon
+              icon="LuSearch"
+              className="h-5 w-5"
+              aria-hidden="true"
+            /></span
+          >
+          <h2 class="text-base font-semibold" id="site-search-title">
+            {copy.title}
+          </h2>
+        </div>
+        <button
+          type="button"
+          class="text-muted-foreground hover:bg-accent hover:text-foreground grid size-10 shrink-0 cursor-pointer place-items-center rounded-[0.625rem]"
+          data-search-close
+          aria-label={copy.close}
+        >
+          <DynamicIcon icon="LuX" className="h-5 w-5" aria-hidden="true" />
+        </button>
+      </header>
+
+      <form role="search" class="shrink-0 px-5 pb-4">
+        <label class="sr-only" for="site-search-input">{copy.title}</label>
+        <div
+          class="bg-background text-muted-foreground focus-within:border-primary focus-within:ring-primary/12 flex items-center gap-3 rounded-[0.875rem] border py-1.5 pr-2.5 pl-3.5 focus-within:ring-3"
+        >
+          <DynamicIcon
+            icon="LuSearch"
+            className="h-5 w-5 shrink-0"
+            aria-hidden="true"
+          />
+          <input
+            class="text-foreground placeholder:text-muted-foreground h-11 w-full min-w-0 border-0 bg-transparent text-base outline-0 [&::-webkit-search-cancel-button]:hidden"
+            id="site-search-input"
+            name="q"
+            type="search"
+            placeholder={copy.placeholder}
+            autocomplete="off"
+            spellcheck="false"
+            autofocus
+            aria-controls="site-search-results"
+          />
+          <button
+            type="button"
+            class="text-muted-foreground hover:bg-accent hover:text-foreground grid size-10 shrink-0 cursor-pointer place-items-center rounded-[0.625rem]"
+            data-search-clear
+            aria-label={copy.clear}
+            hidden
+          >
+            <DynamicIcon icon="LuX" className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
+      </form>
+
+      <div
+        class="flex shrink-0 gap-2 overflow-x-auto px-5 pb-3"
+        role="group"
+        aria-label={copy.filters}
+      >
+        {
+          (["all", "news", "people", "projects"] as const).map((facet) => (
+            <button
+              type="button"
+              class="aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary shrink-0 cursor-pointer rounded-full border px-3 py-2 text-[0.8125rem] whitespace-nowrap transition-colors motion-reduce:transition-none"
+              data-search-facet={facet}
+              aria-pressed={facet === "all"}
+              aria-controls="site-search-results"
+            >
+              {copy[facet]}
+            </button>
+          ))
+        }
+      </div>
+
+      <div
+        data-search-content
+        class="min-h-0 flex-1 scrollbar-gutter-stable overflow-y-auto overscroll-contain px-5 pt-1 pb-5"
+      >
+        <p
+          class="text-muted-foreground min-h-10 pt-2 pb-3 text-[0.8125rem] wrap-anywhere"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          data-search-status
+        >
+          {copy.idle}
+        </p>
+        <div
+          class="text-muted-foreground mx-auto my-6 flex max-w-88 flex-col items-center gap-4 text-center text-sm leading-relaxed"
+          data-search-hint
+        >
+          <DynamicIcon
+            icon="LuFileSearch"
+            className="h-10 w-10"
+            aria-hidden="true"
+          />
+          <p>{copy.hint}</p>
+        </div>
+        <ul
+          class="m-0 grid list-none gap-2 p-0"
+          id="site-search-results"
+          aria-label={copy.title}
+          aria-busy="false"
+        >
+        </ul>
+        <button
+          type="button"
+          class="hover:bg-accent mx-auto mt-4 block cursor-pointer rounded-[0.625rem] border px-4 py-2.5 text-[0.8125rem] disabled:cursor-wait disabled:opacity-50"
+          data-search-more
+          hidden>{copy.more}</button
+        >
+        <button
+          type="button"
+          class="hover:bg-accent mx-auto mt-4 block cursor-pointer rounded-[0.625rem] border px-4 py-2.5 text-[0.8125rem] disabled:cursor-wait disabled:opacity-50"
+          data-search-retry
+          hidden>{copy.retry}</button
+        >
+      </div>
+
+      <footer
+        class="text-muted-foreground flex shrink-0 flex-wrap items-center gap-3 border-t px-5 py-3.5 text-[0.6875rem] [&_kbd]:rounded [&_kbd]:border [&_kbd]:px-1 [&_kbd]:py-0.5 [&_kbd]:text-[0.625rem]"
+        aria-hidden="true"
+      >
+        <span><kbd>↑</kbd> <kbd>↓</kbd> {copy.navigate}</span>
+        <span><kbd>Enter</kbd> {copy.open}</span>
+        <span class="ml-auto"><kbd>Esc</kbd> {copy.dismiss}</span>
+      </footer>
+    </div>
+  </dialog>
+
+  <template data-search-result>
+    <li>
+      <a
+        class="hover:bg-accent hover:border-primary/40 focus-visible:bg-accent flex flex-col gap-2 rounded-[0.875rem] border p-4 wrap-anywhere no-underline transition-colors motion-reduce:transition-none"
+      >
+        <span
+          class="text-muted-foreground text-[0.6875rem] tracking-wide"
+          data-result-path></span>
+        <span
+          class="text-foreground [&>svg]:text-primary flex items-center justify-between gap-3 text-[0.9375rem] leading-normal font-semibold"
+          ><span data-result-title></span><DynamicIcon
+            icon="LuArrowUpRight"
+            className="h-4 w-4 shrink-0"
+            aria-hidden="true"
+          /></span
+        >
+        <span
+          class="text-muted-foreground [&_mark]:bg-primary/15 [&_mark]:text-foreground text-[0.8125rem] leading-7 [&_mark]:rounded [&_mark]:px-0.5"
+          data-result-excerpt></span>
+      </a>
+    </li>
+  </template>
+</site-search>
+
+<script>
+  import "@/scripts/search";
+</script>

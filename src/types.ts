@@ -3,7 +3,6 @@
 import type { HTMLAttributes } from "astro/types";
 import type { Language } from "@/i18n/ui.ts";
 import type { Key } from "@/i18n/utils.ts";
-import type { Props as ButtonProps } from "@/components/ui-astro/Button.astro";
 
 // =================================================================
 //  Core Content & Navigation Types
@@ -27,6 +26,9 @@ type BaseLink = HTMLAttributes<"a"> & {
 export type Link = BaseLink &
   ({ text: string; textKey?: never } | { text?: never; textKey: Key });
 
+/** Social links may use an icon and accessible label instead of visible text. */
+export type SocialLink = BaseLink & { text?: string };
+
 /** A themed group of links, often used in footers or navigation panels. */
 export type LinkGroup = {
   titleKey: Key;
@@ -34,7 +36,7 @@ export type LinkGroup = {
 };
 
 // Type helpers to enforce using 'textKey' instead of 'text'
-export type NavLink = Omit<Link, "text"> & { textKey: string } & {
+export type NavLink = Omit<Link, "text"> & { textKey: Key } & {
   hasChildren?: boolean;
   children?: HTMLAttributes<"a">[];
 };
@@ -54,7 +56,7 @@ export type SideBarLink = Link & {
 export interface FooterProps {
   links: LinkGroup[];
   secondaryLinks: Link[];
-  socialLinks: Link[];
+  socialLinks: SocialLink[];
   footNote?: {
     textKey: Key;
     image: { src: string; alt: string };
@@ -71,7 +73,9 @@ export interface Headline {
   title?: string;
   subtitle?: string;
   tagline?: string;
-  classes?: Record<string, string | Record<string, string>>;
+  class?: string;
+  titleClass?: string;
+  subtitleClass?: string;
 }
 
 /** Base properties for a UI component or page section. */
@@ -79,14 +83,14 @@ export interface Component {
   id?: string;
   bg?: string;
   hasFlatBackground?: boolean; // Renamed for clarity
-  classes?: Record<string, string | Record<string, string>>;
+  class?: string;
+  containerClass?: string;
 }
 
 /** Props for the SideBar component. */
 export interface SideBarProps extends HTMLAttributes<"div"> {
   title?: string;
   menuItems: SideBarLink[];
-  className?: string;
 }
 
 export type Stat = {
@@ -120,14 +124,6 @@ export interface BaseLayoutProps {
  * This avoids repeating `Omit` in every layout type.
  */
 export interface SectionProps extends Headline, Component {}
-
-/** Props for the Hero section of a page. */
-export interface Hero extends SectionProps {
-  content?: string;
-  actions?: ButtonProps[];
-  image?: string | ImageMetadata;
-  imageAlt?: string;
-}
 
 /** Props for a section displaying a list of statistics. */
 export interface Stats extends SectionProps {

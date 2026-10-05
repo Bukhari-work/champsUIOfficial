@@ -1,7 +1,7 @@
 ---
 import type { Language } from "@/i18n/ui";
 import { useTranslations, getLocalizedPath } from "@/i18n/utils";
-import Stats from "@/layouts/blocks/Stats.astro";
+import Stats from "@/components/shared/Stats.astro";
 import SectionHeading from "../shared/SectionHeading.astro";
 import Kaleidoscope from "../shared/Kaleidoscope.astro";
 interface Props {
@@ -18,7 +18,7 @@ const t = useTranslations(lang);
 >
   <Stats
     id="home-results"
-    classes={{ container: "max-w-6xl py-14 md:py-20 lg:pt-20" }}
+    containerClass="max-w-6xl py-14 md:py-20 lg:pt-20"
     stats={[
       {
         title: t("stats.item1"),
