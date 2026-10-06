@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { kaleidoscopePhoto } from "@/assets/home";
 import type { Language } from "@/i18n/ui";
 import { useTranslations } from "@/i18n/utils";
 import DynamicIcon from "@/components/shared/DynamicIcon";
@@ -52,10 +53,14 @@ const actionClass = cn(
         aria-hidden="true"
       >
         <Image
-          src="/images/marquee/Home - Foto Berjalan 3.webp"
+          src={kaleidoscopePhoto}
           alt=""
           width={600}
           height={400}
+          widths={[240, 480, 768, 1280]}
+          sizes="(min-width: 1024px) 240px, (min-width: 768px) 176px, calc(100vw - 110px)"
+          format="webp"
+          quality={80}
           loading="lazy"
           class="block size-full object-cover object-[center_65%]"
         />

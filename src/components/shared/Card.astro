@@ -1,12 +1,16 @@
 ---
 import { Image } from "astro:assets";
 import { cn } from "@/lib/utils";
+import { getImageAsset } from "@/lib/imageAssets";
+import type { ImageMetadata } from "astro";
 
 export interface Props {
   href?: string; // <-- Make href optional
   title: string;
-  imageMeta?: ImageMetadata | { alt: string; src: string };
+  imageMeta?: ImageMetadata | { alt: string; src: string | ImageMetadata };
   imageAlt?: string;
+  imageWidths?: number[];
+  imageSizes?: string;
   headingLevel?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   size?: "default" | "small";
   class?: string;
@@ -17,12 +21,26 @@ const {
   title,
   imageMeta,
   imageAlt,
+  imageWidths,
+  imageSizes,
   headingLevel: Heading = "h2",
   size = "default",
   class: className,
 } = Astro.props;
 
 const isSmall = size === "small";
+const imageSrc = imageMeta
+  ? "width" in imageMeta
+    ? imageMeta
+    : imageWidths
+      ? await getImageAsset(imageMeta.src)
+      : imageMeta.src
+  : undefined;
+const imageProps = !imageSrc
+  ? undefined
+  : typeof imageSrc === "string"
+    ? { src: imageSrc, width: isSmall ? 320 : 445, height: isSmall ? 180 : 230 }
+    : { src: imageSrc, width: isSmall ? 320 : 445 };
 const patternId = `pattern-${crypto.randomUUID().slice(0, 8)}`;
 
 // Use a generic 'Wrapper' component for link or non-link
@@ -64,7 +82,7 @@ const Wrapper = href ? "a" : "div";
     Astro.slots.has("media") ? (
       <slot name="media" />
     ) : (
-      imageMeta && (
+      imageProps && (
         <Wrapper
           href={href}
           class={cn(
@@ -74,11 +92,12 @@ const Wrapper = href ? "a" : "div";
         >
           <Image
             class="h-full w-full object-cover"
-            src={imageMeta.src}
+            {...imageProps}
             alt={imageAlt || title}
-            width={isSmall ? 320 : 445}
-            height={isSmall ? 180 : 230}
+            widths={imageWidths}
+            sizes={imageSizes}
             format="webp"
+            quality={80}
           />
         </Wrapper>
       )

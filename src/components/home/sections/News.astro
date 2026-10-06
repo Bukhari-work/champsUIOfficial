@@ -30,6 +30,14 @@ const currentPosts = sortByDate(await getSinglePage("news"))
     linkText={t("news.all")}
   />
   <div class="grid gap-4 lg:grid-cols-3">
-    {currentPosts.map((post) => <CardNewsSm data={post} />)}
+    {
+      currentPosts.map((post) => (
+        <CardNewsSm
+          data={post}
+          imageWidths={[320, 640, 960, 1280, 1920]}
+          imageSizes="(min-width: 1280px) 340px, (min-width: 1024px) 33vw, 100vw"
+        />
+      ))
+    }
   </div>
 </section>

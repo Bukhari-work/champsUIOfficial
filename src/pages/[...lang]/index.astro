@@ -16,16 +16,26 @@ import PhotoDivider from "@/components/home/sections/PhotoDivider.astro";
 import News from "@/components/home/sections/News.astro";
 import Collaboration from "@/components/home/sections/Collaboration.astro";
 import InvitationModal from "@/components/shared/InvitationModal.astro";
+import { getImage } from "astro:assets";
+import { heroPhoto } from "@/assets/home";
 
 export function getStaticPaths() {
   return getLocaleStaticPaths();
 }
 const lang = getPageLanguage(Astro.params.lang);
 const t = useTranslations(lang);
+const socialImage = await getImage({
+  src: heroPhoto,
+  width: 1200,
+  height: 630,
+  fit: "cover",
+  format: "jpeg",
+  quality: 80,
+});
 const content = {
   title: t("nav.home"),
   description: t("site.description"),
-  image: "/images/marquee/Home - Foto Berjalan 2.webp",
+  image: socialImage.src,
   imageAlt: t("home.hero.photoAlt"),
   canonical: Astro.url.href,
 };

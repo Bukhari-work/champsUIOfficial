@@ -2,6 +2,7 @@
 import type { Language } from "@/i18n/ui";
 import { useTranslations, getLocalizedPath } from "@/i18n/utils";
 import { Image } from "astro:assets";
+import { purposePhoto } from "@/assets/home";
 import Quote from "@/components/ui-astro/Quote.astro";
 import SectionHeading from "../shared/SectionHeading.astro";
 interface Props {
@@ -21,10 +22,14 @@ const t = useTranslations(lang);
     <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-2 lg:gap-14">
       <figure class="bg-background overflow-hidden rounded-xl border">
         <Image
-          src="/images/marquee/Home - Foto Berjalan 1.webp"
+          src={purposePhoto}
           alt={t("home.story.photoAlt")}
           width={960}
           height={640}
+          widths={[480, 768, 960, 1440]}
+          sizes="(min-width: 1280px) 544px, (min-width: 768px) 50vw, 100vw"
+          format="webp"
+          quality={80}
           loading="lazy"
           class="h-[clamp(14rem,65vw,23rem)] w-full object-cover md:h-[clamp(18rem,30vw,25rem)]"
         />

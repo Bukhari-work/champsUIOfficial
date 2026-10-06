@@ -8,6 +8,7 @@ page-level component.
 
 ```text
 src/
+  assets/home/            Homepage photo originals and their shared image index
   pages/                  Routes and page composition
   layouts/                Page shells: Base, SidebarLayout, ProjectLayout
   components/
@@ -44,13 +45,32 @@ generic component is not necessary just to shorten a page.
   `bejamas/tailwind.css`, with the marquee keyframes in `styles/animations.css`;
   the photo and partner wrappers preserve the site's edge
   fades and add hover pausing. The primitive's reduced-motion behavior and
-  hidden duplicate track remain intact. Image optimization remains a separate task.
+  hidden duplicate track remain intact.
 - Partner marquees share a `speed` in pixels per second (40 by default), rather
   than a fixed loop duration. `scripts/partner-marquee.ts` measures the track and
   updates its duration on resize; its custom element disconnects the observer
   when removed during page transitions.
 - Prefer Tailwind utilities, theme colors, standard sizing/shadows, and named
   responsive breakpoints. Preserve functional selectors and accessible focus states.
+
+## Image assets
+
+- Homepage-only photos live in `assets/home/`; `index.ts` selects the hero,
+  purpose, recap, and marquee photos from the same seven originals. Do not
+  create separate full-size copies for each section.
+- Use Astro's `Image` with `widths` and `sizes` matching the rendered layout.
+  The hero loads eagerly with high priority; below-the-fold images stay lazy.
+  The photo marquee uses 224–576px variants, rather than downloading originals.
+- Shared news, people, and expertise originals retain their public URLs for
+  content and other pages. `lib/imageAssets.ts` resolves those paths to imported
+  image metadata for optimization without moving or copying shared originals.
+- `Card` accepts optional `imageWidths` and `imageSizes` for its caller's layout.
+  Public-path optimization is enabled when these responsive variants are
+  requested, preserving existing behavior for other pages. Keep the source
+  aspect ratio and let `object-cover` handle the visible crop.
+- Astro's image service uses the project's explicit `sharp` dependency at build
+  time. Generated variants are build artifacts; do not commit them. The homepage
+  also generates a separate 1200×630 JPEG for social previews.
 
 ## Layouts and localized pages
 

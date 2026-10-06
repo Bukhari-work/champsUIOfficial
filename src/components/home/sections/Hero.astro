@@ -4,6 +4,7 @@ import type { Language } from "@/i18n/ui";
 import { useTranslations, getLocalizedPath } from "@/i18n/utils";
 import Button from "@/components/ui-astro/Button.astro";
 import DynamicIcon from "@/components/shared/DynamicIcon";
+import { heroPhoto, teamPortraits } from "@/assets/home";
 interface Props {
   lang: Language;
 }
@@ -72,24 +73,19 @@ const t = useTranslations(lang);
         class="[&_img]:border-background flex shrink-0 pl-2 [&_img]:-ml-2 [&_img]:size-8 [&_img]:rounded-[50%] [&_img]:border-2 [&_img]:object-cover [&_img]:object-[center_25%]"
         aria-hidden="true"
       >
-        <Image
-          src="/images/people/ede-surya-darmawan.webp"
-          alt=""
-          width={40}
-          height={40}
-        />
-        <Image
-          src="/images/people/putu-mas-dewi-pratiwi.webp"
-          alt=""
-          width={40}
-          height={40}
-        />
-        <Image
-          src="/images/people/sheila-rizkia-anjari.webp"
-          alt=""
-          width={40}
-          height={40}
-        />
+        {
+          teamPortraits.map((src) => (
+            <Image
+              src={src}
+              alt=""
+              width={32}
+              height={32}
+              densities={[1, 2]}
+              format="webp"
+              quality={80}
+            />
+          ))
+        }
       </span>
       <span>{t("home.hero.people")}</span>
       <DynamicIcon
@@ -104,9 +100,13 @@ const t = useTranslations(lang);
       class="bg-background border-primary/20 overflow-hidden rounded-xl border"
     >
       <Image
-        src="/images/marquee/Home - Foto Berjalan 2.webp"
+        src={heroPhoto}
         width={1200}
         height={800}
+        widths={[480, 768, 1200, 1620]}
+        sizes="(min-width: 1344px) 1216px, (min-width: 1024px) calc(100vw - 98px), (min-width: 768px) calc(100vw - 66px), calc(100vw - 26px)"
+        format="webp"
+        quality={80}
         alt={t("home.hero.photoAlt")}
         loading="eager"
         fetchpriority="high"

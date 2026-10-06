@@ -9,7 +9,7 @@ import Button from "@/components/ui-astro/Button.astro";
 import Card from "@/components/shared/Card.astro";
 
 const { news_folder } = SETTINGS;
-const { data } = Astro.props;
+const { data, imageWidths, imageSizes } = Astro.props;
 const { title, date } = data.data;
 
 const firstImage = data.data.images?.[0];
@@ -22,7 +22,9 @@ const firstImage = data.data.images?.[0];
   )}
   title={title}
   imageMeta={firstImage}
-  imageAlt={firstImage.alt}
+  imageAlt={firstImage?.alt}
+  {imageWidths}
+  {imageSizes}
   headingLevel="h3"
   size="small"
 >
