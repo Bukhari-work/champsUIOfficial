@@ -14,6 +14,9 @@ importers:
       '@astrojs/react':
         specifier: ^6.0.5
         version: 6.0.5(@types/node@24.7.0)(@types/react-dom@19.2.1(@types/react@19.2.2))(@types/react@19.2.2)(esbuild@0.28.2)(jiti@2.7.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(yaml@2.8.1)
+      '@data-slot/dialog':
+        specifier: ^1.1.1
+        version: 1.1.1
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@19.2.2)(react@19.2.0)
@@ -447,6 +450,12 @@ packages:
   '@clack/prompts@1.8.1':
     resolution: {integrity: sha512-dlT1m5e/0yUL0kRNcQn7yGLVThkgbB0Ga/1AmfDDC/8ik6AIiSf2QLQO2zPYvefsHP0aFgxO93cVLCCfDp7kzQ==}
     engines: {node: '>= 20.12.0'}
+
+  '@data-slot/core@1.1.1':
+    resolution: {integrity: sha512-RMJ6oKIM92ryU23UmXeDCliyuxv2u1/nXIjjF2WN7YAI17fvw4vtdLT7fQFwXwg4KfBJd7VSfuPqsDy/C4+cFg==}
+
+  '@data-slot/dialog@1.1.1':
+    resolution: {integrity: sha512-gpeTmeqDGOsPMOLJXK7VXeBKtIG2pBHDAYNA9GCFuyrLoQ8dtRqLSr2w6hLt/8XUOTBgum30Mrok1U9axSkZdw==}
 
   '@dotenvx/dotenvx@1.75.1':
     resolution: {integrity: sha512-/BITOC9dmS/edY2zQwZNicQ059O6RKabtQfyEafV0nGtfYRNHYy1DIPiYVcov40+tob9hfmBnbR963dS+EQ1DQ==}
@@ -4042,6 +4051,12 @@ snapshots:
       fast-string-width: 3.0.2
       fast-wrap-ansi: 0.2.2
       sisteransi: 1.0.5
+
+  '@data-slot/core@1.1.1': {}
+
+  '@data-slot/dialog@1.1.1':
+    dependencies:
+      '@data-slot/core': 1.1.1
 
   '@dotenvx/dotenvx@1.75.1':
     dependencies:

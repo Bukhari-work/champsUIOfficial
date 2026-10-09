@@ -1,0 +1,110 @@
+---
+import { navigation } from "@/navigation";
+import { useTranslations } from "@/i18n/utils";
+import type { Language } from "@/i18n/ui";
+import { ArrowUpRight, X } from "lucide-react";
+import Button from "@/components/ui-astro/Button.astro";
+import { getMobileNavigationCopy } from "./copy";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const copy = getMobileNavigationCopy(lang);
+const nav = navigation[lang];
+const normalize = (path: string) =>
+  path === "/" ? "/" : path.replace(/\/+$/, "");
+const pathname = normalize(Astro.url.pathname);
+const homePath = normalize(
+  new URL(nav.header[0].href || "/", Astro.url).pathname,
+);
+const isActiveHref = (href: string | URL | null | undefined) => {
+  if (!href) return false;
+  const target = new URL(href, Astro.url);
+  if (target.origin !== Astro.url.origin) return false;
+  const path = normalize(target.pathname);
+  return (
+    pathname === path || (path !== homePath && pathname.startsWith(`${path}/`))
+  );
+};
+---
+
+<div class="flex shrink-0 items-center justify-between gap-4">
+  <div>
+    <p class="text-primary text-xs font-semibold tracking-widest uppercase">
+      {copy.navigation}
+    </p>
+    <h2
+      data-slot="dialog-title"
+      id="mobile-menu-title"
+      class="mt-1 text-2xl leading-normal font-medium sm:text-3xl"
+    >
+      {copy.prompt}
+    </h2>
+  </div>
+  <button
+    type="button"
+    data-slot="dialog-close"
+    autofocus
+    aria-label={copy.close}
+    class="border-primary/25 text-primary hover:bg-primary/10 focus-visible:outline-primary flex size-11 shrink-0 items-center justify-center rounded-xl border focus-visible:outline-2 focus-visible:outline-offset-2"
+    ><X className="size-5" aria-hidden="true" /></button
+  >
+</div>
+<nav aria-label={t("nav.mainNavigation")} class="my-auto shrink-0 py-3 sm:py-6">
+  <ul class="divide-border divide-y">
+    {
+      nav.header.map((item, index) => {
+        const active = isActiveHref(item.href);
+        const description = copy.destinations[item.textKey];
+        return (
+          <li>
+            <a
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              class:list={[
+                "hover:bg-primary/5 focus-visible:outline-primary flex min-h-12 items-center justify-between gap-3 rounded-xl px-2 py-2 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none sm:py-4",
+                active && "text-primary",
+              ]}
+            >
+              <span class="flex min-w-0 items-baseline gap-4">
+                <span
+                  aria-hidden="true"
+                  class="text-muted-foreground shrink-0 text-xs"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span class="min-w-0">
+                  <span class="font-libron block text-3xl sm:text-4xl">
+                    {t(item.textKey)}
+                  </span>
+                  {description && (
+                    <span class="text-muted-foreground mt-1 block text-xs leading-normal">
+                      {description}
+                    </span>
+                  )}
+                </span>
+              </span>
+              <ArrowUpRight
+                className="text-primary size-5 shrink-0"
+                aria-hidden="true"
+              />
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
+<div
+  class="border-border shrink-0 border-t pt-4 pb-[env(safe-area-inset-bottom)]"
+>
+  <Button href={nav.callToAction.href} class="min-h-12 w-full rounded-xl">
+    {t(nav.callToAction.textKey)}<ArrowUpRight
+      className="size-4"
+      aria-hidden="true"
+    />
+  </Button>
+</div>

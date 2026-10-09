@@ -25,7 +25,6 @@ import SiteTools from "@/components/site/SiteTools.astro";
 
 // 1e. Script Components
 import MainScript from "@/scripts/MainScript.astro";
-import DrawerAttachScript from "@/scripts/DrawerAttachScript.astro";
 import IntersectScript from "@/scripts/IntersectScript.astro";
 
 // 1f. Asset Imports
@@ -74,7 +73,10 @@ const footerProps = {
 
 <html
   lang={lang}
-  class:list={[mode, "[&:has(#site-search-dialog[open])]:overflow-hidden"]}
+  class:list={[
+    mode,
+    "[&:has(#mobile-navigation-content[data-state]:not([hidden]),[data-mobile-menu-handoff])]:overflow-hidden [&:has(#site-search-dialog[open])]:overflow-hidden",
+  ]}
 >
   <head>
     <meta name="viewport" content="width=device-width" />
@@ -120,17 +122,16 @@ const footerProps = {
     <Favicons />
     <ClientRouter />
     <MainScript />
-    <DrawerAttachScript />
   </head>
 
   <body class="relative w-screen overflow-x-hidden sm:overscroll-y-none">
     <TWSizeIndicator />
     <div class="relative flex w-full flex-none flex-col justify-between">
-      <Header lang={lang} />
+      <Header {lang} />
       <main
         id="main-content"
         data-pagefind-body
-        class="relative mx-3 mt-14 min-h-[70vh] grow border-x md:mx-8 lg:mx-12"
+        class="relative mx-3 mt-24 min-h-[70vh] grow border-x md:mx-8 lg:mx-12"
       >
         <slot />
       </main>

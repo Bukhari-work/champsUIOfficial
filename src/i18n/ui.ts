@@ -11,6 +11,17 @@ export const ui = {
     "nav.whatWeDo": "What We Do",
     "nav.news": "News",
     "nav.contact": "Contact",
+    "nav.mainNavigation": "Main navigation",
+    "nav.homepage": "Homepage",
+    "nav.openMenu": "Open menu",
+    "nav.closeMenu": "Close menu",
+    "nav.explore": "Explore CHAMPS UI",
+    "nav.prompt": "Where to next?",
+    "nav.description.home": "Get to know CHAMPS UI",
+    "nav.description.about": "Our mission, values, and team",
+    "nav.description.whatWeDo": "Research, consulting, and training",
+    "nav.description.news": "The latest updates and stories",
+    "nav.description.contact": "Start a conversation with us",
 
     // Call to Action Button
     "button.latestProgram": "Questionnaire",
@@ -21,12 +32,6 @@ export const ui = {
     "footer.title.whatWeDo": "What We Do",
     "footer.title.contact": "Contact",
     "footer.copyright": `© ${new Date().getFullYear()} CHAMPS UI. All rights reserved.`,
-
-    // Drawer
-    "drawer.theme.light": "Turn Light Mode On",
-    "drawer.theme.dark": "Turn Night Mode On",
-    "drawer.language": "Gunakan Bahasa Indonesia 🇮🇩",
-    "drawer.close": "Close",
 
     // Homepage - Hero Section
     "hero.tagline": "Faculty of Public Health",
@@ -370,6 +375,17 @@ export const ui = {
     "nav.whatWeDo": "Layanan",
     "nav.news": "Berita",
     "nav.contact": "Kontak",
+    "nav.mainNavigation": "Navigasi utama",
+    "nav.homepage": "Beranda",
+    "nav.openMenu": "Buka menu",
+    "nav.closeMenu": "Tutup menu",
+    "nav.explore": "Jelajahi CHAMPS UI",
+    "nav.prompt": "Ke mana selanjutnya?",
+    "nav.description.home": "Kenali CHAMPS UI",
+    "nav.description.about": "Misi, nilai, dan tim kami",
+    "nav.description.whatWeDo": "Riset, konsultasi, dan pelatihan",
+    "nav.description.news": "Kabar dan cerita terbaru",
+    "nav.description.contact": "Mulai percakapan dengan kami",
 
     // Call to Action Button
     "button.latestProgram": "Kuesioner",
@@ -378,12 +394,6 @@ export const ui = {
     "footer.secondary": "Fakultas Kesehatan Masyarakat",
     "footer.title.contact": "Kontak",
     "footer.copyright": `© ${new Date().getFullYear()} CHAMPS UI. Hak cipta dilindungi.`,
-
-    // Drawer
-    "drawer.theme.light": "Aktifkan Mode Terang",
-    "drawer.theme.dark": "Aktifkan Mode Malam",
-    "drawer.language": "Use English 🇬🇧",
-    "drawer.close": "Tutup",
 
     // Homepage - Hero Section
     "hero.tagline": "Fakultas Kesehatan Masyarakat",

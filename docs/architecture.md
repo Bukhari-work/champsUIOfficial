@@ -75,6 +75,50 @@ generic component is not necessary just to shorten a page.
 ## Layouts and localized pages
 
 - `Base` owns the document, SEO, global styles, site chrome, and global scripts.
+  Ordinary pages reserve space below the floating header with `mt-24`.
+- `site/Header.astro` provides the static Bridge islands header on every page.
+  The logo and navigation/action cards stay separate at fixed sizes and positions
+  while scrolling. Opaque backgrounds, borders, and shadows use Tailwind directly
+  on each island, without SVG surfaces, geometry measurements, scroll listeners,
+  or entrance animations. Mobile navigation uses `site/mobile-navigation/FullScreen.astro`
+  on every page, with numbered Libron links and localized destination descriptions. The header
+  retains its named, non-animated view transition so page fades do not dim it.
+  The header uses one Bejamas Dialog implementation, without variant props or
+  preview-link rewriting.
+- Header and mobile-menu comparisons, the native menu variant, and the old drawer
+  have been removed. The static header needs no scroll or resize controller.
+  The mobile menu controller handles closing at
+  the desktop breakpoint and dismissing same-page choices without a reload.
+- The live full-screen menu uses Bejamas/ui's Dialog, installed with
+  `pnpm dlx bejamas@latest add dialog` into `components/ui/dialog/`.
+  Its `@data-slot/dialog` primitive owns focus containment, modal semantics,
+  Escape/button closing, focus restoration, and animation
+  presence. The Dialog wrapper owns Astro page-load initialization and synchronous
+  disposal at the actual page swap, preventing stale portals and listeners across
+  client navigation. Navigation links are not dialog-close controls: the menu stays
+  visible during loading. `scripts/mobile-navigation-transition.ts` carries an inert,
+  aria-hidden visual copy into the destination, without IDs, modal slots, or live
+  handlers. It replaces the normal page transition and fades away after page-load,
+  revealing the ready destination rather than the outgoing page. Reduced motion
+  removes the visual cover without animation.
+  The visual copy preserves the outgoing menu's scroll position on short screens.
+  Native search does not open while a Bejamas dialog is visible or closing, avoiding
+  overlapping modal focus traps.
+  The header trigger and menu share one Dialog root; the menu portal moves out of
+  the header's stacking context. Menu-specific Tailwind classes preserve the
+  full-screen layout and use opacity-only transitions with a transparent backdrop,
+  explicitly opting out of DialogContent's default fade/zoom with `animate={false}`.
+  The fade eases out for a 300ms entrance and eases in for a quicker 150ms exit. Closed
+  opacity remains zero after the primitive clears its temporary animation flags,
+  preventing a final-frame rebound. Reduced motion disables both transitions.
+  The root disables the primitive's
+  scroll lock, which reserves a scrollbar gutter; `Base` locks scrolling through
+  CSS while the menu remains visible, including its exit transition, keeping the
+  full-screen panel edge-to-edge. It uses
+  compact spacing to fit ordinary phone and laptop viewport heights.
+  Keep `overflow-y-auto` as an accessibility
+  fallback for short landscape screens, safe-area insets, and enlarged text;
+  do not hide overflow or clip destinations to prevent necessary scrolling.
 - `styles/global.css` sets Libron on all `h1`–`h6` and ARIA headings; child links,
   spans, and emphasis inherit the heading font. Long words wrap within headings,
   and page titles use responsive sizes to fit narrow screens. Body text and

@@ -2,19 +2,24 @@
 import { getLocalizedPath, useTranslations } from "@/i18n/utils";
 import { navigation } from "@/navigation.ts";
 import { i18n } from "@/config.ts";
-import { ui, type Language } from "@/i18n/ui";
+import type { Language } from "@/i18n/ui";
 
-import NavDrawer from "@/components/site/NavDrawer.astro";
+import FullScreenNavigation from "@/components/site/mobile-navigation/FullScreen.astro";
+import { Dialog } from "@/components/ui/dialog";
 import Button from "@/components/ui-astro/Button.astro";
 import { Image } from "astro:assets";
 
-type TranslationKeys = keyof (typeof ui)[typeof i18n.defaultLocale];
+interface Props {
+  lang?: Language;
+}
 
-const { lang = i18n.defaultLocale } = Astro.params;
-const t = useTranslations(lang as Language);
+const { lang = i18n.defaultLocale } = Astro.props;
+const t = useTranslations(lang);
 
-const nav = navigation[lang as keyof typeof navigation];
+const nav = navigation[lang];
 const homeUrl = nav.header[0]?.href || getLocalizedPath("/", lang);
+const island =
+  "border-primary/25 bg-background border shadow-md dark:shadow-sm";
 
 const normalize = (path: string) =>
   path === "/" ? "/" : path.replace(/\/+$/, "");
@@ -42,174 +47,132 @@ const isActiveHref = (href?: string | URL | null): boolean => {
 };
 ---
 
-<header
-  id="site-header"
-  data-scrolled="false"
-  class:list={[
-    // Layout
-    "fixed inset-x-0 top-0 z-30 w-screen",
-    // Visuals (default: subtle, no border)
-    "bg-background/40 supports-backdrop-filter:bg-background/60 backdrop-blur-sm",
-    "border-b border-transparent",
-    // When scrolled (toggled via data attribute)
-    "data-[scrolled=true]:border-border",
-  ]}
->
-  <div class="relative mx-3 flex h-full grow md:mx-8 lg:mx-12">
-    <nav
-      aria-label="Main navigation"
-      class="mx-auto flex h-16 w-full items-center justify-between px-3 md:max-w-7xl md:px-6"
-    >
-      <a href={homeUrl} class="flex items-center" aria-label="Homepage">
-        <span class="sr-only">Homepage</span>
+<!-- Full-screen scroll locking stays in Base to avoid the modal's reserved scrollbar gutter. -->
+<Dialog id="mobile-navigation" lockScroll={false}>
+  <header
+    id="site-header"
+    transition:name="site-header"
+    transition:animate="none"
+    class="pointer-events-none fixed inset-x-0 top-3 z-30 w-screen md:top-4"
+  >
+    <div class="relative mx-3 flex h-full grow md:mx-8 lg:mx-12">
+      <nav
+        aria-label={t("nav.mainNavigation")}
+        class="mx-auto flex h-16 w-full max-w-304 items-center justify-between gap-2"
+      >
+        <a
+          href={homeUrl}
+          class:list={[
+            island,
+            "focus-visible:outline-primary pointer-events-auto flex h-16 shrink-0 items-center rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4",
+          ]}
+          aria-label={t("nav.homepage")}
+        >
+          <span class="sr-only">{t("nav.homepage")}</span>
 
-        <!-- Dark mode logo -->
-        <Image
-          src="/images/Logo-landscape-black.webp"
-          alt="Company Logo"
-          width={150}
-          height={48}
-          class="hidden p-2 transition-transform duration-300 hover:scale-105 dark:block"
-          loading="eager"
-          decoding="async"
-        />
+          <!-- Dark mode logo -->
+          <Image
+            src="/images/Logo-landscape-black.webp"
+            alt="Company Logo"
+            width={150}
+            height={48}
+            class="hidden w-28 p-2 transition-transform duration-300 motion-safe:hover:scale-105 motion-reduce:transition-none sm:w-36 dark:block"
+            loading="eager"
+            decoding="async"
+          />
 
-        <!-- Light mode logo -->
-        <Image
-          src="/images/Logo-landscape-white.webp"
-          alt="Company Logo"
-          width={150}
-          height={48}
-          class="block p-2 transition-transform duration-300 hover:scale-105 dark:hidden"
-          loading="eager"
-          decoding="async"
-        />
-      </a>
+          <!-- Light mode logo -->
+          <Image
+            src="/images/Logo-landscape-white.webp"
+            alt="Company Logo"
+            width={150}
+            height={48}
+            class="block w-28 p-2 transition-transform duration-300 motion-safe:hover:scale-105 motion-reduce:transition-none sm:w-36 dark:hidden"
+            loading="eager"
+            decoding="async"
+          />
+        </a>
 
-      <div id="desktop-menu" class="hidden items-center lg:flex">
-        <ul
-          id="navigation"
-          class="inline-flex w-auto flex-wrap justify-center space-x-1 self-center px-5 text-center text-sm"
+        <div
+          id="desktop-menu"
+          class:list={[
+            island,
+            "pointer-events-auto hidden h-16 items-center rounded-xl px-3 lg:flex",
+          ]}
+        >
+          <ul
+            id="navigation"
+            class="inline-flex w-auto flex-wrap justify-center space-x-1 self-center px-5 text-center text-sm"
+          >
+            {
+              nav.header.map((menu) => {
+                const isActive = isActiveHref(menu.href);
+
+                return (
+                  <li>
+                    <a
+                      href={menu.href}
+                      class:list={[
+                        "text-foreground/80 hover:bg-primary/12 focus-visible:outline-primary block rounded-xl px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2",
+                        {
+                          "text-primary/80": isActive,
+                          "bg-primary/12": isActive,
+                        },
+                      ]}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      {t(menu.textKey)}
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+
+          {
+            nav.callToAction && (
+              <Button
+                size="lg"
+                class="my-auto h-11 transition-[translate,box-shadow,background-color] duration-200 hover:shadow-md motion-safe:hover:-translate-y-1 motion-reduce:transition-none"
+                href={nav.callToAction.href}
+              >
+                {t(nav.callToAction.textKey)}
+              </Button>
+            )
+          }
+        </div>
+
+        <div
+          id="mobile-menu"
+          class:list={[
+            island,
+            "pointer-events-auto flex h-16 items-center gap-1 rounded-xl p-2 lg:hidden",
+          ]}
         >
           {
-            nav.header.map((menu) => {
-              const isActive = isActiveHref(menu.href);
-
-              return (
-                <li>
-                  <a
-                    href={menu.href}
-                    class:list={[
-                      "text-foreground/80 group hover:bg-primary/12 relative block gap-10 rounded-xl px-4 py-3",
-                      {
-                        "text-primary/80 bg-primary/12": isActive,
-                      },
-                    ]}
-                    aria-current={isActive ? "page" : undefined}
-                  >
-                    {t(menu.textKey)}
-                  </a>
-                </li>
-              );
-            })
+            nav.callToAction && (
+              <Button
+                size="sm"
+                class="bg-primary h-11 rounded-lg px-3 align-middle text-xs transition-colors duration-200 motion-reduce:transition-none"
+                href={nav.callToAction.href}
+              >
+                {t(nav.callToAction.textKey)}
+              </Button>
+            )
           }
-        </ul>
-
-        {
-          nav.callToAction && (
-            <Button
-              size="default"
-              class="bg-primary/80 my-auto transition-colors duration-200"
-              href={nav.callToAction.href}
-            >
-              {t(nav.callToAction.textKey)}
-            </Button>
-          )
-        }
-      </div>
-
-      <div id="mobile-menu" class="flex items-center gap-2 lg:hidden">
-        {
-          nav.callToAction && (
-            <Button
-              size="sm"
-              class="bg-primary/60 mr-2 align-middle transition-colors duration-200"
-              href={nav.callToAction.href}
-            >
-              {t(nav.callToAction.textKey)}
-            </Button>
-          )
-        }
-        <Button
-          icon="LuMenu"
-          variant="outline"
-          size="sm"
-          data-aw-show-nav
-          class="align-middle"
-          aria-label="Open menu"
-        />
-      </div>
-    </nav>
-    <div
-      class="bg-background border-primary absolute -bottom-1 -left-1 z-10 h-2 w-2 rotate-45 border"
-    >
+          <Button
+            icon="LuMenu"
+            variant="outline"
+            size="sm"
+            data-slot="dialog-trigger"
+            aria-controls="mobile-navigation-content"
+            class="bg-background border-primary/25 text-primary hover:bg-primary-soft hover:text-primary size-11 rounded-lg px-0 align-middle"
+            aria-label={t("nav.openMenu")}
+          />
+        </div>
+      </nav>
     </div>
-    <div
-      class="bg-background border-primary absolute -right-1 -bottom-1 z-10 h-2 w-2 rotate-45 border"
-    >
-    </div>
-  </div>
-</header>
+  </header>
 
-<NavDrawer lang={lang} />
-
-<script is:inline>
-  (() => {
-    let cleanup;
-
-    const setup = () => {
-      const header = document.getElementById("site-header");
-      if (!header) return;
-
-      const threshold = 8;
-      let ticking = false;
-
-      const update = () => {
-        const scrolled = window.scrollY > threshold;
-        header.dataset.scrolled = scrolled ? "true" : "false";
-      };
-
-      const onScroll = () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          ticking = false;
-          update();
-        });
-      };
-
-      update();
-      window.addEventListener("scroll", onScroll, { passive: true });
-
-      cleanup = () => {
-        window.removeEventListener("scroll", onScroll);
-      };
-    };
-
-    const run = () => {
-      cleanup?.();
-      setup();
-    };
-
-    // Initial load
-    if (document.readyState === "loading") {
-      window.addEventListener("DOMContentLoaded", run, { once: true });
-    } else {
-      run();
-    }
-
-    // Astro client-side navigation
-    document.addEventListener("astro:after-swap", run);
-    document.addEventListener("astro:before-swap", () => cleanup?.());
-  })();
-</script>
+  <FullScreenNavigation {lang} />
+</Dialog>

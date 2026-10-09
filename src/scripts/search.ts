@@ -208,7 +208,12 @@ class SiteSearch extends HTMLElement {
       }
     };
     const open = () => {
-      if (dialog.open) return;
+      // Avoid stacking native search over another modal, including its exit animation.
+      if (
+        dialog.open ||
+        document.querySelector('[data-slot="dialog-content"]:not([hidden])')
+      )
+        return;
       returnFocus =
         document.activeElement instanceof HTMLElement
           ? document.activeElement

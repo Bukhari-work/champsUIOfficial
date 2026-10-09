@@ -1,0 +1,27 @@
+---
+import type { Language } from "@/i18n/ui";
+import { DialogContent } from "@/components/ui/dialog";
+import MenuContent from "./MenuContent.astro";
+
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+---
+
+<site-mobile-navigation>
+  <DialogContent
+    id="mobile-navigation-content"
+    showCloseButton={false}
+    animate={false}
+    overlayClass="bg-transparent duration-0 supports-backdrop-filter:backdrop-blur-none"
+    class="text-foreground inset-0 top-0 left-0 flex h-dvh max-h-none w-screen max-w-none -translate-x-0 -translate-y-0 flex-col gap-0 overflow-y-auto overscroll-contain rounded-none p-4 text-base ring-0 transition-opacity duration-300 ease-out data-closed:opacity-0 data-closed:duration-150 data-closed:ease-in data-starting-style:opacity-0 motion-reduce:transition-none motion-reduce:duration-0 motion-reduce:data-closed:duration-0 sm:max-w-none sm:p-8"
+  >
+    <MenuContent {lang} />
+  </DialogContent>
+</site-mobile-navigation>
+
+<script>
+  import "@/scripts/mobile-navigation";
+  import "@/scripts/mobile-navigation-transition";
+</script>
