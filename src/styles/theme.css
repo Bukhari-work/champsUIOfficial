@@ -115,9 +115,7 @@
   --color-kuning: var(--kuning);
   --color-ungu: var(--ungu);
 
-  --font-asap: "Asap", sans-serif;
   --font-trajan: "Trajan", serif;
-  --font-pristina: "Pristina", cursive;
-  --font-brittany: "Brittany", cursive;
   --font-lexend: "Lexend", sans-serif;
+  --font-libron: "Libron", serif;
 }

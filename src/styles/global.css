@@ -36,9 +36,17 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    @apply font-lexend;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply font-lexend bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  [role="heading"] {
+    @apply font-libron wrap-break-word;
   }
 }

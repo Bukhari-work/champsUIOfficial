@@ -75,7 +75,7 @@ const sideBar = getSidebar(lang, "whatWeDo");
 
 <SidebarLayout {content} {sideBar}>
   <h1
-    class="font-lexend text-primary mt-8 mb-6 w-fit scroll-mt-24 text-6xl font-semibold"
+    class="text-primary mt-8 mb-6 w-fit scroll-mt-24 text-3xl font-semibold sm:text-4xl lg:text-6xl"
   >
     {t("partners.title")}
   </h1>
@@ -87,42 +87,42 @@ const sideBar = getSidebar(lang, "whatWeDo");
 
   <div class="not-prose mt-16 space-y-16">
     <section id="government">
-      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+      <h2 class="text-primary mb-4 text-3xl font-semibold">
         {t("partners.gov")}
       </h2>
       <MarqueePartners imagePaths={imagePathsGovernment} />
     </section>
 
     <section id="hospitals">
-      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+      <h2 class="text-primary mb-4 text-3xl font-semibold">
         {t("partners.hospitals")}
       </h2>
       <MarqueePartners imagePaths={imagePathsHospitals} reverse={true} />
     </section>
 
     <section id="phc">
-      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+      <h2 class="text-primary mb-4 text-3xl font-semibold">
         {t("partners.phc")}
       </h2>
       <MarqueePartners imagePaths={imagePathsPublicHealthCenters} />
     </section>
 
     <section id="organizations">
-      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+      <h2 class="text-primary mb-4 text-3xl font-semibold">
         {t("partners.orgs")}
       </h2>
       <MarqueePartners imagePaths={imagePathsOrganizations} reverse={true} />
     </section>
 
     <section id="private">
-      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+      <h2 class="text-primary mb-4 text-3xl font-semibold">
         {t("partners.private")}
       </h2>
       <MarqueePartners imagePaths={imagePathsPrivate} />
     </section>
 
     <section id="universities">
-      <h2 class="font-lexend text-primary mb-4 text-3xl font-semibold">
+      <h2 class="text-primary mb-4 text-3xl font-semibold">
         {t("partners.universities")}
       </h2>
       <MarqueePartners imagePaths={imagePathsUniversities} reverse={true} />
