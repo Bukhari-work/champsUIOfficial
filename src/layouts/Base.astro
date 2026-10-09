@@ -15,6 +15,7 @@ import { SITE } from "@/config.ts";
 import { navigation, sharedFooter } from "@/navigation.ts";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils.ts";
 import type { BaseLayoutProps } from "@/types.ts"; // ✨ IMPORT THE NEW TYPE
+import { cn } from "@/lib/utils";
 
 // 1d. Layout Components & Blocks
 import Favicons from "@/components/site/Favicons.astro";
@@ -38,7 +39,7 @@ import Makara from "@/assets/makaraUniversitasIndonesia.svg";
 type Props = BaseLayoutProps; // ✨ APPLY THE TYPE TO PROPS
 
 // Define props passed from the page, with sensible defaults
-const { content, mode = "light", makara = false } = Astro.props;
+const { content, mode = "light", makara = false, mainClass } = Astro.props;
 
 // =================================================================================
 // 3. LAYOUT LOGIC & DATA PREPARATION
@@ -131,7 +132,10 @@ const footerProps = {
       <main
         id="main-content"
         data-pagefind-body
-        class="relative mx-3 mt-24 min-h-[70vh] grow border-x md:mx-8 lg:mx-12"
+        class={cn(
+          "relative mx-3 mt-24 min-h-[70vh] grow border-x md:mx-8 lg:mx-12",
+          mainClass,
+        )}
       >
         <slot />
       </main>

@@ -75,7 +75,9 @@ generic component is not necessary just to shorten a page.
 ## Layouts and localized pages
 
 - `Base` owns the document, SEO, global styles, site chrome, and global scripts.
-  Ordinary pages reserve space below the floating header with `mt-24`.
+  Its optional `mainClass` customizes the main container for full-bleed layouts;
+  ordinary pages retain their existing margins and borders, with `mt-24` reserving
+  space below the floating header. The homepage overrides this margin for its photo.
 - `site/Header.astro` provides the static Bridge islands header on every page.
   The logo and navigation/action cards stay separate at fixed sizes and positions
   while scrolling. Opaque backgrounds, borders, and shadows use Tailwind directly
@@ -119,6 +121,12 @@ generic component is not necessary just to shorten a page.
   Keep `overflow-y-auto` as an accessibility
   fallback for short landscape screens, safe-area insets, and enlarged text;
   do not hide overflow or clip destinations to prevent necessary scrolling.
+- The homepage keeps Photo first in `home/sections/Hero.astro` and the full-width
+  approach band. It owns the full-bleed layout and does not need preview
+  props, alternate hero markup, comparison controls, or a separate page component.
+  Its white/kuning UI slogan sits over a neutral gradient, softer in light
+  mode, with an opaque support card and a fade into the page background.
+  Accents use the shared `--kuning` theme color without a homepage palette override.
 - `styles/global.css` sets Libron on all `h1`–`h6` and ARIA headings; child links,
   spans, and emphasis inherit the heading font. Long words wrap within headings,
   and page titles use responsive sizes to fit narrow screens. Body text and

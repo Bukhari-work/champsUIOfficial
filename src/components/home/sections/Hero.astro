@@ -13,117 +13,123 @@ const t = useTranslations(lang);
 ---
 
 <section
-  class="bg-background relative isolate mx-auto flex max-w-304 flex-col pt-4 pb-8"
+  class="bg-background relative isolate grid min-h-svh w-full items-end overflow-hidden px-5 pt-40 pb-10 md:px-8 lg:items-center lg:px-12 lg:py-20"
   data-home-section="hero"
   aria-labelledby="home-title"
 >
-  <div
-    class="bg-background border-t-primary relative z-1 mx-5 -mt-6 min-w-0 rounded-xl border border-t-3 px-5 py-6 shadow-sm shadow-black/5 md:mx-6 md:-mt-24 md:grid md:grid-cols-2 md:gap-x-7 md:gap-y-4 md:p-7 md:[grid-template-areas:'institution_name'_'title_description'_'title_actions'_'title_team'] lg:mx-10 lg:gap-x-12 lg:p-10"
-  >
-    <p
-      class="text-primary m-0 text-xs leading-relaxed font-medium [grid-area:institution]"
-    >
-      {t("hero.tagline")}<span aria-hidden="true"> · </span>Universitas
-      Indonesia
-    </p>
+  <div class="relative z-1 mx-auto grid w-full max-w-304 gap-5 md:gap-6">
+    <div class="max-w-xl">
+      <p
+        class="flex items-center gap-3 text-xs leading-relaxed font-medium text-white/90"
+      >
+        <span class="bg-kuning h-1 w-8 shrink-0 rounded-full" aria-hidden="true"
+        ></span>
+        <span>
+          {t("hero.tagline")}<span aria-hidden="true"> · </span>Universitas
+          Indonesia
+        </span>
+      </p>
+      <p
+        class="mt-2 max-w-xl text-xs leading-relaxed font-medium tracking-wide text-white/80 md:text-sm"
+      >
+        {t("hero.title")}
+      </p>
+    </div>
     <h1
       id="home-title"
-      class="mt-5 self-center text-3xl leading-tight font-semibold tracking-tight [grid-area:title] sm:text-4xl md:mt-0 xl:text-5xl [&>span]:block"
+      class="wrap-break-words max-w-3xl min-w-0 text-3xl leading-tight font-extrabold tracking-normal text-balance text-white text-shadow-black/60 text-shadow-md sm:text-4xl lg:text-5xl"
     >
-      <span>{t("home.hero.title1")}</span>
-      <span>{t("home.hero.title2")}</span>
-      <span class="text-primary">{t("home.hero.title3")}</span>
+      <span class="sm:block">
+        {t("home.hero.title1")}
+      </span>{" "}
+      <span class="sm:block">
+        {t("home.hero.title2")}
+      </span>{" "}
+      <span class="text-kuning mt-3 block text-2xl sm:text-3xl lg:text-4xl"
+        >{t("home.hero.title3")}</span
+      >
     </h1>
-    <p
-      class="text-foreground/80 mt-5 max-w-116 text-xs leading-relaxed font-medium tracking-wide [grid-area:name] md:mt-0"
-    >
-      {t("hero.title")}
-    </p>
-    <p
-      class="text-muted-foreground mt-3 max-w-md text-sm leading-relaxed [grid-area:description] md:mt-0"
-    >
-      {t("hero.subtitle")}
-    </p>
     <div
-      class="mt-5 flex flex-wrap gap-3 [grid-area:actions] md:mt-1 [&_a]:px-4 [&_a]:text-xs lg:[&_a]:px-5 lg:[&_a]:text-sm"
+      class="bg-primary-soft border-primary/25 border-t-primary grid min-w-0 gap-4 rounded-xl border border-t-3 p-5 shadow-md md:grid-cols-12 md:items-center md:gap-x-8 md:p-6 lg:p-7 dark:shadow-sm"
     >
-      <Button
-        text={t("hero.action.contact")}
-        href="https://wa.me/6281324096624"
-        target="_blank"
-        rel="noopener noreferrer"
-        icon="FaWhatsapp"
-        size="lg"
-        class="h-12 rounded-xl px-5"
-      />
-      <Button
-        text={t("hero.action.expertise")}
-        href={getLocalizedPath("/what-we-do", lang)}
-        icon="FaArrowRightLong"
-        variant="outline"
-        size="lg"
-        class="border-primary/20 text-primary hover:bg-primary/10 hover:text-primary h-12 rounded-xl px-5"
-      />
-    </div>
-    <a
-      class="text-muted-foreground hover:text-primary mt-5 flex w-fit items-center gap-3 text-xs leading-relaxed [grid-area:team] md:mt-1"
-      href={getLocalizedPath("/about/people", lang)}
-    >
-      <span
-        class="[&_img]:border-background flex shrink-0 pl-2 [&_img]:-ml-2 [&_img]:size-8 [&_img]:rounded-[50%] [&_img]:border-2 [&_img]:object-cover [&_img]:object-[center_25%]"
-        aria-hidden="true"
+      <p class="text-foreground max-w-md text-sm leading-relaxed md:col-span-5">
+        {t("hero.subtitle")}
+      </p>
+      <div
+        class="flex flex-wrap gap-3 md:col-span-7 md:col-start-6 md:row-span-2 md:row-start-1 md:justify-end md:self-center"
       >
-        {
-          teamPortraits.map((src) => (
-            <Image
-              src={src}
-              alt=""
-              width={32}
-              height={32}
-              densities={[1, 2]}
-              format="webp"
-              quality={80}
-            />
-          ))
-        }
-      </span>
-      <span>{t("home.hero.people")}</span>
-      <DynamicIcon
-        icon="FaArrowRightLong"
-        className="size-3 shrink-0"
-        aria-hidden="true"
-      />
-    </a>
-  </div>
-  <div class="relative -order-1 mb-0 min-w-0">
-    <figure
-      class="bg-background border-primary/20 overflow-hidden rounded-xl border"
-    >
-      <Image
-        src={heroPhoto}
-        width={1200}
-        height={800}
-        widths={[480, 768, 1200, 1620]}
-        sizes="(min-width: 1344px) 1216px, (min-width: 1024px) calc(100vw - 98px), (min-width: 768px) calc(100vw - 66px), calc(100vw - 26px)"
-        format="webp"
-        quality={80}
-        alt={t("home.hero.photoAlt")}
-        loading="eager"
-        fetchpriority="high"
-        class="h-[clamp(14rem,65vw,23rem)] w-full object-cover object-[center_60%] md:h-[clamp(20rem,34vw,29rem)]"
-      />
-      <figcaption
-        class="text-primary bg-background absolute top-3 right-3 flex items-center gap-3 rounded-md px-4 py-3 text-xs font-medium shadow-sm md:top-5 md:right-5 md:px-5 md:py-4"
+        <Button
+          text={t("hero.action.contact")}
+          href="https://wa.me/6281324096624"
+          target="_blank"
+          rel="noopener noreferrer"
+          icon="FaWhatsapp"
+          size="lg"
+          class="h-12 rounded-xl px-4 text-sm sm:px-5"
+        />
+        <Button
+          text={t("hero.action.expertise")}
+          href={getLocalizedPath("/what-we-do", lang)}
+          icon="FaArrowRightLong"
+          variant="outline"
+          size="lg"
+          class="border-primary/25 bg-background text-primary hover:bg-primary-soft hover:text-primary h-12 rounded-xl px-4 text-sm sm:px-5"
+        />
+      </div>
+      <a
+        href={getLocalizedPath("/about/people", lang)}
+        class="text-foreground/75 hover:text-primary focus-visible:outline-primary border-primary/20 dark:text-muted-foreground flex w-full items-center gap-3 border-t pt-4 text-xs leading-relaxed underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 md:col-span-5 md:col-start-1 md:row-start-2"
       >
+        <span class="flex shrink-0 pl-2" aria-hidden="true">
+          {
+            teamPortraits.map((src) => (
+              <Image
+                src={src}
+                alt=""
+                width={32}
+                height={32}
+                densities={[1, 2]}
+                format="webp"
+                quality={80}
+                loading="lazy"
+                class="border-background -ml-2 size-8 rounded-full border-2 object-cover object-[center_25%]"
+              />
+            ))
+          }
+        </span>
+        <span>{t("home.hero.people")}</span>
         <DynamicIcon
-          icon="FaUsers"
-          className="size-4 shrink-0"
+          icon="FaArrowRightLong"
+          className="size-3 shrink-0"
           aria-hidden="true"
         />
-        <span>{t("home.hero.photoCaption")}</span>
-        <span class="bg-kuning ml-3 size-2 rounded-[50%]" aria-hidden="true"
-        ></span>
-      </figcaption>
-    </figure>
+      </a>
+    </div>
   </div>
+  <figure class="bg-background absolute inset-0 min-w-0 overflow-hidden">
+    <Image
+      src={heroPhoto}
+      width={1200}
+      height={800}
+      widths={[480, 768, 1200, 1620]}
+      sizes="max(100vw, 150svh)"
+      format="webp"
+      quality={80}
+      alt={t("home.hero.photoAlt")}
+      loading="eager"
+      fetchpriority="high"
+      class="h-full w-full object-cover object-[center_70%]"
+    />
+    <div
+      class="absolute inset-0 bg-linear-to-r from-black/65 via-black/35 to-black/5 dark:from-black/85 dark:via-black/50 dark:to-black/10"
+      aria-hidden="true"
+    >
+    </div>
+    <div
+      class="from-background pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t to-transparent md:h-40"
+      data-hero-transition
+      aria-hidden="true"
+    >
+    </div>
+  </figure>
 </section>

@@ -26,45 +26,42 @@ const steps = [
 ];
 ---
 
-<div class="bg-background" data-home-section="approach">
-  <div class="mx-auto max-w-6xl px-5 pt-2 sm:px-6">
+<div
+  class="bg-primary-soft border-primary/15 before:from-background relative border-b before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-8 before:bg-linear-to-b before:to-transparent"
+  data-home-section="approach"
+>
+  <div class="relative mx-auto max-w-6xl px-5 py-8 sm:px-6 md:py-10">
     <div
-      class="border-primary/20 bg-primary-soft rounded-xl border p-5 md:px-7 md:py-6"
+      class="mb-5 flex flex-col items-baseline justify-between gap-2 md:flex-row md:gap-4"
     >
-      <div
-        class="mb-5 flex flex-col items-baseline justify-between gap-2 md:flex-row md:gap-4"
-      >
-        <p
-          class="text-primary m-0 text-xs font-medium tracking-widest uppercase"
-        >
-          {t("home.story.approach")}
-        </p>
-        <p class="text-muted-foreground text-xs leading-relaxed">
-          {t("home.story.bridge")}
-        </p>
-      </div>
-      <ol
-        class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-0"
-        aria-label={t("home.story.approach")}
-      >
-        {
-          steps.map((step) => (
-            <li class="border-primary/20 flex items-center gap-3 not-first:border-t not-first:pt-4 sm:flex-col sm:items-start sm:gap-2 sm:px-3 sm:not-first:border-t-0 sm:not-first:border-l sm:not-first:pt-0 sm:first:pl-0 sm:last:pr-0 md:flex-row md:items-center md:gap-3 md:px-4 lg:px-7">
-              <span class="text-primary shrink-0" aria-hidden="true">
-                <DynamicIcon icon={step.icon} className="size-5" />
-              </span>
-              <div>
-                <p class="text-foreground text-xs leading-relaxed font-medium md:text-sm">
-                  {step.label}
-                </p>
-                <p class="text-muted-foreground mt-2 text-xs leading-relaxed">
-                  {step.caption}
-                </p>
-              </div>
-            </li>
-          ))
-        }
-      </ol>
+      <p class="text-primary m-0 text-xs font-medium tracking-widest uppercase">
+        {t("home.story.approach")}
+      </p>
+      <p class="text-muted-foreground text-xs leading-relaxed">
+        {t("home.story.bridge")}
+      </p>
     </div>
+    <ol
+      class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-0"
+      aria-label={t("home.story.approach")}
+    >
+      {
+        steps.map((step) => (
+          <li class="border-primary/20 flex items-center gap-3 not-first:border-t not-first:pt-4 sm:flex-col sm:items-start sm:gap-2 sm:px-3 sm:not-first:border-t-0 sm:not-first:border-l sm:not-first:pt-0 sm:first:pl-0 sm:last:pr-0 md:flex-row md:items-center md:gap-3 md:px-4 lg:px-7">
+            <span class="text-primary shrink-0" aria-hidden="true">
+              <DynamicIcon icon={step.icon} className="size-5" />
+            </span>
+            <div>
+              <p class="text-foreground text-xs leading-relaxed font-medium md:text-sm">
+                {step.label}
+              </p>
+              <p class="text-muted-foreground mt-2 text-xs leading-relaxed">
+                {step.caption}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </div>

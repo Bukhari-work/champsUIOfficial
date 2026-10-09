@@ -9,7 +9,7 @@ import edePortrait from "../../../public/images/people/ede-surya-darmawan.webp";
 import putuPortrait from "../../../public/images/people/putu-mas-dewi-pratiwi.webp";
 import sheilaPortrait from "../../../public/images/people/sheila-rizkia-anjari.webp";
 
-export const heroPhoto = community06;
+export const heroPhoto = community01;
 export const purposePhoto = community01;
 export const kaleidoscopePhoto = community03;
 export const teamPortraits = [edePortrait, putuPortrait, sheilaPortrait];

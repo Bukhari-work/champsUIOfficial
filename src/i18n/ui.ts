@@ -75,11 +75,10 @@ export const ui = {
     "home.video.collapse": "Close video",
     "home.story.next": "Let’s move forward",
     "home.hero.photoAlt":
-      "Participants gathered at a CHAMPS UI event in an auditorium",
-    "home.hero.title1": "Big ideas.",
-    "home.hero.title2": "Shared purpose.",
-    "home.hero.title3": "Healthier lives.",
-    "home.hero.photoCaption": "Stronger, together.",
+      "CHAMPS UI colleagues and partners connecting at an event",
+    "home.hero.title1": "Empowering Public Health",
+    "home.hero.title2": "Leadership and Innovation",
+    "home.hero.title3": "in Southeast Asia",
     "home.hero.people": "Meet the people behind our work",
     "home.expertise.subtitle":
       "Connecting knowledge, people, and practice across four areas of expertise.",
@@ -396,10 +395,10 @@ export const ui = {
     "footer.copyright": `© ${new Date().getFullYear()} CHAMPS UI. Hak cipta dilindungi.`,
 
     // Homepage - Hero Section
-    "hero.tagline": "Fakultas Kesehatan Masyarakat",
+    "hero.tagline": "FKM",
     "hero.title": "PUSAT KAJIAN ADMINISTRASI DAN KEBIJAKAN KESEHATAN",
     "hero.subtitle":
-      "Menjembatani Penelitian, Kebijakan, dan Praktik untuk Pelayanan Kesehatan Masa Depan",
+      "Menjembatani Penelitian, Kebijakan, dan Praktik Pelayanan Kesehatan",
     "hero.action.contact": "Hubungi Kami",
     "hero.action.expertise": "Keahlian Kami",
 
@@ -437,11 +436,10 @@ export const ui = {
     "home.video.collapse": "Tutup video",
     "home.story.next": "Mari melangkah bersama",
     "home.hero.photoAlt":
-      "Peserta berkumpul dalam kegiatan CHAMPS UI di auditorium",
-    "home.hero.title1": "Ide besar.",
-    "home.hero.title2": "Tujuan bersama.",
-    "home.hero.title3": "Hidup lebih sehat.",
-    "home.hero.photoCaption": "Lebih kuat, bersama.",
+      "Tim dan mitra CHAMPS UI bertemu dalam sebuah kegiatan",
+    "home.hero.title1": "Memberdayakan kepemimpinan",
+    "home.hero.title2": "dan inovasi kesehatan masyarakat",
+    "home.hero.title3": "di Asia Tenggara",
     "home.hero.people": "Kenali tim di balik karya kami",
     "home.expertise.subtitle":
       "Menghubungkan pengetahuan, manusia, dan praktik dalam empat bidang keahlian.",

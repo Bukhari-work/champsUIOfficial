@@ -117,6 +117,7 @@ export interface BaseLayoutProps {
   content: PageMetadata;
   mode?: "light" | "dark";
   makara?: boolean;
+  mainClass?: string;
 }
 
 /**
