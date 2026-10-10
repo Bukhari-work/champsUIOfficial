@@ -16,6 +16,7 @@ src/
     shared/               Reusable cards, headings, statistics, galleries, and helpers
     home/sections/        Homepage sections
     home/shared/          Building blocks specific to the homepage
+    announcements/        Reusable campaign announcement dialog
     people/               People cards and carousel
     news/                 News cards, lists, and directory
     contact/              Contact form
@@ -24,6 +25,7 @@ src/
     programs/             Program cards
     ui-astro/             Astro UI primitives
     ui/                   Registry primitives and framework-neutral variants
+  data/                   Typed site data, including localized campaign announcements
   lib/                    TypeScript data-access and utility functions
   i18n/                   Translations, locale validation, and localized paths
   scripts/                Browser behavior and transition lifecycle handlers
@@ -127,6 +129,21 @@ generic component is not necessary just to shorten a page.
   Its white/kuning UI slogan sits over a neutral gradient, softer in light
   mode, with an opaque support card and a fade into the page background.
   Accents use the shared `--kuning` theme color without a homepage palette override.
+- `announcements/AnnouncementBanner.astro` receives a typed campaign and locale,
+  and composes the shared Bejamas Dialog. It replaces the TNA-specific banner and
+  the old `shared/InvitationModal.astro`; presentation and behavior contain no
+  campaign-specific copy, paths, or IDs.
+  `scripts/announcement-banner.ts` handles only auto-opening and dismissal policy;
+  the Dialog handles focus, Escape/backdrop closing, scrolling, and presence.
+  The announcement starts closed and opens after Dialog initialization, unless
+  another dialog is visible or navigation is underway. It reconnects on Astro
+  navigation and aborts its listeners and scheduled opening when removed.
+  Its announcement-specific key is passed through `data-storage-key` and shared
+  across languages. Explicit dismissal or following the announcement CTA records
+  a boolean in `sessionStorage`, with an in-memory fallback if storage is blocked.
+  Navigation disposal alone does not record dismissal. Change the campaign ID
+  for a new campaign; no cookies, tracking, or cross-visit persistence are
+  introduced. Keep this feature-specific policy out of the generic Dialog primitive.
 - `styles/global.css` sets Libron on all `h1`–`h6` and ARIA headings; child links,
   spans, and emphasis inherit the heading font. Long words wrap within headings,
   and page titles use responsive sizes to fit narrow screens. Body text and
@@ -149,8 +166,28 @@ generic component is not necessary just to shorten a page.
   localized 404 generation remains separate.
 - `getSidebar(lang, section)` in `navigation.ts` builds translated navigation
   props for the `about` and `whatWeDo` groups.
-- User-facing translated copy belongs in `i18n/ui.ts`, rather than inline locale
-  conditionals in components.
+- Shared translated interface copy belongs in `i18n/ui.ts`, rather than inline
+  locale conditionals in components. Campaign-specific copy lives together in
+  the typed locale records in `data/announcements.ts`.
+
+## Changing the homepage announcement
+
+Edit `homeAnnouncement` in `src/data/announcements.ts`:
+
+- Set `enabled: false` to remove the popup entirely, without editing the page.
+- Update each language's `title`, `description`, and optional `action`.
+- An action contains its `label` and `href`. Unprefixed site paths, such as
+  `/projects/tna-champs-ui`, are localized automatically; HTTPS links stay unchanged.
+  Omit `action` for a notice without a CTA. Copy is rendered as text, not raw HTML.
+- Keep `id` stable for corrections to the same campaign. Use a new lowercase,
+  hyphen-separated ID for a new campaign so the previous dismissal does not hide it.
+  The existing `tna-champs-ui` ID preserves dismissal during this refactor.
+- Pass another `AnnouncementCampaign` to `AnnouncementBanner` to use it on a
+  different page. Mount at most one auto-opening announcement per page; mounting
+  the same campaign on several pages shares its dismissal for the tab session.
+
+Campaign replacement needs no changes to the dialog markup, browser controller,
+or shared interface translations. There is no campaign scheduling or queue.
 
 ## Verification
 

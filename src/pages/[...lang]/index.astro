@@ -3,7 +3,6 @@ import {
   getLocaleStaticPaths,
   getPageLanguage,
   useTranslations,
-  getLocalizedPath,
 } from "@/i18n/utils";
 
 import Base from "@/layouts/Base.astro";
@@ -15,7 +14,8 @@ import Purpose from "@/components/home/sections/Purpose.astro";
 import PhotoDivider from "@/components/home/sections/PhotoDivider.astro";
 import News from "@/components/home/sections/News.astro";
 import Collaboration from "@/components/home/sections/Collaboration.astro";
-import InvitationModal from "@/components/shared/InvitationModal.astro";
+import AnnouncementBanner from "@/components/announcements/AnnouncementBanner.astro";
+import { homeAnnouncement } from "@/data/announcements";
 import { getImage } from "astro:assets";
 import { heroPhoto } from "@/assets/home";
 
@@ -51,17 +51,6 @@ const content = {
     <PhotoDivider {lang} />
     <News {lang} />
     <Collaboration {lang} />
-    <InvitationModal storageKey={`tna-invitation-${lang}`}>
-      <h2 id="invitation-title" class="text-2xl font-semibold">
-        {t("tna.modal.title")}
-      </h2>
-      <p class="text-muted-foreground mt-4">{t("tna.modal.description")}</p>
-      <a
-        href={getLocalizedPath("/projects/tna-champs-ui", lang)}
-        class="bg-primary text-primary-foreground mt-6 inline-flex rounded-xl px-6 py-3 font-medium hover:opacity-90"
-      >
-        {t("tna.modal.cta")}</a
-      >
-    </InvitationModal>
+    <AnnouncementBanner {lang} campaign={homeAnnouncement} />
   </div>
 </Base>

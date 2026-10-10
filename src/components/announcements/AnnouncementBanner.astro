@@ -1,0 +1,75 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { AnnouncementCampaign } from "@/data/announcements";
+import { getLocalizedPath, useTranslations } from "@/i18n/utils";
+import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
+import Button from "@/components/ui-astro/Button.astro";
+import DynamicIcon from "@/components/shared/DynamicIcon";
+
+interface Props {
+  lang: Language;
+  campaign: AnnouncementCampaign;
+}
+
+const { lang, campaign } = Astro.props;
+const t = useTranslations(lang);
+if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(campaign.id)) {
+  throw new Error(
+    "Announcement campaign IDs must use lowercase words separated by hyphens.",
+  );
+}
+const content = campaign.content[lang];
+const dialogId = `announcement-${campaign.id}`;
+const storageKey = `champs:announcement:${campaign.id}:dismissed`;
+const actionHref = content.action?.href.startsWith("/")
+  ? getLocalizedPath(content.action.href, lang)
+  : content.action?.href;
+---
+
+{
+  campaign.enabled && (
+    <site-announcement-banner data-storage-key={storageKey}>
+      <Dialog id={dialogId}>
+        <DialogContent
+          id={`${dialogId}-content`}
+          showCloseButton={false}
+          overlayClass="bg-black/50 duration-300 data-closed:duration-150 supports-backdrop-filter:backdrop-blur-sm motion-reduce:animate-none motion-reduce:data-open:animate-none motion-reduce:data-closed:animate-none"
+          class="max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-2xl grid-cols-1 gap-0 overflow-y-auto overscroll-contain rounded-3xl p-6 shadow-2xl duration-300 data-closed:duration-150 motion-reduce:animate-none motion-reduce:data-closed:animate-none motion-reduce:data-open:animate-none sm:max-w-2xl"
+        >
+          <DialogClose
+            type="button"
+            autofocus
+            aria-label={t("announcement.close")}
+            class="bg-background text-muted-foreground hover:text-foreground focus-visible:outline-primary flex size-11 items-center justify-center rounded-full border shadow-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
+          >
+            <DynamicIcon icon="LuX" className="size-5" aria-hidden="true" />
+          </DialogClose>
+          <h2
+            id={`${dialogId}-title`}
+            data-slot="dialog-title"
+            class="pr-14 text-2xl font-semibold"
+          >
+            {content.title}
+          </h2>
+          <p data-slot="dialog-description" class="text-muted-foreground mt-4">
+            {content.description}
+          </p>
+          {content.action && (
+            <Button
+              href={actionHref}
+              data-announcement-cta
+              size="lg"
+              class="mt-6 h-auto min-h-12 w-fit max-w-full rounded-xl px-6 py-3 text-center text-base font-medium wrap-anywhere whitespace-normal hover:opacity-90"
+            >
+              {content.action.label}
+            </Button>
+          )}
+        </DialogContent>
+      </Dialog>
+    </site-announcement-banner>
+  )
+}
+
+<script>
+  import "@/scripts/announcement-banner";
+</script>

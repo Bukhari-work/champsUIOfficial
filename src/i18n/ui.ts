@@ -97,11 +97,8 @@ export const ui = {
     "home.collaboration.description":
       "Work with CHAMPS UI to turn research and shared ideas into meaningful change.",
 
-    // Homepage - TNA Invitation Modal
-    "tna.modal.title": "CHAMPS UI Training Needs Assessment",
-    "tna.modal.description":
-      "We invite institutions to participate in our Training Needs Assessment survey to help shape future capacity-building programs.",
-    "tna.modal.cta": "View Invitation",
+    // Campaign announcements
+    "announcement.close": "Close announcement",
 
     // Homepage - Quote Section
     "quote.champs":
@@ -459,11 +456,8 @@ export const ui = {
     "home.collaboration.description":
       "Berkolaborasi dengan CHAMPS UI untuk mengubah riset dan gagasan bersama menjadi perubahan nyata.",
 
-    // Homepage - TNA Invitation Modal
-    "tna.modal.title": "Survei Analisis Kebutuhan Pelatihan CHAMPS UI",
-    "tna.modal.description":
-      "Kami mengundang institusi untuk berpartisipasi dalam survei Analisis Kebutuhan Pelatihan guna membantu merancang program penguatan kapasitas ke depan.",
-    "tna.modal.cta": "Lihat Undangan",
+    // Campaign announcements
+    "announcement.close": "Tutup pengumuman",
 
     // Homepage - Quote Section
     "quote.champs":
