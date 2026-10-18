@@ -1,0 +1,59 @@
+---
+title: "AI literacy workshop invitation"
+description: "An archived invitation for a full-day workshop on AI literacy, BPJS Kesehatan sample data, and scientific writing."
+renderMode: "component"
+speakers:
+  - name: "Prof. Dr. Dra. Dumilah Ayungtyas, M.A.R.S."
+    title: "Professor and lecturer, Faculty of Public Health, Universitas Indonesia"
+  - name: "Dr. R.A.A. Koesoema Wijaya, M.Sc."
+    title: "Junior expert physician and head of the Internal Audit Unit, North Seribu Islands Public Health Center"
+  - name: "Syarif Rahman Hasibuan, S.K.M., M.K.M."
+    title: "Lecturer, Faculty of Medicine, UPN Veteran Jakarta, and CHAMPS UI researcher"
+---
+
+import { contentCopy } from "@/i18n/content";
+import QrCodeImage from "@/components/content-page/mdx/QrCodeImage.astro";
+import SpeakerCard from "@/components/content-page/mdx/SpeakerCard.astro";
+import InvitationFlyers from "@/components/content-page/mdx/InvitationFlyers.astro";
+
+<InvitationFlyers images={props.eventData.flyers} lang={props.lang} />
+
+{props.archiveOnly && <p class="text-muted-foreground mb-6 text-sm leading-relaxed">{contentCopy[props.lang].recoveredInvitationNote}</p>}
+
+<p class="mb-6 leading-relaxed">The workshop introduced ethical AI literacy, the use of BPJS Kesehatan sample data, and practical approaches to producing relevant scientific publications. Sessions combined guided discussion with hands-on data work.</p>
+
+## Learning objectives
+
+- Understand foundational AI literacy and ethical use of health data.
+- Learn how to access and process BPJS Kesehatan sample data.
+- Explore approaches to writing scientific publications using secondary data.
+- Strengthen data analysis and interpretation for health research.
+- Connect with researchers, academics, and health practitioners.
+
+## Intended participants
+
+- Researchers and academics interested in data- and technology-enabled research.
+- Diploma and undergraduate or postgraduate students in public health, policy, data science, and related fields.
+- Health practitioners using evidence to inform decisions.
+- Technology professionals interested in AI applications in health research.
+
+## Speakers
+
+<ul class="grid gap-4 xl:grid-cols-2">
+  {frontmatter.speakers.map((speaker, index) => <SpeakerCard
+    speaker={{ ...speaker, image: { ...props.archive.speakerImages[index], alt: speaker.name } }}
+    sourceLang="en"
+  />)}
+</ul>
+
+## Practical information
+
+The archived flyer lists the workshop fee as **IDR 500,000**, including workshop materials, a participant certificate, coffee break, and lunch. Accommodation, travel, and personal expenses were not included. Participants were asked to install SPSS before attending. The flyer lists a registration deadline of **25 October 2025**; registration is now closed.
+
+{props.archive.qrCode && <div class="bg-primary-soft mt-6 flex flex-col items-start gap-5 rounded-xl border p-5 sm:flex-row sm:items-center">
+  <QrCodeImage image={props.archive.qrCode} />
+  <div>
+    <h3 class="text-base font-semibold">{contentCopy[props.lang].archivedQr}</h3>
+    <p class="text-muted-foreground mt-2 text-sm leading-relaxed">{contentCopy[props.lang].archivedQrNote}</p>
+  </div>
+</div>}

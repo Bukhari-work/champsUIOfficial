@@ -1,0 +1,68 @@
+{
+  "title": {
+    "en": "SEM-PLS Data Analysis Workshop for Health Policy",
+    "id": "Workshop Analisis Data SEM-PLS untuk Kebijakan Kesehatan"
+  },
+  "summary": {
+    "en": "This workshop is designed to develop participant skills in data analysis using SmartPLS software, enabling better evidence-based health policy development.",
+    "id": "Workshop ini dirancang untuk mengembangkan keterampilan peserta dalam menganalisis data menggunakan perangkat lunak SmartPLS, yang memungkinkan pengembangan kebijakan kesehatan berbasis bukti dengan lebih baik."
+  },
+  "format": {
+    "en": "Workshop",
+    "id": "Lokakarya"
+  },
+  "kind": "workshop",
+  "period": "2025-10",
+  "startDate": "2025-10-30",
+  "status": "scheduled",
+  "venue": {
+    "en": "FPH Universitas Diponegoro, Semarang",
+    "id": "FKM Universitas Diponegoro, Semarang"
+  },
+  "duration": {
+    "en": "09.00–16.00 WIB",
+    "id": "09.00–16.00 WIB"
+  },
+  "flyers": [
+    {
+      "src": "/images/events/sem-pls-health-policy-2025/flyer.jpg",
+      "alt": {
+        "en": "Invitation flyer for the SEM-PLS data-analysis workshop for health policy, with its speakers, schedule, fee, and registration information.",
+        "id": "Flyer undangan lokakarya analisis data SEM-PLS untuk kebijakan kesehatan, menampilkan narasumber, jadwal, biaya, dan informasi pendaftaran."
+      },
+      "caption": {
+        "en": "Original workshop invitation",
+        "id": "Undangan asli lokakarya"
+      }
+    }
+  ],
+  "invitationArchive": {
+    "speakerImages": [
+      {
+        "src": "/images/events/sem-pls-health-policy-2025/speaker-1.webp",
+        "alt": {
+          "en": "Prof. Dr. Dra. Dumilah Ayungtyas, M.A.R.S., speaker at the SEM-PLS workshop",
+          "id": "Prof. Dr. Dra. Dumilah Ayungtyas, M.A.R.S., narasumber lokakarya SEM-PLS"
+        }
+      },
+      {
+        "src": "/images/events/sem-pls-health-policy-2025/speaker-2.webp",
+        "alt": {
+          "en": "Ira Gustina, S.Stat., M.K.M., speaker at the SEM-PLS workshop",
+          "id": "Ira Gustina, S.Stat., M.K.M., narasumber lokakarya SEM-PLS"
+        }
+      }
+    ],
+    "qrCode": {
+      "src": "/images/events/sem-pls-health-policy-2025/registration-qr.png",
+      "alt": {
+        "en": "Archived registration QR code for the SEM-PLS workshop",
+        "id": "Arsip kode QR pendaftaran Workshop SEM-PLS"
+      }
+    }
+  },
+  "content": {
+    "mode": "article",
+    "sections": [{ "id": "invitationArchive" }]
+  }
+}

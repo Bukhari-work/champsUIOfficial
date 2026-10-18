@@ -1,0 +1,100 @@
+{
+  "title": {
+    "en": "Workshop on Global Health Leadership and Diplomacy: Foundational Level",
+    "id": "Lokakarya Kepemimpinan dan Diplomasi Kesehatan Global: Tingkat Dasar"
+  },
+  "summary": {
+    "en": "A foundational, one-day workshop on global health diplomacy, negotiation, and leadership. The original invitation is retained as a past-event record; a recap has not been supplied.",
+    "id": "Lokakarya dasar satu hari tentang diplomasi, negosiasi, dan kepemimpinan kesehatan global. Undangan asli disimpan sebagai catatan kegiatan terdahulu; rangkuman belum tersedia."
+  },
+  "format": {
+    "en": "In-person workshop",
+    "id": "Lokakarya tatap muka"
+  },
+  "kind": "workshop",
+  "period": "2025-10",
+  "startDate": "2025-10-30",
+  "status": "scheduled",
+  "venue": {
+    "en": "Universitas Diponegoro, Semarang",
+    "id": "Universitas Diponegoro, Semarang"
+  },
+  "duration": {
+    "en": "08.00–16.40 WIB",
+    "id": "08.00–16.40 WIB"
+  },
+  "flyers": [
+    {
+      "src": "/images/events/ghld-foundational-2025/front.jpg",
+      "alt": {
+        "en": "Front of the Global Health Leadership and Diplomacy Foundational Level workshop invitation, with its three speakers, date, venue, and registration details.",
+        "id": "Bagian depan undangan lokakarya Kepemimpinan dan Diplomasi Kesehatan Global tingkat dasar, menampilkan tiga narasumber, tanggal, lokasi, dan informasi pendaftaran."
+      },
+      "caption": {
+        "en": "Original workshop invitation",
+        "id": "Undangan asli lokakarya"
+      }
+    },
+    {
+      "src": "/images/events/ghld-foundational-2025/programme.jpg",
+      "alt": {
+        "en": "Programme and participant information from the Global Health Leadership and Diplomacy Foundational Level workshop invitation.",
+        "id": "Program dan informasi peserta dari undangan lokakarya Kepemimpinan dan Diplomasi Kesehatan Global tingkat dasar."
+      },
+      "caption": {
+        "en": "Programme and participant information",
+        "id": "Program dan informasi peserta"
+      }
+    }
+  ],
+  "invitationArchive": {
+    "speakerImages": [
+      {
+        "src": "/images/events/ghld-foundational-2025/speaker-1.webp",
+        "alt": {
+          "en": "Prof. Tjandra Yoga Aditama speaking at the workshop",
+          "id": "Prof. Tjandra Yoga Aditama sedang berbicara dalam lokakarya"
+        }
+      },
+      {
+        "src": "/images/events/ghld-foundational-2025/speaker-2.webp",
+        "alt": {
+          "en": "Dr. Agustin Kusumayati speaking at the workshop",
+          "id": "Dr. Agustin Kusumayati sedang berbicara dalam lokakarya"
+        }
+      },
+      {
+        "src": "/images/events/ghld-foundational-2025/speaker-3.webp",
+        "alt": {
+          "en": "Raditya M. Kusumaningprang speaking at the workshop",
+          "id": "Raditya M. Kusumaningprang sedang berbicara dalam lokakarya"
+        }
+      }
+    ],
+    "qrCode": {
+      "src": "/images/events/ghld-foundational-2025/registration-qr.jpg",
+      "alt": {
+        "en": "Archived registration QR code from the GHLD workshop invitation",
+        "id": "Kode QR pendaftaran arsip dari undangan lokakarya GHLD"
+      }
+    }
+  },
+  "invitation": true,
+  "content": {
+    "mode": "tabs",
+    "views": [
+      {
+        "key": "overview",
+        "label": { "en": "Overview", "id": "Ringkasan" },
+        "sections": [
+          { "id": "invitation" }
+        ]
+      },
+      {
+        "key": "details",
+        "label": { "en": "Event details", "id": "Detail kegiatan" },
+        "sections": [{ "id": "details" }]
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+---
+title: "SEM-PLS workshop invitation"
+description: "An archived invitation for a practical workshop on SEM-PLS analysis using SmartPLS for health policy."
+renderMode: "component"
+speakers:
+  - name: "Prof. Dr. Dra. Dumilah Ayungtyas, M.A.R.S."
+    title: "Professor, Faculty of Public Health, Universitas Indonesia"
+  - name: "Ira Gustina, S.Stat., M.K.M."
+    title: "Data analyst and researcher, CHAMPS"
+---
+
+import { contentCopy } from "@/i18n/content";
+import QrCodeImage from "@/components/content-page/mdx/QrCodeImage.astro";
+import SpeakerCard from "@/components/content-page/mdx/SpeakerCard.astro";
+import InvitationFlyers from "@/components/content-page/mdx/InvitationFlyers.astro";
+
+<InvitationFlyers images={props.eventData.flyers} lang={props.lang} />
+
+{props.archiveOnly && <p class="text-muted-foreground mb-6 text-sm leading-relaxed">{contentCopy[props.lang].recoveredInvitationNote}</p>}
+
+<p class="mb-6 leading-relaxed">This full-day workshop introduced Structural Equation Modeling–Partial Least Squares (SEM-PLS) using SmartPLS, combining the method’s concepts with practical analysis for evidence-informed health policy. The brief emphasizes that sound data and appropriate analytical methods can help translate research evidence into stronger health regulation and policy.</p>
+
+## Intended participants
+
+- Public health specialists and health practitioners.
+- Health researchers and medical-records or health-information professionals.
+- Staff from health offices, ministries, NGOs, and other institutions.
+- Postgraduate students and prospective data-informed policy professionals.
+
+## Analysis topics
+
+- Measurement-model and structural-model assessment.
+- Mediation analysis and core SEM-PLS concepts.
+- Distribution assumptions, sample size, and statistical power.
+- Goodness-of-fit assessment and interpretation.
+
+## Speakers
+
+<ul class="grid gap-4 xl:grid-cols-2">
+  {frontmatter.speakers.map((speaker, index) => <SpeakerCard
+    speaker={{ ...speaker, image: { ...props.archive.speakerImages[index], alt: speaker.name } }}
+    sourceLang="en"
+  />)}
+</ul>
+
+## Practical information
+
+The workshop was scheduled for 30 October 2025, 09.00–16.00 WIB, at the Faculty of Public Health, Universitas Diponegoro, Semarang. The fee was **IDR 1,500,000**, including materials, a workshop kit, a certificate with 3 Ministry of Health credit points, lunch, and coffee breaks. Travel and accommodation were not included. The flyer lists 25 October 2025 as the registration deadline; registration is now closed. The original flyer lists Ata and Nisrina as contacts for enquiries.
+
+{props.archive.qrCode && <div class="bg-primary-soft mt-6 flex flex-col items-start gap-5 rounded-xl border p-5 sm:flex-row sm:items-center">
+  <QrCodeImage image={props.archive.qrCode} />
+  <div>
+    <h3 class="text-base font-semibold">{contentCopy[props.lang].archivedQr}</h3>
+    <p class="text-muted-foreground mt-2 text-sm leading-relaxed">{contentCopy[props.lang].archivedQrNote}</p>
+  </div>
+</div>}

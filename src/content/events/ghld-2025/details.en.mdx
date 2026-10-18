@@ -1,0 +1,47 @@
+---
+title: "Event details"
+speakers:
+  - name: "Prof. Tjandra Yoga Aditama"
+    title: "Former Regional Coordinator for Health Security and Emergency Response, WHO SEARO"
+    image:
+      src: /images/events/ghld-foundational-2025/speaker-1.webp
+      alt: "Prof. dr. Tjandra Yoga Aditama"
+  - name: "Dr. Agustin Kusumayati"
+    title: "Member of the Indonesian Health Council leadership (2024–2028); President, Asia Pacific Academic Consortium for Public Health (APACPH)"
+    image:
+      src: /images/events/ghld-foundational-2025/speaker-2.webp
+      alt: "Dr. Agustin Kusumayati"
+  - name: "Raditya M. Kusumaningprang"
+    title: "Counsellor, Ministry of Foreign Affairs of the Republic of Indonesia; former counsellor at Indonesia’s Permanent Mission to the UN, WTO, and other international organizations in Geneva"
+    image:
+      src: /images/events/ghld-foundational-2025/speaker-3.webp
+      alt: "Raditya M. Kusumaningprang"
+---
+
+import SpeakerCard from "@/components/content-page/mdx/SpeakerCard.astro";
+import PracticalDetailsList from "@/components/content-page/mdx/PracticalDetailsList.astro";
+import EventFees from "@/components/content-page/events/EventFees.astro";
+import { eventDetailCopy } from "@/components/content-page/events/EventDetailCopy";
+import { frontmatter as invitation } from "./invitation.en.mdx";
+
+## Speakers
+
+<ul class="grid gap-4 xl:grid-cols-2">
+  {frontmatter.speakers?.map((speaker) => <SpeakerCard speaker={speaker} sourceLang="en" />)}
+</ul>
+
+## Participation details
+
+{invitation.practicalDetails && <PracticalDetailsList details={invitation.practicalDetails} sourceLang="en" />}
+
+{invitation.fees && <div class="bg-primary-soft space-y-4 rounded-xl border p-5">
+  <p class="text-muted-foreground text-xs">{eventDetailCopy.en.feeArchive}</p>
+  <EventFees fee={invitation.fees} lang="en" sourceLang="en" archived={true} />
+  {invitation.fees.includes && <p class="text-sm leading-relaxed" set:html={invitation.fees.includes} />}
+  {invitation.fees.excludes && <p class="text-muted-foreground text-sm leading-relaxed" set:html={invitation.fees.excludes} />}
+</div>}
+
+{invitation.contact && <div>
+  <h3 class="mb-3 text-lg font-semibold">{invitation.contact.heading}</h3>
+  <ul>{invitation.contact.links.map((link) => <li><a href={link.href} class="text-primary inline-flex min-h-11 max-w-full items-center rounded text-sm underline underline-offset-4">{link.text}</a></li>)}</ul>
+</div>}

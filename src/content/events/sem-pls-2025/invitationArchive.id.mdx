@@ -1,0 +1,56 @@
+---
+title: "Arsip undangan lokakarya SEM-PLS"
+description: "Arsip undangan lokakarya analisis data SEM-PLS menggunakan SmartPLS untuk kebijakan kesehatan."
+renderMode: "component"
+speakers:
+  - name: "Prof. Dr. Dra. Dumilah Ayungtyas, M.A.R.S."
+    title: "Guru Besar Fakultas Kesehatan Masyarakat, Universitas Indonesia"
+  - name: "Ira Gustina, S.Stat., M.K.M."
+    title: "Analis data dan peneliti CHAMPS"
+---
+
+import { contentCopy } from "@/i18n/content";
+import QrCodeImage from "@/components/content-page/mdx/QrCodeImage.astro";
+import SpeakerCard from "@/components/content-page/mdx/SpeakerCard.astro";
+import InvitationFlyers from "@/components/content-page/mdx/InvitationFlyers.astro";
+
+<InvitationFlyers images={props.eventData.flyers} lang={props.lang} />
+
+{props.archiveOnly && <p class="text-muted-foreground mb-6 text-sm leading-relaxed">{contentCopy[props.lang].recoveredInvitationNote}</p>}
+
+Lokakarya ini membahas penggunaan Structural Equation Modeling–Partial Least Squares (SEM-PLS) melalui SmartPLS, dengan perpaduan pemahaman konseptual dan praktik analisis untuk mendukung kebijakan kesehatan berbasis bukti. Data yang komprehensif dan metode yang tepat dapat membantu menghasilkan regulasi kesehatan yang lebih relevan dan efektif.
+
+## Sasaran peserta
+
+- Ahli kesehatan masyarakat dan tenaga kesehatan.
+- Peneliti kesehatan serta tenaga rekam medis dan informasi kesehatan.
+- Pegawai dinas kesehatan, kementerian, NGO, dan lembaga lainnya.
+- Mahasiswa pascasarjana dan calon pengambil kebijakan berbasis data.
+
+## Topik analisis
+
+- Penilaian model pengukuran dan model struktural.
+- Analisis mediasi dan konsep dasar SEM-PLS.
+- Asumsi distribusi, ukuran sampel, dan kekuatan statistik.
+- Penilaian goodness of fit serta interpretasi hasil.
+
+## Narasumber
+
+<ul class="grid gap-4 xl:grid-cols-2">
+  {frontmatter.speakers.map((speaker, index) => <SpeakerCard
+    speaker={{ ...speaker, image: { ...props.archive.speakerImages[index], alt: speaker.name } }}
+    sourceLang="id"
+  />)}
+</ul>
+
+## Informasi praktis
+
+Lokakarya dijadwalkan pada 30 Oktober 2025, pukul 09.00–16.00 WIB, di Fakultas Kesehatan Masyarakat Universitas Diponegoro, Semarang. Biaya **Rp1.500.000** mencakup materi, seminar kit, sertifikat dengan 3 SKP Kemenkes, makan siang, dan coffee break. Biaya perjalanan dan akomodasi tidak termasuk. Flyer mencantumkan batas pendaftaran **25 Oktober 2025**; pendaftaran telah ditutup.
+
+{props.archive.qrCode && <div class="bg-primary-soft mt-6 flex flex-col items-start gap-5 rounded-xl border p-5 sm:flex-row sm:items-center">
+  <QrCodeImage image={props.archive.qrCode} />
+  <div>
+    <h3 class="text-base font-semibold">{contentCopy[props.lang].archivedQr}</h3>
+    <p class="text-muted-foreground mt-2 text-sm leading-relaxed">{contentCopy[props.lang].archivedQrNote}</p>
+  </div>
+</div>}

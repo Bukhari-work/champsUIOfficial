@@ -1,0 +1,75 @@
+{
+  "title": {
+    "en": "AI Literacy and BPJS Kesehatan Sample Data Workshop for Scientific Publication",
+    "id": "Workshop Literasi AI Data Sampel BPJS Kesehatan"
+  },
+  "summary": {
+    "en": "This workshop is designed to introduce participants to basic AI literacy concepts, BPJS Kesehatan sample data processing techniques, and strategies for composing relevant scientific publications.",
+    "id": "Workshop ini dirancang untuk memperkenalkan peserta pada konsep dasar literasi AI, teknik pengolahan data sampel BPJS Kesehatan, serta strategi menyusun publikasi ilmiah yang relevan."
+  },
+  "format": {
+    "en": "Workshop",
+    "id": "Lokakarya"
+  },
+  "kind": "workshop",
+  "period": "2025-10",
+  "startDate": "2025-10-30",
+  "status": "scheduled",
+  "venue": {
+    "en": "Universitas Diponegoro, Semarang",
+    "id": "Universitas Diponegoro, Semarang"
+  },
+  "duration": {
+    "en": "08.00–17.00 WIB",
+    "id": "08.00–17.00 WIB"
+  },
+  "flyers": [
+    {
+      "src": "/images/events/ai-literacy-bpjs-2025/flyer.jpg",
+      "alt": {
+        "en": "Invitation flyer for the AI literacy and BPJS Kesehatan sample-data workshop, featuring its speakers, schedule, fee, and registration information.",
+        "id": "Flyer undangan lokakarya literasi AI dan data sampel BPJS Kesehatan, menampilkan narasumber, jadwal, biaya, dan informasi pendaftaran."
+      },
+      "caption": {
+        "en": "Original workshop invitation",
+        "id": "Undangan asli lokakarya"
+      }
+    }
+  ],
+  "invitationArchive": {
+    "speakerImages": [
+      {
+        "src": "/images/events/ai-literacy-bpjs-2025/speaker-1.webp",
+        "alt": {
+          "en": "Prof. Dr. Dra. Dumilah Ayungtyas, M.A.R.S., speaker at the AI Literacy workshop",
+          "id": "Prof. Dr. Dra. Dumilah Ayungtyas, M.A.R.S., narasumber lokakarya Literasi AI"
+        }
+      },
+      {
+        "src": "/images/events/ai-literacy-bpjs-2025/speaker-2.webp",
+        "alt": {
+          "en": "Dr. R.A.A. Koesoema Wijaya, M.Sc., speaker at the AI Literacy workshop",
+          "id": "Dr. R.A.A. Koesoema Wijaya, M.Sc., narasumber lokakarya Literasi AI"
+        }
+      },
+      {
+        "src": "/images/events/ai-literacy-bpjs-2025/speaker-3.webp",
+        "alt": {
+          "en": "Syarif Rahman Hasibuan, S.K.M., M.K.M., speaker at the AI Literacy workshop",
+          "id": "Syarif Rahman Hasibuan, S.K.M., M.K.M., narasumber lokakarya Literasi AI"
+        }
+      }
+    ],
+    "qrCode": {
+      "src": "/images/events/ai-literacy-bpjs-2025/registration-qr.png",
+      "alt": {
+        "en": "Archived registration QR code for the AI Literacy workshop",
+        "id": "Arsip kode QR pendaftaran Workshop Literasi AI"
+      }
+    }
+  },
+  "content": {
+    "mode": "article",
+    "sections": [{ "id": "invitationArchive" }]
+  }
+}

@@ -1,13 +1,53 @@
-# Astro with Tailwind
+# CHAMPS UI website
+
+Bilingual English/Indonesian website built with Astro, TypeScript and Tailwind CSS.
+Public content includes What We Do stories, Events, an activity archive and people
+profiles. Design comparison previews have been removed for now.
+The questionnaire invitation lives at `/questionnaire` and opens the existing
+external survey; the site does not collect survey responses.
+
+## Development
+
+Use Node.js **22.12 or later** and **pnpm 10.18.2** (declared in `package.json`).
 
 ```sh
-pnpm create astro@latest -- --template with-tailwindcss
+pnpm install
+pnpm dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/with-tailwindcss)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/with-tailwindcss/devcontainer.json)
+Other commands:
 
-Astro comes with [Tailwind](https://tailwindcss.com) support out of the box. This example showcases how to style your Astro project with Tailwind.
+- `pnpm build` — build the static site and Pagefind search index into `dist/`.
+- `pnpm preview` — serve the production build locally.
+- `pnpm test` — run the existing Node test suite. For small changes, run only the
+  relevant files: `node --experimental-strip-types --test tests/event-fees.test.mjs`.
 
-For complete setup instructions, please see our [Tailwind Integration Guide](https://docs.astro.build/en/guides/integrations-guide/tailwind).
+## Project organization
+
+- `src/pages/` — routing, metadata, data preparation and page composition.
+- `src/layouts/` — the site shell, section-navigation layout, and shared content layout.
+- `src/components/` — feature-owned components, copy and browser controllers.
+  `directories/` owns browsing/discovery components; `content-page/` owns record
+  reading components. Each has content-type subfolders, such as `events/` and
+  `what-we-do/`. General cross-role presentation lives in `shared/`, and basic
+  controls/registry primitives live in `ui/`. Individual-content page structure
+  lives in `layouts/ContentLayout.astro`.
+- `src/content/`, `src/data/` — published content and structured site data.
+- `src/lib/`, `src/i18n/` — data helpers, translations and route localization.
+- `src/scripts/` — global theme and intersection initialization only.
+- `src/components/previews/` — fictional fixtures and review-only presentation;
+  production components must not import these.
+- `src/assets/`, `public/` — optimized source assets and stable public URLs.
+- `tests/`, `docs/` — regression checks and implementation guidance.
+
+Keep a feature's browser controller beside its component. Pages own composition;
+avoid adding page-sized wrappers or generic abstractions just to shorten a file.
+Generated output, dependency stores and local browser artifacts are not source.
+
+## Documentation
+
+- [Architecture and component ownership](docs/architecture.md)
+- [Where to edit Stories, Events, Publications and the questionnaire](docs/content-authoring.md)
+- [Content directories and migration](docs/content-directory.md)
+- [Event content model](docs/event-content-map.md)
+- [Recovered invitation sources and images](docs/recovered-invitations.md)
