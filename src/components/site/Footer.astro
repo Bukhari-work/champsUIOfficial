@@ -105,7 +105,7 @@ const t = useTranslations(lang);
           {socialLinks.map(({ ariaLabel, href, icon }) => (
             <li>
               <a
-                class="inline-flex items-center rounded-lg p-2.5 text-sm hover:bg-gray-100/20 focus:outline-none"
+                class="focus-visible:outline-background inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2.5 text-sm hover:bg-gray-100/20 focus-visible:outline-2 focus-visible:outline-offset-2"
                 aria-label={ariaLabel}
                 href={href}
                 target="_blank"

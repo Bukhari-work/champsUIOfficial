@@ -1,0 +1,51 @@
+---
+import type { Language } from "@/i18n/ui";
+import { Button } from "@/components/ui/button";
+import { peopleCopy } from "./Copy";
+interface Props {
+  id: string;
+  lang: Language;
+}
+const { id, lang } = Astro.props;
+const copy = peopleCopy[lang];
+const contentId = `${id}-content`;
+---
+
+<profile-biography
+  class="block min-w-0"
+  data-more={copy.readMore}
+  data-less={copy.readLess}
+>
+  <div class="relative">
+    <div
+      id={contentId}
+      class="prose dark:prose-invert max-w-none data-collapsed:max-h-112 data-collapsed:overflow-hidden"
+      data-biography-content
+    >
+      <slot />
+    </div>
+    <div
+      class="from-background pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-t to-transparent"
+      data-biography-fade
+      hidden
+      aria-hidden="true"
+    >
+    </div>
+  </div>
+  <div class="mt-4 [[hidden]]:hidden!" data-biography-controls hidden>
+    <Button
+      type="button"
+      variant="outline"
+      class="min-h-11"
+      aria-expanded="true"
+      aria-controls={contentId}
+      data-biography-toggle
+    >
+      {copy.readMore}
+    </Button>
+  </div>
+</profile-biography>
+
+<script>
+  import "./ProfileBiography.client";
+</script>

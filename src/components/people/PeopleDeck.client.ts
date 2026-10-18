@@ -15,6 +15,13 @@ class PeopleDeck extends HTMLElement {
       slidesPerView: "auto",
       centeredSlides: true,
       modules: [Pagination, Navigation, EffectCoverflow, A11y],
+      a11y: {
+        prevSlideMessage: this.dataset.previous,
+        nextSlideMessage: this.dataset.next,
+        firstSlideMessage: this.dataset.first,
+        lastSlideMessage: this.dataset.last,
+        slideLabelMessage: this.dataset.slide,
+      },
       pagination: {
         el: this.querySelector<HTMLElement>(".person-slider-pagination"),
         type: "fraction",

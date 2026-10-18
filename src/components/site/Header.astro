@@ -6,7 +6,8 @@ import type { Language } from "@/i18n/ui";
 
 import FullScreenNavigation from "@/components/site/mobile-navigation/FullScreen.astro";
 import { Dialog } from "@/components/ui/dialog";
-import Button from "@/components/ui-astro/Button.astro";
+import { Button } from "@/components/ui/button";
+import DynamicIcon from "@/components/shared/DynamicIcon";
 import { Image } from "astro:assets";
 
 interface Props {
@@ -102,7 +103,7 @@ const isActiveHref = (href?: string | URL | null): boolean => {
         >
           <ul
             id="navigation"
-            class="inline-flex w-auto flex-wrap justify-center space-x-1 self-center px-5 text-center text-sm"
+            class="inline-flex w-auto justify-center space-x-1 self-center px-2 text-center text-sm"
           >
             {
               nav.header.map((menu) => {
@@ -113,7 +114,7 @@ const isActiveHref = (href?: string | URL | null): boolean => {
                     <a
                       href={menu.href}
                       class:list={[
-                        "text-foreground/80 hover:bg-primary/12 focus-visible:outline-primary block rounded-xl px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2",
+                        "text-foreground/80 hover:bg-primary/12 focus-visible:outline-primary block rounded-xl px-3 py-3 whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2",
                         {
                           "text-primary/80": isActive,
                           "bg-primary/12": isActive,
@@ -161,14 +162,15 @@ const isActiveHref = (href?: string | URL | null): boolean => {
             )
           }
           <Button
-            icon="LuMenu"
             variant="outline"
             size="sm"
             data-slot="dialog-trigger"
             aria-controls="mobile-navigation-content"
             class="bg-background border-primary/25 text-primary hover:bg-primary-soft hover:text-primary size-11 rounded-lg px-0 align-middle"
             aria-label={t("nav.openMenu")}
-          />
+          >
+            <DynamicIcon icon="LuMenu" aria-hidden="true" />
+          </Button>
         </div>
       </nav>
     </div>

@@ -5,7 +5,7 @@ import { getImageAsset } from "@/lib/imageAssets";
 import type { ImageMetadata } from "astro";
 
 export interface Props {
-  href?: string; // <-- Make href optional
+  href?: string;
   title: string;
   imageMeta?: ImageMetadata | { alt: string; src: string | ImageMetadata };
   imageAlt?: string;
@@ -43,20 +43,28 @@ const imageProps = !imageSrc
     : { src: imageSrc, width: isSmall ? 320 : 445 };
 const patternId = `pattern-${crypto.randomUUID().slice(0, 8)}`;
 
-// Use a generic 'Wrapper' component for link or non-link
-const Wrapper = href ? "a" : "div";
+// One native primary link covers the card. Secondary controls belong above it
+// in a relative z-10 container (for example, a person's email links).
+const Title = href ? "a" : "span";
 ---
 
 <article
   class={cn(
-    "group hover:border-primary focus-within:border-primary bg-background relative isolate flex flex-col overflow-hidden transition-[transform,box-shadow,border-color] duration-150 hover:[box-shadow:var(--sh-alt)] focus-within:[box-shadow:var(--sh-alt)] motion-safe:hover:-translate-y-1 motion-safe:focus-within:-translate-y-1 motion-reduce:transition-none",
+    "group bg-background relative isolate flex flex-col overflow-hidden",
+    href &&
+      "hover:border-primary focus-within:border-primary focus-within:ring-primary focus-within:ring-2 motion-safe:transition-transform motion-safe:duration-150 motion-safe:hover:-translate-y-1",
     isSmall ? "gap-3 rounded-lg border p-4" : "gap-6 rounded-xl border-2 p-6",
     className,
   )}
 >
   {/* SVG background pattern */}
   <svg
-    class="text-primary pointer-events-none invisible absolute inset-0 z-[-1] size-full opacity-15 transition-opacity select-none group-focus-within:visible group-focus-within:opacity-25 group-hover:visible group-hover:opacity-25 motion-reduce:transition-none"
+    class:list={[
+      "text-primary pointer-events-none invisible absolute inset-0 -z-1 size-full opacity-15 select-none",
+      href &&
+        "group-focus-within:visible group-focus-within:opacity-25 group-hover:visible group-hover:opacity-25",
+    ]}
+    aria-hidden="true"
   >
     <defs>
       <pattern
@@ -83,11 +91,10 @@ const Wrapper = href ? "a" : "div";
       <slot name="media" />
     ) : (
       imageProps && (
-        <Wrapper
-          href={href}
+        <div
           class={cn(
-            "relative overflow-hidden",
-            isSmall ? "h-32 rounded-md" : "h-48 rounded-lg md:h-64",
+            "relative aspect-video overflow-hidden",
+            isSmall ? "rounded-md" : "rounded-lg",
           )}
         >
           <Image
@@ -99,7 +106,7 @@ const Wrapper = href ? "a" : "div";
             format="webp"
             quality={80}
           />
-        </Wrapper>
+        </div>
       )
     )
   }
@@ -111,15 +118,19 @@ const Wrapper = href ? "a" : "div";
         <slot name="eyebrow" />
         <Heading
           class={cn(
-            "group-hover:text-primary group-focus-within:text-primary font-bold",
+            "font-bold",
+            href && "group-hover:text-primary group-focus-within:text-primary",
             isSmall ? "text-base font-semibold" : "text-xl",
             href && "line-clamp-2",
           )}
         >
-          <Wrapper
+          <Title
             href={href}
-            class="focus-visible:outline-primary focus-visible:decoration-primary focus-visible:underline focus-visible:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
-            >{title}</Wrapper
+            class:list={[
+              href &&
+                "after:absolute after:inset-0 after:cursor-pointer focus-visible:underline focus-visible:underline-offset-4 focus-visible:outline-none",
+            ]}
+            data-card-link={href ? "" : undefined}>{title}</Title
           >
         </Heading>
       </header>

@@ -14,18 +14,24 @@ const { class: className, socialLinks = [], linkClass } = Astro.props;
 
 {
   socialLinks?.length ? (
-    <ul class={cn("mb-4 -ml-2 flex md:mb-0", className)}>
-      {socialLinks.map(({ ariaLabel, href, icon, platform, text }) => (
-        <li>
+    <ul class={cn("mb-4 -ml-2 flex flex-wrap md:mb-0", className)}>
+      {socialLinks.map(({ ariaLabel, href, icon, text }) => (
+        <li class="max-w-full min-w-0">
           <a
             class={cn(
-              "hover:bg-primary/20 dark:hover:bg-primary/12 inline-flex items-center rounded-lg p-2 text-sm",
+              "hover:bg-primary/20 dark:hover:bg-primary/12 focus-visible:outline-primary inline-flex min-h-11 max-w-full items-center rounded-lg p-2 text-sm wrap-anywhere focus-visible:outline-2 focus-visible:outline-offset-2",
               linkClass,
             )}
             aria-label={ariaLabel}
             href={href}
           >
-            {icon && <DynamicIcon icon={icon} className="h-5 w-5 mx-1" />}
+            {icon && (
+              <DynamicIcon
+                icon={icon}
+                className="mx-1 size-5 shrink-0"
+                aria-hidden="true"
+              />
+            )}
             <Fragment set:html={text} />
           </a>
         </li>

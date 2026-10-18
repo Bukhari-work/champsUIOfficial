@@ -1,8 +1,9 @@
 ---
 import Base from "@/layouts/Base.astro";
 import PageHeader from "@/components/shared/PageHeader.astro";
-import { i18n, SETTINGS } from "@/config";
+import { i18n } from "@/config";
 import type { Language } from "@/i18n/ui.ts";
+import { getPageLanguage } from "@/i18n/utils";
 
 import { getSinglePage } from "@/lib/contentParser.ts";
 
@@ -10,7 +11,7 @@ import { Image } from "astro:assets";
 import { render } from "astro:content";
 import { cn } from "@/lib/utils.ts";
 import Social from "@/components/shared/Social.astro";
-import Button from "@/components/ui-astro/Button.astro";
+import ProfileBiography from "@/components/people/ProfileBiography.astro";
 
 // --- Static Paths Function (from [single].astro) ---
 export async function getStaticPaths() {
@@ -56,7 +57,7 @@ export async function getStaticPaths() {
 
 const { person } = Astro.props;
 
-const { people_folder } = SETTINGS;
+const lang = getPageLanguage(Astro.params.lang);
 const {
   name,
   responsibility, // For the card subheader
@@ -66,11 +67,8 @@ const {
 } = person.data;
 const { Content } = await render(person);
 
-// Generate unique IDs for the profile controls.
 const uniqueId = person.id.replace(/[^a-zA-Z0-9]/g, ""); // Sanitize ID
-const contentBoxId = `contentBox-${uniqueId}`;
-const toggleButtonId = `toggleButton-${uniqueId}`;
-const fadeOverlayId = `fadeOverlay-${uniqueId}`;
+const hasBiography = Boolean(person.body?.trim());
 
 const content = { title: name };
 ---
@@ -82,7 +80,7 @@ const content = { title: name };
   <section class="mx-auto flex max-w-6xl flex-col px-2 py-16">
     <article
       class={cn(
-        "group hover:border-primary bg-background relative isolate grid grid-cols-1 gap-6 overflow-hidden rounded-xl border-2 p-6 duration-100  hover:shadow-xl dark:shadow-primary/20",
+        "bg-background relative isolate grid grid-cols-1 gap-6 overflow-hidden rounded-xl border-2 p-6",
       )}
       transition:name={`person-card-${person.id}`}
     >
@@ -93,7 +91,7 @@ const content = { title: name };
           {
             image && (
               // *** UPDATED: Removed <a> tag ***
-              <div class="relative mb-6 h-75 w-75 self-center overflow-hidden rounded-xl lg:mt-6 lg:shrink-0">
+              <div class="relative mb-6 aspect-square w-full max-w-75 self-center overflow-hidden rounded-xl lg:mt-6 lg:shrink-0">
                 <Image
                   class="size-full object-cover"
                   src={image.src}
@@ -109,7 +107,7 @@ const content = { title: name };
 
           <header class="mb-4">
             {/* *** UPDATED: Removed <a> tag *** */}
-            <h2 class="group-hover:text-primary text-xl font-bold">
+            <h2 class="text-xl font-bold">
               <span transition:name={`person-name-${person.id}`}>{name}</span>
             </h2>
             <h3
@@ -125,61 +123,17 @@ const content = { title: name };
           />
         </div>
 
-        <div
-          class="flex flex-col justify-start text-left lg:border-l-2 lg:pl-8"
-        >
-          <div class="relative mt-2 pt-2">
-            <div
-              id={contentBoxId}
-              class="prose dark:prose-invert max-w-none overflow-hidden transition-[max-height] duration-500 ease-in-out"
-              style="max-height: 450px"
-            >
-              <Content />
-              <div
-                id={fadeOverlayId}
-                class="from-background absolute bottom-0 left-0 h-32 w-full bg-gradient-to-t to-transparent transition-opacity duration-500 ease-in-out"
-              >
-              </div>
+        {
+          hasBiography && (
+            <div class="min-w-0 text-left lg:border-l-2 lg:pl-8">
+              <ProfileBiography id={`biography-${uniqueId}`} {lang}>
+                <Content />
+              </ProfileBiography>
             </div>
-            <div class="mt-4 flex w-full justify-center lg:justify-start">
-              <Button
-                class="z-10"
-                id={toggleButtonId}
-                onclick={`toggleContent('${contentBoxId}', '${toggleButtonId}', '${fadeOverlayId}')`}
-                variant="outline"
-              >
-                Read more
-              </Button>
-            </div>
-          </div>
-        </div>
+          )
+        }
       </div>
     </article>
-    <script is:inline>
-      function toggleContent(contentBoxId, toggleButtonId, fadeOverlayId) {
-        const contentBox = document.getElementById(contentBoxId);
-        const toggleButton = document.getElementById(toggleButtonId);
-        const fadeOverlay = document.getElementById(fadeOverlayId);
-
-        if (!contentBox || !toggleButton || !fadeOverlay) return;
-
-        const isExpanded = contentBox.classList.contains("expanded");
-
-        if (!isExpanded) {
-          // Expand
-          contentBox.style.maxHeight = contentBox.scrollHeight + "px";
-          contentBox.classList.add("expanded");
-          toggleButton.textContent = "Read less";
-          fadeOverlay.classList.add("opacity-0"); // Fade out
-        } else {
-          // Collapse
-          contentBox.style.maxHeight = "450px";
-          contentBox.classList.remove("expanded");
-          toggleButton.textContent = "Read more";
-          fadeOverlay.classList.remove("opacity-0"); // Fade in
-        }
-      }
-    </script>
   </section>
 
   {/* Footer content from original [single].astro */}

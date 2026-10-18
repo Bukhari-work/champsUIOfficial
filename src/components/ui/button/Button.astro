@@ -1,0 +1,79 @@
+---
+/**
+ * Bejamas UI Button, installed with `bejamas add button`.
+ * Site adaptations: shared styles, href-based rendering, safe new-tab links.
+ * https://ui.bejamas.com/components/button
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+import { buttonVariants, type ButtonVariantProps } from "./Variants";
+
+type ButtonAsButton = HTMLAttributes<"button"> & {
+  as?: "button";
+  href?: never;
+  target?: never;
+  rel?: never;
+};
+
+type ButtonAsAnchor = Omit<HTMLAttributes<"a">, "type"> & {
+  as?: "a";
+  href: string;
+  type?: never;
+  disabled?: never;
+};
+
+export type Props = (ButtonAsButton | ButtonAsAnchor) &
+  ButtonVariantProps & {
+    "data-slot"?: string;
+  };
+
+const {
+  as: _as,
+  variant = "default",
+  size = "default",
+  class: className,
+  "data-slot": dataSlot = "button",
+  ...rest
+} = Astro.props;
+const classes = cn(
+  "group/button",
+  buttonVariants({ variant, size }),
+  className,
+);
+const target =
+  rest.target ??
+  (rest.href && /^https?:\/\//i.test(rest.href) ? "_blank" : undefined);
+const rel =
+  target === "_blank"
+    ? [
+        ...new Set(`${rest.rel ?? ""} noopener noreferrer`.trim().split(/\s+/)),
+      ].join(" ")
+    : rest.rel;
+---
+
+{
+  rest.href !== undefined ? (
+    <a
+      data-slot={dataSlot}
+      data-variant={variant}
+      data-size={size}
+      class={classes}
+      {...rest}
+      {target}
+      {rel}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      data-slot={dataSlot}
+      data-variant={variant}
+      data-size={size}
+      class={classes}
+      {...rest}
+      type={rest.type ?? "button"}
+    >
+      <slot />
+    </button>
+  )
+}

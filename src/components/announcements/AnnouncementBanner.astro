@@ -3,7 +3,7 @@ import type { Language } from "@/i18n/ui";
 import type { AnnouncementCampaign } from "@/data/announcements";
 import { getLocalizedPath, useTranslations } from "@/i18n/utils";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
-import Button from "@/components/ui-astro/Button.astro";
+import { Button } from "@/components/ui/button";
 import DynamicIcon from "@/components/shared/DynamicIcon";
 
 interface Props {
@@ -71,5 +71,5 @@ const actionHref = content.action?.href.startsWith("/")
 }
 
 <script>
-  import "@/scripts/announcement-banner";
+  import "./AnnouncementBanner.client";
 </script>

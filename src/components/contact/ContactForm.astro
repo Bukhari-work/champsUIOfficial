@@ -1,5 +1,5 @@
 ---
-import Button from "@/components/ui-astro/Button.astro";
+import { Button } from "@/components/ui/button";
 
 export interface Props {
   title: string;
@@ -14,7 +14,12 @@ const { title, url } = Astro.props;
 >
   <h3>{title}</h3>
 
-  <form id="contactForm" method="POST" data-contact-url={url}>
+  <form
+    id="contactForm"
+    class="scroll-mt-32"
+    method="POST"
+    data-contact-url={url}
+  >
     <div class="mb-4">
       <label for="name" class="form-label">
         Full Name <span class="text-red-500">*</span>
