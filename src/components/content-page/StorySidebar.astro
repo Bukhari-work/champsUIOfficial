@@ -1,0 +1,47 @@
+---
+import type { Language } from "@/i18n/ui";
+import { contentCopy } from "@/i18n/content";
+import SidebarCard from "@/components/content-page/SidebarCard.astro";
+
+interface LocalizedFact {
+  label: Record<Language, string>;
+  value: Record<Language, string>;
+}
+
+interface Props {
+  lang: Language;
+  period?: string;
+  hasActivityPeriod: boolean;
+  partner?: string;
+  facts?: LocalizedFact[];
+}
+
+const { lang, period, hasActivityPeriod, partner, facts = [] } = Astro.props;
+const copy = contentCopy[lang];
+const sidebarFacts = [
+  ...(hasActivityPeriod && period
+    ? [{ label: copy.period, value: period }]
+    : []),
+  ...(partner ? [{ label: copy.partner, value: partner }] : []),
+  ...facts.map((fact) => ({
+    label: fact.label[lang],
+    value: fact.value[lang],
+  })),
+];
+const title = lang === "id" ? "Sekilas kegiatan" : "At a glance";
+---
+
+{sidebarFacts.length > 0 && (
+  <div>
+    <SidebarCard {title}>
+      <dl slot="facts" class="space-y-4 text-sm" data-story-facts>
+        {sidebarFacts.map((fact) => (
+          <div>
+            <dt class="text-muted-foreground mb-1 text-xs">{fact.label}</dt>
+            <dd class="font-medium wrap-anywhere">{fact.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </SidebarCard>
+  </div>
+)}

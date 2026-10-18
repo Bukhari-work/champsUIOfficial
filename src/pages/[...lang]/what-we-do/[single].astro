@@ -1,0 +1,124 @@
+---
+import { getEntries, render } from "astro:content";
+import type { MarkdownHeading } from "astro";
+import Base from "@/layouts/Base.astro";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { getLocaleStaticPaths, getLocalizedPath, getPageLanguage } from "@/i18n/utils";
+import { getWhatWeDoActivities, getStoryDocuments, type ActivityItem } from "@/lib/contentCatalog";
+import { SITE } from "@/config";
+import { contentCopy } from "@/i18n/content";
+import { whatWeDoCopy } from "@/i18n/what-we-do";
+import ContentPhoto from "@/components/shared/ContentPhoto.astro";
+import CallToAction from "@/components/shared/CallToAction.astro";
+import ContentBody from "@/components/content-page/ContentBody.astro";
+import StorySidebar from "@/components/content-page/StorySidebar.astro";
+import TableOfContents from "@/components/content-page/TableOfContents.astro";
+import PhotoStage from "@/components/content-page/PhotoStage.astro";
+import RelatedReading from "@/components/content-page/RelatedReading.astro";
+interface Props {
+  item: ActivityItem;
+  related: ActivityItem[];
+}
+export async function getStaticPaths() {
+  return (
+    await Promise.all(
+      getLocaleStaticPaths().map(async ({ params }) => {
+        const lang = getPageLanguage(params.lang);
+        const items = await getWhatWeDoActivities(lang, { includePreviewOnly: true });
+        return items
+          .filter((item) => !item.event)
+          .map((item) => ({
+            params: { ...params, single: item.slug },
+            props: {
+              item,
+              related: items
+                .filter((other) => other.slug !== item.slug)
+                .filter((other) => !other.story?.data.previewOnly)
+                .sort(
+                  (a, b) =>
+                    Number(b.category === item.category) -
+                    Number(a.category === item.category),
+                )
+                .slice(0, 3),
+            },
+          }));
+      }),
+    )
+  ).flat();
+}
+const { item, related } = Astro.props;
+const lang = getPageLanguage(Astro.params.lang);
+if (!item.story) throw new Error(`Missing story record for ${item.slug}`);
+const sections = item.story.data.content.mode === "article"
+  ? item.story.data.content.sections
+  : item.story.data.content.views.flatMap((view) => view.sections);
+const documents = await getStoryDocuments(item.story, sections.map(({ id }) => id), lang);
+const headings = (await Promise.all(
+  Object.values(documents).map(async (document) => (await render(document)).headings),
+)).flat();
+const canonical = new URL(item.href, SITE.base_href);
+const content = { title: item.title, description: item.description, canonical };
+const story = item.story;
+const copy = contentCopy[lang];
+const area = item.category === copy.consulting ? "consultation"
+  : item.category === copy.capacityBuilding ? "capacity" : "research";
+const cta = whatWeDoCopy[lang];
+const authors = await getEntries(story.data.authors[lang]);
+const images = story.data.images;
+const links = [
+  ...headings.filter((heading: MarkdownHeading) => heading.depth === 2).slice(0, 8),
+  ...(images.length ? [{ slug: "story-photos", text: copy.photos }] : []),
+];
+const showContents = links.length >= 3 && (item.post.body ?? "").trim().split(/\s+/).length >= 600;
+---
+
+<Base {content} noindex={story.data.previewOnly}>
+  <ContentLayout
+    kind="story" {lang} title={item.title} description={item.description}
+    shareUrl={canonical.href}
+    context={[
+      { label: copy.work, href: getLocalizedPath("/what-we-do", lang) },
+      { label: item.category, href: `${getLocalizedPath("/what-we-do", lang)}#expertise-${area}` },
+    ]}
+  >
+    {(authors.length > 0 || item.published) && <div
+      slot="metadata" class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm"
+    >
+      {authors.length > 0 && <ul class="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2"
+        aria-label={copy.authors} data-story-authors>
+        {authors.map((author) => <li class="max-w-full min-w-0"><a
+          href={getLocalizedPath(`/about/people/${author.id.split("/").slice(1).join("/")}`, lang)}
+          class="text-primary inline-flex min-h-11 max-w-full items-center gap-3 rounded underline-offset-4 hover:underline"
+        >
+          {author.data.image && <ContentPhoto image={author.data.image} widths={[64, 128]} sizes="40px"
+            class="size-10 shrink-0 rounded-full border object-cover" />}
+          <span class="min-w-0 wrap-anywhere">{author.data.name}</span>
+        </a></li>)}
+      </ul>}
+      {item.published && <p class="text-muted-foreground text-xs" data-story-published>
+        {copy.published}: {item.published}
+      </p>}
+    </div>}
+    <StorySidebar
+      slot="reference"
+      {lang}
+      period={item.date}
+      hasActivityPeriod={Boolean(story.data.activityPeriod)}
+      partner={item.partner}
+      facts={story.data.sidebarFacts}
+    />
+    {story.data.content.mode === "article" && <TableOfContents
+      slot="contents" {lang} {links} substantial={showContents} />}
+    <ContentBody {lang} content={story.data.content} {documents} />
+    {images.length > 0 && <div slot="gallery">
+      <PhotoStage id="story-photos" title={copy.photos} {images} {lang} />
+    </div>}
+    <div slot="ending" class="space-y-10">
+      <CallToAction class="md:flex-row md:items-center md:justify-between"
+        headingId="story-next" size="compact" title={cta[`${area}CtaTitle`]}
+        description={cta[`${area}CtaIntro`]}
+        action={{ href: `${getLocalizedPath("/contact", lang)}#contactForm`, label: cta[`${area}Cta`] }} />
+      <RelatedReading items={related} {lang} />
+    </div>
+  </ContentLayout>
+</Base>

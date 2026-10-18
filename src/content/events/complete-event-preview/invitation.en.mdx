@@ -1,0 +1,62 @@
+---
+title: Invitation
+description: "A complete sample invitation for the Southeast Asia Public Health Leadership & Innovation Forum."
+objectives:
+  intro: "By the end of the forum, participants will be better prepared to:"
+  items:
+    - "Assess practical leadership approaches for complex public health challenges."
+    - "Use evidence and implementation learning to shape policy and services."
+    - "Build partnerships across disciplines, institutions, and countries."
+audience:
+  items:
+    - "Public health professionals and health-system leaders."
+    - "Researchers, educators, and policy practitioners."
+    - "Early-career professionals working across health and development."
+audienceNotes:
+  - icon: "LuLanguages"
+    text: "The working language is <strong>English</strong>; interpretation support will be available for selected sessions."
+  - icon: "LuUsers"
+    text: "This sample programme is designed for a mixed regional cohort of approximately <strong>120 participants</strong>."
+fees:
+  heading: "Participation fee"
+  items:
+    - details: "Early-bird registration"
+      price: "IDR 1,250,000"
+      opensAt: "2026-10-01T00:00:00+07:00"
+      closesAt: "2026-11-15T23:59:00+07:00"
+    - details: "Standard registration"
+      price: "IDR 1,750,000"
+      opensAt: "2026-11-16T00:00:00+07:00"
+      closesAt: "2027-03-10T23:59:00+07:00"
+  includesSummary: "Two-day programme, materials, refreshments, and lunch."
+  includes: "The fee includes <strong>two days of sessions, event materials, refreshments, and lunch</strong>."
+  excludes: "Travel and accommodation are not included. These sample rates are for layout preview only."
+contact:
+  heading: "Questions about this sample event?"
+  links:
+    - href: "https://example.org/event-preview-enquiries"
+      icon: "LuMail"
+      text: "Sample event enquiries"
+---
+
+import AudienceList from "@/components/content-page/mdx/AudienceList.astro";
+import ObjectivesList from "@/components/content-page/mdx/ObjectivesList.astro";
+
+This **sample event** demonstrates how an upcoming event page can bring together its invitation, practical information, programme, participation fees, and registration action. The event, dates, venue, fees, and registration link are illustrative—not a real CHAMPS event.
+
+The two-day forum is framed around a practical question: how can public health leaders turn evidence, partnerships, and local experience into more responsive health systems? Sessions combine short talks, facilitated discussion, and small-group working sessions.
+
+## Who should attend
+
+<AudienceList
+  sourceLang="en"
+  audience={frontmatter.audience}
+  notes={frontmatter.audienceNotes}
+/>
+
+## What participants will take away
+
+<ObjectivesList
+  sourceLang="en"
+  objectives={frontmatter.objectives}
+/>

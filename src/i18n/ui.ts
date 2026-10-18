@@ -9,7 +9,8 @@ export const ui = {
     "nav.home": "Home",
     "nav.about": "About Us",
     "nav.whatWeDo": "What We Do",
-    "nav.news": "News",
+    "nav.events": "Events",
+    "nav.archive": "Activity archive",
     "nav.contact": "Contact",
     "nav.mainNavigation": "Main navigation",
     "nav.homepage": "Homepage",
@@ -20,7 +21,7 @@ export const ui = {
     "nav.description.home": "Get to know CHAMPS UI",
     "nav.description.about": "Our mission, values, and team",
     "nav.description.whatWeDo": "Research, consulting, and training",
-    "nav.description.news": "The latest updates and stories",
+    "nav.description.events": "Training, seminars, and dialogue",
     "nav.description.contact": "Start a conversation with us",
 
     // Call to Action Button
@@ -128,11 +129,6 @@ export const ui = {
       "Reflection of our shared commitment, collaboration, and progress.",
 
     // Homepage - News Section
-    "news.latest": "Latest News",
-    "news.all": "All Posts",
-    "news.page.title": "News",
-    "news.page.description":
-      "Read the latest news, articles, and updates from CHAMPS UI.",
 
     // About Us Page
     "about.visionTitle": "OUR VISION",
@@ -293,17 +289,9 @@ export const ui = {
     // What We Do section sidebar
     "sidebar.whatWeDo.title": "What We Do",
     "sidebar.whatWeDo.item.whatWeDo": "What We Do",
-    "sidebar.whatWeDo.item.experiences": "Experiences",
     "sidebar.whatWeDo.item.partners": "Our Partners",
 
     // --- Experiences Page ---
-    "experiences.meta.title": "Our Experiences & Past Projects",
-    "experiences.meta.description":
-      "Explore the past projects, research, and partnerships that showcase our experience in health policy.",
-    "experiences.title": "Our Experiences",
-    "experiences.description":
-      "We follow a structured, collaborative process to ensure the final product perfectly aligns with your vision and goals.",
-    "experiences.allButton": "All",
     "experiences.contactPrompt": "Want to work with us? Contact us at",
 
     // --- Partners Page ---
@@ -339,25 +327,6 @@ export const ui = {
     "contact.address.line2": "Depok, West Java Indonesia",
 
     // --- Projects Page (Workshops) ---
-    "projects.title": "Latest Workshops",
-    "projects.description":
-      "Browse our upcoming workshops and training events.",
-    "projects.learnMore": "Learn More",
-    "workshops.commonDate": "30 October 2025",
-    "workshops.ghld.title":
-      "Workshop on Global Health Leadership and Diplomacy",
-    "workshops.ghld.description":
-      "This foundational workshop equips you with essential skills in negotiation, diplomacy, and leadership to effectively influence global health policy.",
-    "workshops.ghld.location": "Universitas Diponegoro, Semarang",
-    "workshops.sempls.title":
-      "SEM-PLS Data Analysis Workshop for Health Policy",
-    "workshops.sempls.description":
-      "This workshop is designed to develop participant skills in data analysis using SmartPLS software, enabling better evidence-based health policy development.",
-    "workshops.sempls.location": "FPH Universitas Diponegoro, Semarang",
-    "workshops.ai.title": "AI Literacy Workshop for BPJS Kesehatan Sample Data",
-    "workshops.ai.description":
-      "This workshop is designed to introduce participants to basic AI literacy concepts, BPJS Kesehatan sample data processing techniques, and strategies for composing relevant scientific publications.",
-    "workshops.ai.location": "Universitas Diponegoro, Semarang",
   },
   id: {
     // Site Metadata
@@ -369,7 +338,8 @@ export const ui = {
     "nav.home": "Beranda",
     "nav.about": "Tentang",
     "nav.whatWeDo": "Layanan",
-    "nav.news": "Berita",
+    "nav.events": "Kegiatan",
+    "nav.archive": "Arsip kegiatan",
     "nav.contact": "Kontak",
     "nav.mainNavigation": "Navigasi utama",
     "nav.homepage": "Beranda",
@@ -380,7 +350,7 @@ export const ui = {
     "nav.description.home": "Kenali CHAMPS UI",
     "nav.description.about": "Misi, nilai, dan tim kami",
     "nav.description.whatWeDo": "Riset, konsultasi, dan pelatihan",
-    "nav.description.news": "Kabar dan cerita terbaru",
+    "nav.description.events": "Pelatihan, seminar, dan dialog",
     "nav.description.contact": "Mulai percakapan dengan kami",
 
     // Call to Action Button
@@ -487,11 +457,6 @@ export const ui = {
       "Refleksi dari komitmen, kolaborasi, dan kemajuan bersama kami.",
 
     // Homepage - News Section
-    "news.latest": "Berita Terbaru",
-    "news.all": "Semua Postingan",
-    "news.page.title": "Berita",
-    "news.page.description":
-      "Baca berita, artikel, dan informasi terbaru dari CHAMPS UI.",
 
     // Halaman Tentang Kami
     "about.visionTitle": "VISI KAMI",
@@ -655,17 +620,9 @@ export const ui = {
     // Sidebar untuk bagian Apa yang kami lakukan
     "sidebar.whatWeDo.title": "Layanan",
     "sidebar.whatWeDo.item.whatWeDo": "Layanan Kami",
-    "sidebar.whatWeDo.item.experiences": "Pengalaman",
     "sidebar.whatWeDo.item.partners": "Partner Kami",
 
     // --- Halaman Pengalaman  ---
-    "experiences.meta.title": "Pengalaman & Proyek Terdahulu Kami",
-    "experiences.meta.description":
-      "Jelajahi proyek, penelitian, dan kemitraan terdahulu yang menunjukkan pengalaman kami dalam kebijakan kesehatan.",
-    "experiences.title": "Pengalaman Kami",
-    "experiences.description":
-      "Kami mengikuti proses terstruktur dan kolaboratif untuk memastikan produk akhir selaras dengan visi dan tujuan Anda.",
-    "experiences.allButton": "Semua",
     "experiences.contactPrompt":
       "Ingin bekerja sama dengan kami? Hubungi kami di",
 
@@ -702,25 +659,6 @@ export const ui = {
     "contact.address.line2": "Depok, Jawa Barat Indonesia",
 
     // --- Halaman Program (Lokakarya) ---
-    "projects.title": "Lokakarya Terbaru",
-    "projects.description":
-      "Jelajahi lokakarya dan acara pelatihan kami yang akan datang.",
-    "projects.learnMore": "Pelajari Lebih Lanjut",
-    "workshops.commonDate": "30 Oktober 2025",
-    "workshops.ghld.title":
-      "Lokakarya Kepemimpinan dan Diplomasi Kesehatan Global",
-    "workshops.ghld.description":
-      "Lokakarya dasar ini membekali Anda dengan keterampilan penting dalam negosiasi, diplomasi, dan kepemimpinan untuk memengaruhi kebijakan kesehatan global secara efektif.",
-    "workshops.ghld.location": "Universitas Diponegoro, Semarang",
-    "workshops.sempls.title":
-      "Workshop Analisis Data SEM-PLS untuk Kebijakan Kesehatan",
-    "workshops.sempls.description":
-      "Workshop ini dirancang untuk mengembangkan keterampilan peserta dalam menganalisis data menggunakan perangkat lunak SmartPLS, yang memungkinkan pengembangan kebijakan kesehatan berbasis bukti dengan lebih baik.",
-    "workshops.sempls.location": "FKM Universitas Diponegoro, Semarang",
-    "workshops.ai.title": "Workshop Literasi AI Data Sampel BPJS Kesehatan",
-    "workshops.ai.description":
-      "Workshop ini dirancang untuk memperkenalkan peserta pada konsep dasar literasi AI, teknik pengolahan data sampel BPJS Kesehatan, serta strategi menyusun publikasi ilmiah yang relevan.",
-    "workshops.ai.location": "Universitas Diponegoro, Semarang",
   },
 } as const;
 
@@ -729,7 +667,7 @@ export const headerNavKeys = [
   "nav.home",
   "nav.about",
   "nav.whatWeDo",
-  "nav.news",
+  "nav.events",
   "nav.contact",
 ];
 

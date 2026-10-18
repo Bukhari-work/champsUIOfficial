@@ -1,0 +1,33 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { ProgrammeCategory } from "@/data/programmes";
+import { whatWeDoCopy } from "@/i18n/what-we-do";
+interface Props {
+  category: ProgrammeCategory;
+  lang: Language;
+  id: string;
+}
+const { category, lang, id } = Astro.props;
+---
+
+<section
+  class="min-w-0"
+  aria-labelledby={`${id}-programmes-title`}
+  data-programme-index
+>
+  <h3 id={`${id}-programmes-title`} class="mb-5 text-xl font-semibold">
+    {whatWeDoCopy[lang].howWeHelp}
+  </h3>
+  <dl class="grid gap-x-8 gap-y-6 md:grid-cols-2">
+    {
+      category.programmes.map((programme) => (
+        <div class="border-t pt-4" data-programme>
+          <dt class="text-base font-semibold">{programme.title}</dt>
+          <dd class="text-muted-foreground mt-2 text-sm leading-relaxed">
+            {programme.description}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>

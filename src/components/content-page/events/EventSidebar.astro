@@ -1,0 +1,178 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { EventEntry } from "@/lib/contentCatalog";
+import type { EventInvitationData } from "./EventTypes";
+import { eventDetailCopy } from "./EventDetailCopy";
+import { contentCopy } from "@/i18n/content";
+import { formatEventDate, getEventStatus } from "@/lib/eventDates";
+import { getLinkBehavior } from "@/lib/linkBehavior";
+import SidebarCard from "@/components/content-page/SidebarCard.astro";
+import EventFees from "./EventFees.astro";
+import EventRegistration from "./EventRegistration.astro";
+import { Button } from "@/components/ui/button/index";
+import DynamicIcon from "@/components/shared/DynamicIcon";
+
+interface Props {
+  event: EventEntry;
+  invitationData?: EventInvitationData;
+  lang: Language;
+  sourceLang?: string;
+  hasMaterials?: boolean;
+}
+const {
+  event,
+  invitationData,
+  lang,
+  sourceLang = lang,
+  hasMaterials = false,
+} = Astro.props;
+const c = eventDetailCopy[lang];
+const eventCopy = contentCopy[lang];
+const { data } = event;
+const status = getEventStatus(data);
+const upcoming = status === "upcoming";
+const facts = [
+  {
+    label: eventCopy.when,
+    value: formatEventDate(data, lang),
+    note: data.duration?.[lang],
+    icon: "LuCalendarDays",
+  },
+  ...(data.venue
+    ? [
+        {
+          label: eventCopy.where,
+          value: data.venue[lang],
+          note: undefined,
+          icon: "LuMapPin",
+        },
+      ]
+    : []),
+  {
+    label: eventCopy.format,
+    value: data.format[lang],
+    note: undefined,
+    icon: "LuPresentation",
+  },
+];
+const contact = invitationData?.contact?.links[0];
+const href = contact?.href ?? "#event-enquiries";
+const behavior = getLinkBehavior(href);
+const fee = invitationData?.fees;
+const registration = upcoming && data.registration &&
+  new Date(data.registration.closesAt) > new Date()
+  ? data.registration
+  : undefined;
+const registrationDeadline = registration ? new Intl.DateTimeFormat(lang, {
+  dateStyle: "long", timeStyle: "short", timeZone: "Asia/Jakarta",
+}).format(new Date(registration.closesAt)) : undefined;
+const showAction = upcoming || (status !== "cancelled" && hasMaterials);
+---
+
+<SidebarCard
+  title={c.practical}
+  data-event-sidebar
+  class="min-w-0 text-sm"
+  factsClass="border-0 pt-0"
+  actionClass="border-t pt-5"
+>
+  <h2
+    slot="heading"
+    id="sidebar-practical-title"
+    class="text-base font-semibold"
+  >
+    {c.practical}
+  </h2>
+  <section slot="facts" class="space-y-4" aria-labelledby="sidebar-practical-title">
+    <dl class="space-y-3 text-sm" data-event-facts>
+      {
+        facts.map((fact) => (
+          <div class="relative min-w-0 pl-7">
+            <dt>
+              <span
+                class="text-primary absolute top-1 left-0"
+                aria-hidden="true"
+              >
+                <DynamicIcon icon={fact.icon} className="size-4" />
+              </span>
+              <span class="sr-only">{fact.label}</span>
+            </dt>
+            <dd class="leading-relaxed font-medium wrap-anywhere">
+              {fact.value}
+            </dd>
+            {fact.note && (
+              <dd class="text-muted-foreground mt-1 text-xs leading-relaxed">
+                {fact.note}
+              </dd>
+            )}
+          </div>
+        ))
+      }
+    </dl>
+    {
+      !data.startDate && (
+        <p class="text-muted-foreground mt-5 text-xs leading-relaxed">
+          {eventCopy.monthOnly}
+        </p>
+      )
+    }
+    {
+      status !== "upcoming" && (
+        <p class="text-muted-foreground mt-4 text-xs leading-relaxed">
+          {status === "cancelled" ? eventCopy.cancelledNote : eventCopy.closed}
+        </p>
+      )
+    }
+  </section>
+  {showAction && <Fragment slot="action">
+    {upcoming ? (
+        <section aria-label={c.participation} class="space-y-4">
+          {fee && <EventFees {fee} {lang} {sourceLang} compact />}
+          {registration && <div>
+            <EventRegistration {registration} label={eventCopy.register} />
+            <p class="text-muted-foreground mt-3 text-xs leading-relaxed">
+              {c.registrationCloses}: <time datetime={registration.closesAt}>{registrationDeadline} WIB</time>
+            </p>
+          </div>}
+          <div class="space-y-3">
+            <div
+              class="grid grid-cols-2 gap-2 border-t pt-3"
+              data-sidebar-utilities
+            >
+              {fee && (
+                <Button
+                  href="#participation"
+                  variant="outline"
+                  class="hover:bg-primary-soft hover:text-primary h-auto min-h-11 w-full rounded-lg px-2 py-3 text-xs whitespace-normal shadow-none"
+                >
+                  {c.feeDetails}
+                  <DynamicIcon icon="LuReceiptText" aria-hidden="true" />
+                </Button>
+              )}
+              <div data-event-enquiry class:list={[!fee && "col-span-2"]}>
+                <Button
+                  href={href}
+                  target={behavior.target}
+                  rel={behavior.rel}
+                  variant="outline"
+                  class="hover:bg-primary-soft hover:text-primary h-auto min-h-11 w-full rounded-lg px-2 py-3 text-xs whitespace-normal shadow-none"
+                  aria-label={
+                    contact ? `${c.contact}: ${contact.text}` : undefined
+                  }
+                >
+                  {c.question}
+                  <DynamicIcon icon="LuMessageCircle" aria-hidden="true" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        status !== "cancelled" && hasMaterials && <div>
+          <Button href="#resources" class="h-auto min-h-11 w-full whitespace-normal">
+            {lang === "id" ? "Lihat materi" : "View materials"}
+          </Button>
+        </div>
+      )}
+  </Fragment>}
+</SidebarCard>

@@ -1,0 +1,43 @@
+---
+import type { Language } from "@/i18n/ui";
+import ContentPhoto from "@/components/shared/ContentPhoto.astro";
+
+interface Flyer {
+  src: string;
+  alt: Record<Language, string>;
+  caption?: Record<Language, string>;
+}
+
+interface Props {
+  images: Flyer[];
+  lang: Language;
+}
+
+const { images = [], lang } = Astro.props;
+---
+
+{images.length > 0 && (
+  <div
+    class:list={[
+      "mb-8 grid items-start gap-5",
+      images.length > 1 && "sm:grid-cols-2",
+    ]}
+    data-invitation-flyers
+  >
+    {images.map((image) => (
+      <figure class="mx-auto min-w-0 w-full max-w-md overflow-hidden rounded-xl border bg-background">
+        <ContentPhoto
+          image={{ src: image.src, alt: image.alt[lang] }}
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 640px) 42vw, 92vw"
+          class="h-auto w-full"
+        />
+        {image.caption && (
+          <figcaption class="text-muted-foreground border-t px-4 py-3 text-xs leading-relaxed">
+            {image.caption[lang]}
+          </figcaption>
+        )}
+      </figure>
+    ))}
+  </div>
+)}

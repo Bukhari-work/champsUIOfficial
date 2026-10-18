@@ -1,0 +1,19 @@
+---
+import { getImageAsset } from "@/lib/imageAssets";
+
+interface Props {
+  image: { src: string; alt: string };
+}
+const { image } = Astro.props;
+const asset = await getImageAsset(image.src);
+---
+
+<img
+  src={image.src}
+  alt={image.alt}
+  width={typeof asset === "object" ? asset.width : 192}
+  height={typeof asset === "object" ? asset.height : 192}
+  loading="lazy"
+  decoding="async"
+  class="h-auto w-40 max-w-full shrink-0 bg-white p-2"
+/>

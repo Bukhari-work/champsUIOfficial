@@ -1,0 +1,24 @@
+{
+  "title": {
+    "en": "Building Advocacy Capacity to Combat Drug-Resistant Tuberculosis",
+    "id": "Pengembangan Kapasitas Advokasi Tuberkulosis Resistan Obat"
+  },
+  "summary": {
+    "en": "A CHAMPS capacity-building programme equipping advocates with skills in data-driven decision-making, strategic communication, and policy analysis for DR-TB advocacy.",
+    "id": "Program pengembangan kapasitas CHAMPS untuk membekali para pegiat advokasi dengan keterampilan pengambilan keputusan berbasis data, komunikasi strategis, dan analisis kebijakan untuk TB resistan obat."
+  },
+  "format": {
+    "en": "Capacity-building programme",
+    "id": "Program pengembangan kapasitas"
+  },
+  "kind": "training",
+  "period": "2024-08",
+  "startDate": "2024-08-05",
+  "endDate": "2024-08-09",
+  "status": "completed",
+  "recap": true,
+  "content": {
+    "mode": "article",
+    "sections": [{ "id": "recap" }]
+  }
+}

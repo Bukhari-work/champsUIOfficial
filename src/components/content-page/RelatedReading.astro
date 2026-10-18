@@ -1,0 +1,32 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { ActivityItem } from "@/lib/contentCatalog";
+import ContentCard from "@/components/shared/ContentCard.astro";
+interface Props {
+  items: ActivityItem[];
+  lang: Language;
+}
+const { items, lang } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section
+      aria-labelledby="detail-related-title"
+      class="border-t pt-8"
+      data-detail-related
+    >
+      <h2
+        id="detail-related-title"
+        class="mb-6 text-2xl font-semibold sm:text-3xl"
+      >
+        {lang === "id" ? "Bacaan terkait" : "Related reading"}
+      </h2>
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((item) => (
+          <ContentCard {item} {lang} size="small" />
+        ))}
+      </div>
+    </section>
+  )
+}

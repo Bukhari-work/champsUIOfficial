@@ -1,0 +1,17 @@
+---
+import ContentPhoto from "@/components/shared/ContentPhoto.astro";
+
+interface Props {
+  speaker: { name: string; title: string; image?: { src: string; alt: string } };
+  sourceLang: string;
+}
+const { speaker, sourceLang } = Astro.props;
+---
+
+<li lang={sourceLang} class="flex min-w-0 flex-col items-start gap-4 rounded-xl border p-4 sm:flex-row">
+  {speaker.image && <ContentPhoto image={speaker.image} widths={[128, 256]} sizes="80px" class="aspect-4/5 w-20 shrink-0 rounded-lg object-cover" />}
+  <div class="min-w-0 wrap-anywhere">
+    <h3 class="text-base font-semibold">{speaker.name}</h3>
+    <p class="text-muted-foreground mt-2 text-sm leading-relaxed">{speaker.title}</p>
+  </div>
+</li>

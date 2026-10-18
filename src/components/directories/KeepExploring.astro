@@ -1,0 +1,51 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+import { getLinkBehavior } from "@/lib/linkBehavior";
+interface Props
+  extends Omit<HTMLAttributes<"nav">, "title" | "aria-labelledby"> {
+  headingId: string;
+  title: string;
+  links: { href: string; label: string; description: string }[];
+}
+const {
+  headingId,
+  title,
+  links,
+  class: className,
+  ...attributes
+} = Astro.props;
+---
+
+<nav
+  {...attributes}
+  class={cn("mt-10 border-t pt-6", className)}
+  aria-labelledby={headingId}
+  data-keep-exploring
+>
+  <h2 id={headingId} class="mb-4 text-base font-semibold">{title}</h2>
+  <div class="grid gap-5 md:grid-cols-2">
+    {
+      links.map((link) => {
+        const behavior = getLinkBehavior(link.href);
+        return (
+          <a
+            href={link.href}
+            target={behavior.target}
+            rel={behavior.rel}
+            class="hover:bg-primary-soft focus-visible:outline-primary block rounded-xl border p-5 focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            <>
+              <h3 class="text-primary text-base font-semibold">
+                {link.label} <span aria-hidden="true">{behavior.arrow}</span>
+              </h3>
+              <p class="text-muted-foreground mt-2 text-sm leading-relaxed">
+                {link.description}
+              </p>
+            </>
+          </a>
+        );
+      })
+    }
+  </div>
+</nav>

@@ -1,0 +1,141 @@
+---
+import type { Language } from "@/i18n/ui";
+import { sharingCopy } from "@/i18n/sharing";
+import Share from "@/components/content-page/Share.astro";
+import ContentHeader from "@/components/content-page/ContentHeader.astro";
+
+interface Props {
+  kind: "story" | "event" | "publication" | "questionnaire";
+  lang: Language;
+  title: string;
+  description?: string;
+  context: { label: string; href?: string }[];
+  state?: string;
+  shareUrl?: string;
+  shareDescription?: string;
+}
+const {
+  kind,
+  lang,
+  title,
+  description,
+  context,
+  state,
+  shareUrl,
+  shareDescription,
+} = Astro.props;
+const metadata = await Astro.slots.render("metadata");
+const status = await Astro.slots.render("status");
+const reference = await Astro.slots.render("reference");
+const hasReference = Boolean(reference?.trim());
+const contents = await Astro.slots.render("contents");
+const gallery = await Astro.slots.render("gallery");
+const copy = sharingCopy[lang];
+---
+
+<div
+  id="detail-page"
+  data-detail-page={kind}
+  data-event-state={state}
+  class="scroll-mt-28"
+>
+  <div
+    class:list={[
+      "mx-auto px-5 pt-8 pb-16 sm:px-8 lg:pt-10",
+      hasReference ? "max-w-6xl" : "max-w-3xl",
+    ]}
+  >
+    <div
+      class="grid items-start gap-8 lg:grid-cols-12 lg:gap-x-8"
+      data-detail-grid
+    >
+      <div
+        class:list={[
+          "max-w-prose min-w-0 lg:row-start-1",
+          hasReference ? "lg:col-span-8" : "lg:col-span-12",
+        ]}
+        data-detail-introduction
+      >
+        <ContentHeader {title} {description} {context} {status} {metadata} />
+      </div>
+      {hasReference && <aside
+        class="min-w-0 lg:col-span-4 lg:col-start-9 lg:row-span-2 lg:row-start-1 lg:self-stretch"
+        data-detail-reference
+      >
+        <sidebar-sticky
+          class="block lg:top-28 lg:data-sticky-ready:sticky print:static!"
+          data-detail-record
+          set:html={reference}
+        />
+      </aside>}
+      <article
+        class:list={[
+          "min-w-0 border-t pt-6 lg:col-start-1 lg:row-start-2",
+          kind !== "event" && "max-w-prose",
+          hasReference ? "lg:col-span-8" : "lg:col-span-12",
+        ]}
+        data-detail-body
+      >
+        {
+          contents?.trim() && (
+            <div
+              class="mb-6 print:hidden"
+              data-detail-contents
+              set:html={contents}
+            />
+          )
+        }
+        <div data-detail-reading><slot /></div>
+      </article>
+    </div>
+    {
+      gallery?.trim() && (
+        <div class="mt-10" data-detail-gallery>
+          <div class="mx-auto max-w-3xl" set:html={gallery} />
+        </div>
+      )
+    }
+    <div class="mt-12 space-y-10 sm:mt-16" data-detail-ending>
+      <slot name="ending" />
+      {
+        shareUrl && kind !== "questionnaire" && (
+          <footer
+            id="detail-footer"
+            class="scroll-mt-28 border-y py-5"
+            data-detail-footer={kind}
+          >
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <p class="text-muted-foreground shrink-0 text-xs font-medium">
+                {copy[kind]}
+              </p>
+              <div
+                class="flex min-w-0 flex-wrap items-center gap-2"
+                data-footer-tools
+              >
+                <Share
+                  {lang}
+                  {title}
+                  description={shareDescription ?? description}
+                  url={shareUrl}
+                  class="flex flex-wrap gap-2 [&_a]:min-h-11 [&_a]:min-w-11"
+                />
+                {kind === "publication" && (
+                  <a
+                    href="#citation"
+                    class="text-primary focus-visible:outline-primary inline-flex min-h-11 max-w-full items-center rounded px-2 text-xs font-medium underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+                  >
+                    {copy.cite}
+                  </a>
+                )}
+              </div>
+            </div>
+          </footer>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  import "@/components/content-page/SidebarSticky.client";
+</script>

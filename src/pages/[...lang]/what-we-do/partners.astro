@@ -5,10 +5,10 @@ import {
   useTranslations,
 } from "@/i18n/utils";
 
-import { getSidebar } from "@/navigation.ts";
+import { getSectionNavigation } from "@/navigation.ts";
 
 import type { PageMetadata } from "@/types.ts";
-import SidebarLayout from "@/layouts/SidebarLayout.astro";
+import SectionLayout from "@/layouts/SectionLayout.astro";
 import MarqueePartners from "@/components/partners/MarqueePartners.astro";
 
 export async function getStaticPaths() {
@@ -70,10 +70,10 @@ const content: PageMetadata = {
 };
 
 // --- Sidebar Data (Re-uses the same 'What We Do' sidebar) ---
-const sideBar = getSidebar(lang, "whatWeDo");
+const sectionNavigation = getSectionNavigation(lang, "whatWeDo");
 ---
 
-<SidebarLayout {content} {sideBar}>
+<SectionLayout {content} {sectionNavigation}>
   <h1
     class="text-primary mt-8 mb-6 w-fit scroll-mt-24 text-3xl font-semibold sm:text-4xl lg:text-6xl"
   >
@@ -133,4 +133,4 @@ const sideBar = getSidebar(lang, "whatWeDo");
       <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
     </p>
   </div>
-</SidebarLayout>
+</SectionLayout>

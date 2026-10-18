@@ -1,0 +1,16 @@
+---
+title: Resources
+renderMode: component
+---
+
+import ResourceLinks from "@/components/content-page/mdx/ResourceLinks.astro";
+
+## Resources
+
+<ResourceLinks
+  resources={props.eventData.resources.map((resource) => ({
+    title: resource.title[props.lang],
+    href: resource.href,
+  }))}
+  lang={props.lang}
+/>

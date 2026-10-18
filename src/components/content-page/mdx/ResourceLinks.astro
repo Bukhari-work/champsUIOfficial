@@ -1,0 +1,20 @@
+---
+import type { Language } from "@/i18n/ui";
+import { getLinkBehavior } from "@/lib/linkBehavior";
+
+interface Props {
+  resources: { title: string; href: string }[];
+  lang: Language;
+}
+const { resources, lang } = Astro.props;
+---
+
+{resources.length > 0 && <ul class="divide-y" lang={lang}>
+  {resources.map((resource) => {
+    const link = getLinkBehavior(resource.href);
+    return <li><a href={resource.href} target={link.target} rel={link.rel}
+      class="text-primary focus-visible:outline-primary flex min-h-12 items-center justify-between gap-4 rounded py-4 text-sm font-medium underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2">
+      <span>{resource.title}</span><span aria-hidden="true">{link.arrow}</span>
+    </a></li>;
+  })}
+</ul>}

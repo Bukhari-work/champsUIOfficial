@@ -32,7 +32,6 @@ export const SETTINGS = {
   highlight: 6,
   summary_length: 250,
   people_folder: "people",
-  news_folder: "news",
   publications_folder: "publications",
 
   contact_form_url:

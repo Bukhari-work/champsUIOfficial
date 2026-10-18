@@ -1,0 +1,88 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { getLinkBehavior } from "@/lib/linkBehavior";
+
+interface Props
+  extends Omit<HTMLAttributes<"section">, "title" | "aria-labelledby"> {
+  headingId: string;
+  title: string;
+  description?: string;
+  action: { href: string; label: string };
+  eyebrow?: string;
+  number?: string;
+  headingLevel?: "h2" | "h3" | "h4";
+  size?: "default" | "compact";
+}
+const {
+  headingId,
+  title,
+  description,
+  action,
+  eyebrow,
+  number,
+  headingLevel: Heading = "h2",
+  size = "default",
+  class: className,
+  ...attributes
+} = Astro.props;
+const compact = size === "compact";
+const link = getLinkBehavior(action.href);
+---
+
+<section
+  {...attributes}
+  aria-labelledby={headingId}
+  class={cn(
+    "bg-primary-soft border-t-primary flex min-w-0 flex-col items-start rounded-2xl border border-t-4",
+    compact
+      ? "gap-5 p-5 sm:p-6"
+      : "justify-between gap-6 p-6 sm:p-8 xl:flex-row xl:items-center",
+    className,
+  )}
+  data-cta
+  data-cta-size={size}
+>
+  <div class="max-w-2xl min-w-0" data-chapter={number}>
+    {
+      eyebrow && (
+        <p
+          class="text-primary mb-3 font-mono text-xs uppercase"
+          data-cta-eyebrow
+        >
+          {number && (
+            <>
+              <span class="tabular-nums">{number}</span>
+              <span aria-hidden="true"> / </span>
+            </>
+          )}
+          {eyebrow}
+        </p>
+      )
+    }
+    <Heading
+      id={headingId}
+      class:list={[
+        "font-semibold text-balance",
+        compact ? "text-xl sm:text-2xl" : "text-2xl sm:text-3xl",
+      ]}
+    >
+      {title}
+    </Heading>
+    {
+      description && (
+        <p class="text-muted-foreground mt-3 text-sm leading-relaxed">
+          {description}
+        </p>
+      )
+    }
+  </div>
+  <Button
+    href={action.href}
+    target={link.target}
+    rel={link.rel}
+    class="h-auto min-h-12 max-w-full min-w-0 shrink-0 whitespace-normal xl:max-w-72"
+    data-cta-action>{action.label}</Button
+  >
+</section>

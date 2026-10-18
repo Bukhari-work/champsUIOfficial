@@ -1,0 +1,15 @@
+---
+interface Props {
+  audience: { items: string[] };
+  sourceLang: string;
+  notes?: { icon: string; text: string }[];
+}
+const { audience, sourceLang, notes = [] } = Astro.props;
+---
+
+<div lang={sourceLang} class="space-y-4">
+  <ul class="list-disc space-y-3 pl-5">
+    {audience.items.map((item) => <li>{item}</li>)}
+  </ul>
+  {notes.map((note) => <p class="bg-primary-soft rounded-xl border p-4 text-sm leading-relaxed" set:html={note.text} />)}
+</div>

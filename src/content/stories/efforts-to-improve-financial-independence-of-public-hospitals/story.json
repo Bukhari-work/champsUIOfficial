@@ -1,0 +1,58 @@
+{
+  "title": {
+    "en": "Efforts to Improve Financial Independence of Public Hospitals: Recommendations for Policy Improvement",
+    "id": "Efforts to Improve Financial Independence of Public Hospitals: Recommendations for Policy Improvement"
+  },
+  "description": {
+    "en": "Working with Bappenas, CHAMPS studied public hospital financing and developed a roadmap for greater financial autonomy and sustainable service delivery.",
+    "id": "Bersama Bappenas, CHAMPS mengkaji pembiayaan rumah sakit pemerintah dan menyusun peta jalan untuk kemandirian keuangan serta layanan yang berkelanjutan."
+  },
+  "authors": {
+    "en": [
+      "en/putu-mas-dewi-pratiwi"
+    ],
+    "id": [
+      "id/putu-mas-dewi-pratiwi"
+    ]
+  },
+  "date": "2025-06-19T10:00:00.000Z",
+  "images": [
+    {
+      "src": "/images/news/Efforts to Improve Financial Independence of PUBLIC Hospitals 1.webp",
+      "alt": "Participants discussing the public hospital financing study around a meeting table."
+    },
+    {
+      "src": "/images/news/Efforts to Improve Financial Independence of PUBLIC Hospitals 2.webp",
+      "alt": "Documentation: Efforts to Improve Financial Independence of Public Hospitals: Recommendations for Policy Improvement"
+    },
+    {
+      "src": "/images/news/Efforts to Improve Financial Independence of PUBLIC Hospitals 3.webp",
+      "alt": "Documentation: Efforts to Improve Financial Independence of Public Hospitals: Recommendations for Policy Improvement"
+    },
+    {
+      "src": "/images/news/Efforts to Improve Financial Independence of PUBLIC Hospitals 4.webp",
+      "alt": "Documentation: Efforts to Improve Financial Independence of Public Hospitals: Recommendations for Policy Improvement"
+    }
+  ],
+  "categories": [
+    "Report"
+  ],
+  "tags": [],
+  "draft": false,
+  "partner": {
+    "en": "Bappenas",
+    "id": "Bappenas"
+  },
+  "workType": "research",
+  "activityPeriod": {
+    "startYear": 2024
+  },
+  "content": {
+    "mode": "article",
+    "sections": [
+      {
+        "id": "article"
+      }
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+---
+import Base from "@/layouts/Base.astro";
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  getLocalizedPath,
+} from "@/i18n/utils";
+import { contentCopy } from "@/i18n/content";
+import ActivityArchive from "@/components/directories/what-we-do/ActivityArchive.astro";
+import { SITE } from "@/config";
+export function getStaticPaths() {
+  return getLocaleStaticPaths();
+}
+const lang = getPageLanguage(Astro.params.lang);
+const copy = contentCopy[lang];
+const workPath = getLocalizedPath("/what-we-do", lang);
+const content = {
+  title: `${copy.archiveName} | ${copy.work}`,
+  description: copy.archiveIntro,
+  canonical: new URL(
+    getLocalizedPath("/what-we-do/archive", lang),
+    SITE.base_href,
+  ),
+};
+---
+
+<Base {content}>
+  <div class="mx-auto max-w-6xl px-5 pt-8 pb-16 sm:px-8">
+    <nav
+      aria-label={copy.backWork}
+      class="mb-8 flex flex-wrap items-center gap-3 text-sm"
+    >
+      <a
+        href={workPath}
+        class="text-primary flex min-h-11 items-center rounded underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4"
+        >{copy.work}</a
+      >
+      <span aria-hidden="true">/</span><span aria-current="page"
+        >{copy.archiveName}</span
+      >
+    </nav>
+    <header class="mb-10 max-w-3xl">
+      <p class="text-primary mb-3 text-sm font-semibold">{copy.archiveName}</p>
+      <h1 class="text-4xl font-semibold sm:text-5xl lg:text-6xl">
+        {copy.archiveTitle}
+      </h1>
+      <p class="text-muted-foreground mt-5 text-lg leading-relaxed">
+        {copy.archiveIntro}
+      </p>
+    </header>
+    <ActivityArchive {lang} />
+    <a
+      href={workPath}
+      class="text-primary mt-8 flex min-h-11 w-fit items-center rounded text-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4"
+      >← {copy.backWork}</a
+    >
+  </div>
+</Base>

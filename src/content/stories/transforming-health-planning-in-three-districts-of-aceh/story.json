@@ -1,0 +1,51 @@
+{
+  "title": {
+    "en": "From Data to Action: Transforming Health Planning in Three Districts of Aceh",
+    "id": "Dari Data ke Aksi Nyata: Transformasi Perencanaan Kesehatan di Tiga Kabupaten Aceh"
+  },
+  "description": {
+    "en": "CHAMPS supported health offices in Gayo Lues, Bener Meriah, and West Aceh with evidence-based planning and preparation of strategic and annual work plans.",
+    "id": "CHAMPS mendampingi dinas kesehatan Gayo Lues, Bener Meriah, dan Aceh Barat dalam perencanaan berbasis bukti serta penyusunan rencana strategis dan rencana kerja tahunan."
+  },
+  "authors": {
+    "en": [
+      "en/aulia-khairina-khairil"
+    ],
+    "id": [
+      "id/aulia-khairina-khairil"
+    ]
+  },
+  "date": "2025-06-19T10:00:00.000Z",
+  "images": [
+    {
+      "src": "/images/news/Pendampingan Tata Kelola Program Kesehatan (ROREN) 1.webp",
+      "alt": "Group photograph of participants in the Aceh health planning assistance programme."
+    },
+    {
+      "src": "/images/news/Pendampingan Tata Kelola Program Kesehatan (ROREN) 2.webp",
+      "alt": "Documentation: From Data to Action: Transforming Health Planning in Three Districts of Aceh"
+    }
+  ],
+  "categories": [
+    "Report",
+    "training"
+  ],
+  "tags": [],
+  "draft": false,
+  "partner": {
+    "en": "Ministry of Health and district health offices",
+    "id": "Kementerian Kesehatan dan dinas kesehatan kabupaten"
+  },
+  "workType": "consulting",
+  "activityPeriod": {
+    "startYear": 2025
+  },
+  "content": {
+    "mode": "article",
+    "sections": [
+      {
+        "id": "article"
+      }
+    ]
+  }
+}

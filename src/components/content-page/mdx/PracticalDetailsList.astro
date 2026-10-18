@@ -1,0 +1,11 @@
+---
+interface Props {
+  details: { items: { text: string }[] };
+  sourceLang: string;
+}
+const { details, sourceLang } = Astro.props;
+---
+
+<ul lang={sourceLang} class="list-disc space-y-2 pl-5">
+  {details.items.map((item) => <li>{item.text}</li>)}
+</ul>

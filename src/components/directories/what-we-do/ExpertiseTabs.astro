@@ -1,0 +1,110 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { ProgrammeCategory } from "@/data/programmes";
+import type { ActivityItem } from "@/lib/contentCatalog";
+import { contentCopy } from "@/i18n/content";
+import { getLocalizedPath } from "@/i18n/utils";
+import CallToAction from "@/components/shared/CallToAction.astro";
+import DynamicIcon from "@/components/shared/DynamicIcon";
+import AreaContent from "./AreaContent.astro";
+import { whatWeDoCopy } from "@/i18n/what-we-do";
+interface Props {
+  categories: ProgrammeCategory[];
+  items: ActivityItem[];
+  lang: Language;
+}
+const { categories, items, lang } = Astro.props;
+const copy = whatWeDoCopy[lang];
+const content = contentCopy[lang];
+const workCategories = {
+  research: content.research,
+  capacity: content.capacityBuilding,
+  consultation: content.consulting,
+};
+const icons = {
+  research: "LuMicroscope",
+  capacity: "LuGraduationCap",
+  consultation: "LuCompass",
+  csr: "LuHeartHandshake",
+};
+const groups = categories.map((category) => {
+  const categoryId = category.id;
+  return {
+    category,
+    id: `expertise-${categoryId}`,
+    items:
+      categoryId === "csr"
+        ? []
+        : items.filter((item) => item.category === workCategories[categoryId]),
+  };
+});
+---
+
+<expertise-navigation id="expertise" class="block min-w-0 scroll-mt-32">
+  <nav
+    class="mb-8 flex min-w-0 gap-1 border-b md:grid md:auto-rows-fr md:grid-cols-4 md:gap-3 md:border-b-0"
+    aria-label={copy.expertise}
+    data-expertise-tablist
+  >
+    {
+      groups.map(({ category, id }) => (
+        <a
+          id={`${id}-tab`}
+          href={`#${id}`}
+          aria-label={copy[`${category.id}Tab`]}
+          class="text-muted-foreground hover:text-primary aria-selected:text-primary aria-selected:border-primary focus-visible:outline-primary group md:hover:bg-primary-soft md:aria-selected:bg-primary-soft flex min-h-12 min-w-0 flex-auto items-center justify-center border-b-2 border-transparent px-1 py-3 text-xs font-semibold whitespace-nowrap focus-visible:outline-2 focus-visible:-outline-offset-2 motion-safe:transition-colors motion-safe:duration-150 max-md:min-w-11 sm:px-2 sm:text-sm md:min-h-32 md:flex-none md:flex-col md:items-start md:justify-start md:gap-4 md:rounded-t-xl md:p-4 md:whitespace-normal"
+          data-expertise-tab
+        >
+          <span
+            class="bg-background text-primary hidden size-10 items-center justify-center rounded-xl border md:flex"
+            aria-hidden="true"
+          >
+            <DynamicIcon icon={icons[category.id]} className="size-5" />
+          </span>
+          <span class="min-w-0">
+            <span class="block leading-snug">
+              <span class="md:hidden">
+                {category.id === "capacity"
+                  ? copy.capacityMobileTab
+                  : copy[`${category.id}Tab`]}
+              </span>
+              <span class="hidden md:inline">{copy[`${category.id}Tab`]}</span>
+            </span>
+            <span class="text-muted-foreground mt-2 hidden text-xs leading-relaxed font-normal md:block">
+              {copy[`${category.id}TabDescription`]}
+            </span>
+          </span>
+        </a>
+      ))
+    }
+  </nav>
+  {
+    groups.map(({ category, id, items }) => (
+      <section
+        id={id}
+        class="mb-10 min-w-0 scroll-mt-32 [[hidden]]:hidden!"
+        aria-labelledby={`${id}-title`}
+        data-expertise-panel
+      >
+        <AreaContent {category} {items} {lang} {id} />
+        <CallToAction
+          class="mt-12 sm:mt-16"
+          headingId={`${id}-cta-title`}
+          headingLevel="h3"
+          eyebrow={copy.nextStep}
+          title={copy[`${category.id}CtaTitle`]}
+          description={copy[`${category.id}CtaIntro`]}
+          action={{
+            href: `${getLocalizedPath("/contact", lang)}#contactForm`,
+            label: copy[`${category.id}Cta`],
+          }}
+          data-area-cta
+        />
+      </section>
+    ))
+  }
+</expertise-navigation>
+
+<script>
+  import "./ExpertiseTabs.client";
+</script>

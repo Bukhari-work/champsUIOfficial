@@ -1,0 +1,187 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { EventEntry } from "@/lib/contentCatalog";
+import { eventPath } from "@/lib/contentCatalog";
+import { formatEventDate } from "@/lib/eventDates";
+import { contentCopy } from "@/i18n/content";
+import { getLocalizedPath } from "@/i18n/utils";
+import { Button } from "@/components/ui/button/index";
+import { eventsDirectoryCopy } from "./Copy";
+export type UpcomingEventItem = EventEntry & { href?: string };
+interface Props {
+  lang: Language;
+  events: UpcomingEventItem[];
+}
+const { lang, events } = Astro.props;
+const copy = contentCopy[lang];
+const directory = eventsDirectoryCopy[lang];
+const hrefFor = (event: UpcomingEventItem) =>
+  event.data.listingOnly ? undefined : (event.href ?? eventPath(event, lang));
+const featuredEvents = events.slice(0, 1);
+const remainingEvents = events.slice(1);
+---
+
+<section
+  id="upcoming-events"
+  class="scroll-mt-28"
+  aria-labelledby="upcoming-title"
+  data-upcoming-events
+>
+  <div class="mb-6 max-w-2xl">
+    <h2 id="upcoming-title" class="text-2xl font-semibold sm:text-3xl">
+      {copy.upcomingTitle}
+    </h2>
+    <p class="text-muted-foreground mt-3 text-sm leading-relaxed">
+      {events.length ? directory.upcomingIntro : copy.noUpcomingText}
+    </p>
+  </div>
+  {
+    events.length ? (
+      <div class="space-y-4">
+        {featuredEvents.map((event) => (
+          <article
+            class="bg-primary-soft overflow-hidden rounded-2xl border"
+            data-upcoming-feature
+          >
+            <div class="grid lg:grid-cols-3">
+              <div class="p-6 sm:p-8 lg:col-span-2 lg:col-start-2 lg:row-start-1">
+                <p class="text-primary mb-4 font-mono text-xs uppercase">
+                  {directory.next}
+                </p>
+                <h3 class="max-w-3xl text-2xl font-semibold text-balance sm:text-3xl">
+                  {hrefFor(event) ? (
+                    <a
+                      href={hrefFor(event)}
+                      class="hover:text-primary focus-visible:outline-primary rounded underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                      data-upcoming-title-link
+                    >
+                      {event.data.title[lang]}
+                    </a>
+                  ) : (
+                    event.data.title[lang]
+                  )}
+                </h3>
+                <p class="text-muted-foreground mt-4 max-w-2xl text-sm leading-relaxed sm:text-base">
+                  {event.data.summary[lang]}
+                </p>
+              </div>
+              <div class="border-t p-6 sm:p-8 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:border-t-0 lg:border-r">
+                <p class="text-xl font-semibold text-balance sm:text-2xl lg:text-3xl">
+                  {formatEventDate(event.data, lang)}
+                </p>
+                <p class="text-muted-foreground mt-2 text-xs leading-relaxed">
+                  {event.data.duration?.[lang]}
+                </p>
+                <dl class="mt-4 grid grid-cols-2 gap-4 text-sm lg:grid-cols-1">
+                  {event.data.venue && (
+                    <div>
+                      <dt class="text-muted-foreground mb-1">{copy.where}</dt>
+                      <dd>{event.data.venue[lang]}</dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt class="text-muted-foreground mb-1">{copy.format}</dt>
+                    <dd>{event.data.format[lang]}</dd>
+                  </div>
+                </dl>
+              </div>
+              <div class="px-6 pb-6 sm:px-8 sm:pb-8 lg:col-span-2 lg:col-start-2 lg:row-start-2">
+                {hrefFor(event) ? (
+                  <Button
+                    href={hrefFor(event)}
+                    class="h-auto min-h-11 max-w-full whitespace-normal"
+                    data-upcoming-action
+                  >
+                    {directory.programmeAction}
+                    <span class="sr-only">: {event.data.title[lang]}</span>
+                  </Button>
+                ) : (
+                  <p class="text-muted-foreground text-sm">
+                    {copy.listingOnly}
+                  </p>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-primary-soft flex flex-col items-start justify-between gap-5 rounded-xl border p-6 sm:flex-row sm:items-center">
+        <h3 class="text-lg font-semibold">{copy.noUpcoming}</h3>
+        <Button
+          href={getLocalizedPath("/contact", lang)}
+          variant="outline"
+          class="h-auto min-h-11 shrink-0 whitespace-normal"
+        >
+          {copy.contact}
+        </Button>
+      </div>
+    )
+  }
+  {
+    remainingEvents.length > 0 && (
+      <div class="mt-8" data-upcoming-remainder>
+        <>
+          <h3 class="mb-4 text-lg font-semibold">{directory.alsoUpcoming}</h3>
+          <ol class="divide-y rounded-2xl border">
+            {remainingEvents.map((event) => {
+              const href = hrefFor(event);
+              const Row = href ? "a" : "div";
+              const titleId = `upcoming-${event.id}-title`;
+              const actionId = `upcoming-${event.id}-action`;
+              return (
+                <li data-upcoming-row>
+                  <Row
+                    {href}
+                    aria-labelledby={
+                      href ? `${titleId} ${actionId}` : undefined
+                    }
+                    class:list={[
+                      "flex min-h-11 flex-col gap-3 rounded-xl px-5 py-5 sm:flex-row sm:items-center sm:gap-6 sm:px-6",
+                      href &&
+                        "group hover:bg-primary-soft focus-visible:outline-primary focus-visible:bg-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2",
+                    ]}
+                    data-upcoming-link={href ? "" : undefined}
+                  >
+                    <p class="text-primary shrink-0 text-sm font-semibold sm:w-40">
+                      {formatEventDate(event.data, lang)}
+                    </p>
+                    <div class="min-w-0 flex-1">
+                      <h4
+                        id={titleId}
+                        class:list={[
+                          "text-lg font-semibold",
+                          href &&
+                            "group-hover:text-primary group-focus-visible:text-primary",
+                        ]}
+                      >
+                        {event.data.title[lang]}
+                      </h4>
+                      <p class="text-muted-foreground mt-2 text-sm leading-relaxed">
+                        {event.data.format[lang]}
+                        {event.data.venue && ` · ${event.data.venue[lang]}`}
+                      </p>
+                    </div>
+                    {href ? (
+                      <span
+                        id={actionId}
+                        class="text-primary inline-flex shrink-0 items-center gap-2 text-sm font-semibold underline underline-offset-4"
+                      >
+                        {directory.programmeAction}
+                        <span aria-hidden="true">→</span>
+                      </span>
+                    ) : (
+                      <p class="text-muted-foreground text-sm">
+                        {copy.listingOnly}
+                      </p>
+                    )}
+                  </Row>
+                </li>
+              );
+            })}
+          </ol>
+        </>
+      </div>
+    )
+  }
+</section>

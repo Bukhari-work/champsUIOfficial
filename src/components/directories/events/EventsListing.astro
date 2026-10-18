@@ -1,0 +1,172 @@
+---
+import type { Language } from "@/i18n/ui";
+import { getLocalizedPath } from "@/i18n/utils";
+import { contentCopy } from "@/i18n/content";
+import {
+  eventDirectoryItem,
+  getActivities,
+  type EventEntry,
+} from "@/lib/contentCatalog";
+import { getEventStatus } from "@/lib/eventDates";
+import { selectFeaturedEvent } from "@/lib/eventDirectory";
+import PageHero from "@/components/directories/PageHero.astro";
+import ContentDirectory from "@/components/directories/ContentDirectory.astro";
+import { openChaptersDirectory } from "@/components/directories/DirectoryPresets";
+import FeaturedContent from "@/components/directories/FeaturedContent.astro";
+import CallToAction from "@/components/shared/CallToAction.astro";
+import KeepExploring from "@/components/directories/KeepExploring.astro";
+import UpcomingEvents from "./UpcomingEvents.astro";
+import { eventsDirectoryCopy } from "./Copy";
+interface Props {
+  events: EventEntry[];
+  lang: Language;
+}
+const { events, lang } = Astro.props;
+const copy = contentCopy[lang];
+const directory = eventsDirectoryCopy[lang];
+const upcoming = events
+  .filter((event) => getEventStatus(event.data) === "upcoming")
+  .toSorted(
+    (a, b) =>
+      (a.data.startDate ?? a.data.period).localeCompare(
+        b.data.startDate ?? b.data.period,
+      ) || a.id.localeCompare(b.id),
+  );
+const past = events.filter(
+  (event) => getEventStatus(event.data) !== "upcoming",
+);
+const work = await getActivities(lang);
+const imageFor = (event: EventEntry) =>
+  work.find((item) => item.event?.id === event.id)?.image;
+const featured = selectFeaturedEvent(past, work, lang);
+const featuredItem = featured && eventDirectoryItem(featured, lang);
+const featuredImage = featured && imageFor(featured);
+const featuredHref = featuredItem?.href;
+const pastItems = past
+  .filter((event) => event.id !== featured?.id)
+  .map((event) => ({
+    ...eventDirectoryItem(event, lang),
+    image: imageFor(event),
+    action: event.data.recap ? copy.readRecap : directory.detailsAction,
+  }));
+const pastTitle = featured ? directory.otherPast : copy.pastTitle;
+---
+
+<div class="mx-auto max-w-400 px-5 pt-10 pb-16 sm:px-8" data-events-directory>
+  <slot name="notice" />
+  <PageHero
+    eyebrow={copy.events}
+    title={directory.heroTitle}
+    description={directory.heroIntro}
+    image={{
+      src: "/images/news/National Health Seminar 2025 4.webp",
+      alt: directory.heroImageAlt,
+    }}
+    textLink={{
+      href: `${getLocalizedPath("/contact", lang)}#contactForm`,
+      label: directory.heroAction,
+    }}
+  />
+  <UpcomingEvents {lang} events={upcoming} />
+  {
+    featured && featuredItem && (
+      <section
+        class="mt-12 border-t pt-10 sm:mt-16"
+        aria-labelledby="featured-title"
+        data-featured-event
+      >
+        <>
+          <div class="mb-6 max-w-2xl">
+            <p class="text-primary mb-3 font-mono text-xs uppercase">
+              {directory.featured}
+            </p>
+            <h2 id="featured-title" class="text-2xl font-semibold sm:text-3xl">
+              {directory.themes}
+            </h2>
+            <p class="text-muted-foreground mt-3 text-sm leading-relaxed">
+              {directory.contributionIntro}
+            </p>
+          </div>
+          <FeaturedContent
+            headingId="featured-event-title"
+            headingLevel="h3"
+            title={featuredItem.title}
+            description={featuredItem.description}
+            eyebrow={`${featuredItem.category} · ${featuredItem.date}`}
+            image={featuredImage}
+            themes={
+              featured.data.topics?.[lang]?.length
+                ? {
+                    label: directory.learning,
+                    items: featured.data.topics[lang].slice(0, 3),
+                  }
+                : undefined
+            }
+            partner={
+              featured.data.partner
+                ? { label: copy.partner, value: featured.data.partner[lang] }
+                : undefined
+            }
+            action={
+              featuredHref
+                ? { href: featuredHref, label: copy.readRecap }
+                : undefined
+            }
+          />
+        </>
+      </section>
+    )
+  }
+  {
+    pastItems.length > 0 && (
+      <section
+        id="past-events"
+        class="bg-primary-soft mt-12 scroll-mt-28 rounded-2xl border p-5 sm:mt-16 sm:p-8"
+        aria-labelledby="past-title"
+      >
+        <>
+          <div class="mb-6 max-w-2xl">
+            <h2 id="past-title" class="text-2xl font-semibold sm:text-3xl">
+              {pastTitle}
+            </h2>
+            <p class="text-muted-foreground mt-3 text-sm leading-relaxed">
+              {directory.pastIntro}
+            </p>
+          </div>
+          <ContentDirectory
+            {lang}
+            items={pastItems}
+            id="past-results"
+            label={pastTitle}
+            {...openChaptersDirectory}
+            yearHeadingLevel="h3"
+            cardHeadingLevel="h4"
+          />
+        </>
+      </section>
+    )
+  }
+  <CallToAction
+    class="mt-16"
+    headingId="collaboration-title"
+    title={directory.contactTitle}
+    description={directory.contactIntro}
+    action={{ href: getLocalizedPath("/contact", lang), label: copy.contact }}
+  />
+  <KeepExploring
+    headingId="events-next-links-title"
+    title={copy.keepExploring}
+    links={[
+      {
+        href: getLocalizedPath("/what-we-do", lang),
+        label: copy.exploreExpertise,
+        description: copy.expertiseLinkIntro,
+      },
+      {
+        href: getLocalizedPath("/what-we-do/archive", lang),
+        label: copy.archiveName,
+        description: copy.archiveLinkIntro,
+      },
+    ]}
+  />
+</div>

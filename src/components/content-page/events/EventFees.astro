@@ -1,0 +1,197 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { EventInvitationData } from "./EventTypes";
+import { eventDetailCopy } from "./EventDetailCopy";
+import { getFeeState } from "./FeeState";
+
+interface Props {
+  fee: NonNullable<EventInvitationData["fees"]>;
+  lang: Language;
+  sourceLang: string;
+  compact?: boolean;
+  archived?: boolean;
+}
+const {
+  fee,
+  lang,
+  sourceLang,
+  compact = false,
+  archived = false,
+} = Astro.props;
+const p = eventDetailCopy[lang];
+const visibleRateCount = fee.items.filter(
+  (rate) => getFeeState(rate, Date.now(), archived) !== "ended",
+).length;
+const summarize = compact && visibleRateCount > 4;
+const formatter = new Intl.DateTimeFormat(lang, {
+  dateStyle: "medium",
+  timeStyle: "short",
+  timeZone: "Asia/Jakarta",
+});
+const labels = {
+  standard: "",
+  current: p.feeAvailable,
+  scheduled: p.feeScheduled,
+  ended: p.feeEnded,
+};
+---
+
+<event-fees
+  class="block space-y-3 text-sm"
+  data-archived={String(archived)}
+  data-fee-summary={String(compact)}
+  lang={sourceLang}
+>
+  <h3 class:list={["font-semibold", compact ? "text-base" : "text-lg"]}>
+    {fee.heading}
+  </h3>
+  {
+    compact && (
+      <p
+        data-fee-overflow-summary
+        hidden={!summarize}
+        lang={lang}
+        class="[[hidden]]:hidden!"
+      >
+        <span data-fee-option-count>{visibleRateCount}</span> {p.feeOptions}
+      </p>
+    )
+  }
+  <dl
+    data-fee-list
+    hidden={summarize}
+    class:list={["[[hidden]]:hidden!", compact ? "space-y-2" : "space-y-3"]}
+  >
+    {
+      fee.items.map((rate) => {
+        const state = getFeeState(rate, Date.now(), archived);
+        return (
+          <div
+            class:list={[
+              "group min-w-0",
+              compact
+                ? "data-[state=current]:border-primary data-[state=current]:bg-primary-soft grid grid-cols-2 gap-x-3 gap-y-1 rounded-r-lg border-l-2 border-transparent px-3 py-3 text-sm data-[state=ended]:hidden"
+                : "data-[state=current]:border-primary data-[state=current]:bg-background data-[state=ended]:text-muted-foreground space-y-2 rounded-lg border border-transparent p-3",
+            ]}
+            data-fee-rate
+            data-state={state}
+            data-opens-at={rate.opensAt}
+            data-closes-at={rate.closesAt}
+          >
+            <dt
+              class:list={[
+                compact
+                  ? "min-w-0 wrap-anywhere"
+                  : "flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1",
+              ]}
+            >
+              <span class="font-medium">{rate.details ?? p.fee}</span>
+              {compact ? (
+                <div class="mt-1">
+                  <span
+                    class="text-muted-foreground group-data-[state=current]:bg-primary group-data-[state=current]:text-primary-foreground inline-flex max-w-full items-center rounded-full text-xs font-normal group-data-[state=current]:px-2 group-data-[state=current]:py-1 group-data-[state=current]:font-medium [[hidden]]:hidden!"
+                    data-fee-status
+                    data-current={p.feeAvailable}
+                    data-scheduled={p.feeScheduled}
+                    data-ended={p.feeEnded}
+                    lang={lang}
+                    hidden={state === "standard"}
+                  >
+                    {labels[state]}
+                  </span>
+                </div>
+              ) : (
+                <span
+                  class="text-xs [[hidden]]:hidden!"
+                  data-fee-status
+                  data-current={p.feeAvailable}
+                  data-scheduled={p.feeScheduled}
+                  data-ended={p.feeEnded}
+                  hidden={state === "standard"}
+                  lang={lang}
+                >
+                  {labels[state]}
+                </span>
+              )}
+            </dt>
+            <dd
+              class:list={[
+                "font-semibold wrap-anywhere",
+                compact && "group-data-[state=current]:text-primary text-right",
+              ]}
+            >
+              {rate.price}
+            </dd>
+            {(rate.opensAt || rate.closesAt) && (
+              <dd
+                class:list={[
+                  "text-muted-foreground space-y-1 text-xs leading-relaxed",
+                  compact && "col-span-2",
+                ]}
+                lang={lang}
+              >
+                {rate.opensAt && (
+                  <p
+                    class:list={[
+                      compact &&
+                        rate.closesAt &&
+                        "hidden group-data-[state=scheduled]:block",
+                    ]}
+                  >
+                    {p.feeFrom}{" "}
+                    <time datetime={rate.opensAt}>
+                      {formatter.format(new Date(rate.opensAt))} WIB
+                    </time>
+                  </p>
+                )}
+                {rate.closesAt && (
+                  <p
+                    class:list={[
+                      compact && "group-data-[state=scheduled]:hidden",
+                    ]}
+                  >
+                    {p.feeUntil}{" "}
+                    <time datetime={rate.closesAt}>
+                      {formatter.format(new Date(rate.closesAt))} WIB
+                    </time>
+                  </p>
+                )}
+              </dd>
+            )}
+          </div>
+        );
+      })
+    }
+  </dl>
+  {
+    compact && (
+      <p
+        data-fee-empty
+        hidden={
+          !fee.items.length ||
+          fee.items.some(
+            (rate) => getFeeState(rate, Date.now(), archived) !== "ended",
+          )
+        }
+        lang={lang}
+        class="text-muted-foreground text-xs leading-relaxed [[hidden]]:hidden!"
+      >
+        {p.feePeriodsEnded}
+      </p>
+    )
+  }
+  {
+    compact && fee.includesSummary && (
+      <p
+        class="text-muted-foreground text-xs leading-relaxed"
+        data-event-inclusions
+      >
+        {fee.includesSummary}
+      </p>
+    )
+  }
+</event-fees>
+
+<script>
+  import "./EventFees.client";
+</script>

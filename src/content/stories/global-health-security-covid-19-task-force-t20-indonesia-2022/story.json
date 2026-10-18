@@ -1,0 +1,54 @@
+{
+  "title": {
+    "en": "Global Health Security & COVID-19 Task Force T20 Indonesia 2022",
+    "id": "Global Health Security & COVID-19 Task Force T20 Indonesia 2022"
+  },
+  "description": {
+    "en": "CHAMPS hosted the T20 Indonesia global health task force, bringing experts together to develop policy recommendations for G20 leaders.",
+    "id": "CHAMPS menjadi tuan rumah gugus tugas kesehatan global T20 Indonesia, mempertemukan para pakar untuk menyusun rekomendasi kebijakan bagi pemimpin G20."
+  },
+  "authors": {
+    "en": [
+      "en/aulia-khairina-khairil"
+    ],
+    "id": [
+      "en/aulia-khairina-khairil"
+    ]
+  },
+  "date": "2025-06-19T10:00:00.000Z",
+  "images": [
+    {
+      "src": "/images/news/Global Health Security COVID-19 Task Force T20 Indonesia 2022 1.webp",
+      "alt": "Panel speakers on stage at the T20 Indonesia summit."
+    },
+    {
+      "src": "/images/news/Global Health Security COVID-19 Task Force T20 Indonesia 2022 2.webp",
+      "alt": "Documentation: Global Health Security & COVID-19 Task Force T20 Indonesia 2022"
+    },
+    {
+      "src": "/images/news/Global Health Security COVID-19 Task Force T20 Indonesia 2022 3.webp",
+      "alt": "Documentation: Global Health Security & COVID-19 Task Force T20 Indonesia 2022"
+    },
+    {
+      "src": "/images/news/Global Health Security COVID-19 Task Force T20 Indonesia 2022 4.webp",
+      "alt": "Documentation: Global Health Security & COVID-19 Task Force T20 Indonesia 2022"
+    }
+  ],
+  "categories": [
+    "Report"
+  ],
+  "tags": [],
+  "draft": false,
+  "workType": "research",
+  "activityPeriod": {
+    "startYear": 2022
+  },
+  "content": {
+    "mode": "article",
+    "sections": [
+      {
+        "id": "article"
+      }
+    ]
+  }
+}

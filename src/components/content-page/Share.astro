@@ -1,0 +1,147 @@
+---
+import { Button } from "@/components/ui/button/index";
+import DynamicIcon from "@/components/shared/DynamicIcon";
+import type { Language } from "@/i18n/ui";
+import { getLangFromUrl } from "@/i18n/utils";
+import { sharingCopy } from "@/i18n/sharing";
+
+import { SITE } from "@/config.ts";
+
+const base_href = SITE.base_href;
+
+interface shareProps {
+  title?: string;
+  description?: string;
+  collection?: string;
+  slug?: string;
+  url?: string;
+  class?: string;
+  lang?: Language;
+}
+const {
+  title,
+  description,
+  collection,
+  slug,
+  url,
+  class: className,
+  lang = getLangFromUrl(Astro.url),
+} = Astro.props as shareProps;
+const copy = sharingCopy[lang];
+const shareUrl = url ?? `${base_href}/${collection}/${slug}`;
+const shareTitle = encodeURIComponent(title ?? "");
+const shareDescription = encodeURIComponent(description ?? "");
+const encodedUrl = encodeURIComponent(shareUrl);
+---
+
+<ul class={className} data-share-actions>
+  <li
+    class="inline-block [[hidden]]:hidden!"
+    data-share-copy-control
+    data-copy-value={shareUrl}
+    data-copy-success={copy.linkCopied}
+    data-copy-failed={copy.copyFailed}
+    hidden
+  >
+    <Button variant="outline" class="min-h-11 min-w-40" data-share-copy>
+      {copy.copyLink}
+      <DynamicIcon icon="LuCopy" aria-hidden="true" />
+    </Button>
+    <p
+      class="text-muted-foreground text-xs not-empty:mt-2"
+      role="status"
+      aria-live="polite"
+      data-share-copy-status
+    >
+    </p>
+  </li>
+  <li class="inline-block">
+    <Button
+      variant="outline"
+      size="sm"
+      class="gap-0"
+      aria-label={copy.whatsapp}
+      title={copy.whatsapp}
+      href={`https://wa.me/?text=${shareTitle}%20${encodedUrl}`}
+      target="_blank"
+      rel="noreferrer noopener"
+    >
+      <DynamicIcon icon="IoLogoWhatsapp" aria-hidden="true" />
+    </Button>
+  </li>
+  <li class="inline-block">
+    <Button
+      variant="outline"
+      size="sm"
+      class="gap-0"
+      aria-label={copy.email}
+      title={copy.email}
+      href={`mailto:?subject=${shareTitle}&body=${shareDescription}%20${encodedUrl}`}
+      target="_blank"
+      rel="noreferrer noopener"
+    >
+      <DynamicIcon icon="IoMail" aria-hidden="true" />
+    </Button>
+  </li>
+  <li class="inline-block">
+    <Button
+      variant="outline"
+      size="sm"
+      class="gap-0"
+      aria-label={copy.linkedin}
+      title={copy.linkedin}
+      href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${shareTitle}&summary=${shareDescription}&source=${encodeURIComponent(base_href)}`}
+      target="_blank"
+      rel="noreferrer noopener"
+    >
+      <DynamicIcon icon="IoLogoLinkedin" aria-hidden="true" />
+    </Button>
+  </li>
+</ul>
+
+<script>
+  function enableCopyActions() {
+    const supported =
+      window.isSecureContext && Boolean(navigator.clipboard?.writeText);
+    document
+      .querySelectorAll<HTMLElement>("[data-share-copy-control]")
+      .forEach((control) => {
+        control.hidden = !supported;
+      });
+  }
+
+  // One delegated handler also serves the publication's inline citation button.
+  // This module runs once; page-load only reveals controls on newly navigated pages.
+  document.addEventListener("astro:page-load", enableCopyActions);
+  enableCopyActions();
+  document.addEventListener("click", async (event) => {
+    const button =
+      event.target instanceof Element
+        ? event.target.closest<HTMLButtonElement>("button[data-share-copy]")
+        : null;
+    if (
+      !button ||
+      button.disabled ||
+      button.getAttribute("aria-busy") === "true"
+    )
+      return;
+    const control = button.closest<HTMLElement>("[data-share-copy-control]");
+    const status = control?.querySelector<HTMLElement>(
+      "[data-share-copy-status]",
+    );
+    if (!control || !status) return;
+    button.setAttribute("aria-busy", "true");
+    status.textContent = "";
+    try {
+      // Only write supplied text after a click. Never read the clipboard.
+      await navigator.clipboard.writeText(control.dataset.copyValue ?? "");
+      if (!button.isConnected) return;
+      status.textContent = control.dataset.copySuccess ?? "";
+    } catch {
+      if (button.isConnected)
+        status.textContent = control.dataset.copyFailed ?? "";
+    } finally {
+      if (button.isConnected) button.removeAttribute("aria-busy");
+    }
+  });
+</script>

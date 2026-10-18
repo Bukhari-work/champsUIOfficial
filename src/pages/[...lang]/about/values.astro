@@ -5,8 +5,8 @@ import {
   useTranslations,
 } from "@/i18n/utils";
 
-import SidebarLayout from "@/layouts/SidebarLayout.astro";
-import { getSidebar } from "@/navigation.ts";
+import SectionLayout from "@/layouts/SectionLayout.astro";
+import { getSectionNavigation } from "@/navigation.ts";
 
 export async function getStaticPaths() {
   return getLocaleStaticPaths();
@@ -16,13 +16,13 @@ const lang = getPageLanguage(Astro.params.lang);
 
 const t = useTranslations(lang);
 
-const sideBar = getSidebar(lang, "about");
+const sectionNavigation = getSectionNavigation(lang, "about");
 
 // Prop for the layout (title for the browser tab, SEO, etc.)
 const content = { title: t("sidebar.about.item.values") };
 ---
 
-<SidebarLayout {content} {sideBar}>
+<SectionLayout {content} {sectionNavigation}>
   <h1
     class="text-primary mt-8 mb-2 w-fit scroll-mt-24 text-3xl font-semibold sm:text-4xl lg:text-6xl"
   >
@@ -56,4 +56,4 @@ const content = { title: t("sidebar.about.item.values") };
     {t("about.contactText")}
     <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
   </p>
-</SidebarLayout>
+</SectionLayout>

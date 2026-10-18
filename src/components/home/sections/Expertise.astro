@@ -2,8 +2,7 @@
 import type { Language } from "@/i18n/ui";
 import { useTranslations, getLocalizedPath } from "@/i18n/utils";
 import Card from "@/components/shared/Card.astro";
-import { slugify } from "@/lib/utils/textConverter";
-import SectionHeading from "../shared/SectionHeading.astro";
+import SectionHeading from "../components/SectionHeading.astro";
 interface Props {
   lang: Language;
 }
@@ -11,21 +10,25 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const expertise = [
   {
+    id: "research",
     title: t("whatWeDo.research.title"),
     description: t("home.expertise.research"),
     image: "/images/what-we-do/research.webp",
   },
   {
+    id: "consultation",
     title: t("whatWeDo.consultation.title"),
     description: t("home.expertise.consultation"),
     image: "/images/what-we-do/consultation.webp",
   },
   {
+    id: "capacity",
     title: t("whatWeDo.capacity.title"),
     description: t("home.expertise.capacity"),
     image: "/images/what-we-do/capacity-building.webp",
   },
   {
+    id: "csr",
     title: t("whatWeDo.csr.title"),
     description: t("home.expertise.csr"),
     image: "/images/what-we-do/corporate.webp",
@@ -52,7 +55,7 @@ const expertise = [
       expertise.map((area, index) => (
         <Card
           title={area.title}
-          href={`${getLocalizedPath("/what-we-do", lang)}#${slugify(area.title)}`}
+          href={`${getLocalizedPath("/what-we-do", lang)}#expertise-${area.id}`}
           imageMeta={{ src: area.image, alt: area.title }}
           imageWidths={[320, 640, 960, 1280]}
           imageSizes="(min-width: 1280px) 240px, (min-width: 640px) 50vw, 100vw"
@@ -66,7 +69,7 @@ const expertise = [
             data-service-number
           >
             <span>{String(index + 1).padStart(2, "0")}</span>
-            <span aria-hidden="true">↗</span>
+            <span aria-hidden="true">→</span>
           </div>
           <p class="text-muted-foreground mt-3 text-sm leading-relaxed">
             {area.description}

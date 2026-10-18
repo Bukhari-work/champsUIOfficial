@@ -28,7 +28,7 @@ export const homeAnnouncement: AnnouncementCampaign = {
         "We invite institutions to participate in our Training Needs Assessment survey to help shape future capacity-building programs.",
       action: {
         label: "View Invitation",
-        href: "/projects/tna-champs-ui",
+        href: "/questionnaire",
       },
     },
     id: {
@@ -37,7 +37,7 @@ export const homeAnnouncement: AnnouncementCampaign = {
         "Kami mengundang institusi untuk berpartisipasi dalam survei Analisis Kebutuhan Pelatihan guna membantu merancang program penguatan kapasitas ke depan.",
       action: {
         label: "Lihat Undangan",
-        href: "/projects/tna-champs-ui",
+        href: "/questionnaire",
       },
     },
   },

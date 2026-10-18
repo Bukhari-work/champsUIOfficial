@@ -1,0 +1,14 @@
+---
+interface Props {
+  objectives: { intro: string; items: string[] };
+  sourceLang: string;
+}
+const { objectives, sourceLang } = Astro.props;
+---
+
+<div lang={sourceLang} class="space-y-3">
+  <p class="text-muted-foreground leading-relaxed">{objectives.intro}</p>
+  <ul class="list-disc space-y-3 pl-5">
+    {objectives.items.map((item) => <li>{item}</li>)}
+  </ul>
+</div>

@@ -420,6 +420,7 @@ export const experiencesId: ExperienceItem[] = [
   {
     year: 2024,
     title: "Peningkatan Kapasitas Advokasi Tuberkulosis Resisten Obat",
+    detailPath: "/events/dr-tb-advocacy-2024",
     authors:
       "Prof. Adang B., Prof. Ede S.D., Prof. Dumilah A., Dr. Prastuti S., dkk",
     location: "Kementerian Kesehatan, USAID & MSH",
@@ -443,6 +444,7 @@ export const experiencesId: ExperienceItem[] = [
   {
     year: 2024,
     title: "Pelatihan Kepemimpinan dan Diplomasi Kesehatan Global",
+    detailPath: "/events/ghld-2024",
     authors: "Dr. Vetty Y., dkk",
     location: "Kementerian Kesehatan",
     icon: "FaGlobe",
@@ -450,6 +452,7 @@ export const experiencesId: ExperienceItem[] = [
   {
     year: 2024,
     title: "Dialog Kebijakan: Optimalisasi Skrining Tiroid di Indonesia",
+    detailPath: "/events/thyroid-screening-dialogue-2024",
     authors: "Prof. Ede S.D., dkk",
     location: "MERCK",
     icon: "FaMicroscope",

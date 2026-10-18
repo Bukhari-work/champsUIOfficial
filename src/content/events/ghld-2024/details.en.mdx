@@ -1,0 +1,14 @@
+---
+title: "Event details"
+renderMode: "component"
+---
+
+import TopicList from "@/components/content-page/mdx/TopicList.astro";
+
+## Partner
+
+<p>{props.eventData.partner?.en}</p>
+
+## Topics covered
+
+<TopicList topics={props.eventData.topics?.en ?? []} sourceLang="en" />

@@ -1,0 +1,92 @@
+---
+import Base from "@/layouts/Base.astro";
+import { SITE } from "@/config";
+import { questionnaire } from "@/data/questionnaire";
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  getLocalizedPath,
+} from "@/i18n/utils";
+import { markdownify } from "@/lib/utils/textConverter";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import SidebarCard from "@/components/content-page/SidebarCard.astro";
+import { Button } from "@/components/ui/button";
+import DynamicIcon from "@/components/shared/DynamicIcon";
+
+export function getStaticPaths() {
+  return getLocaleStaticPaths();
+}
+const lang = getPageLanguage(Astro.params.lang);
+const page = questionnaire.content[lang];
+const content = {
+  title: page.title,
+  description: page.description,
+  canonical: new URL(getLocalizedPath("/questionnaire", lang), SITE.base_href),
+};
+const body = await markdownify(page.body, true);
+---
+
+<Base {content} makara>
+  <ContentLayout
+    kind="questionnaire"
+    {lang}
+    title={page.title}
+    description={page.description}
+    context={[{ label: page.subtitle }]}
+  >
+    <SidebarCard slot="reference" title={page.informationTitle}>
+      <ul slot="facts" class="space-y-3 text-sm">
+        {
+          page.facts.map((fact) => (
+            <li class="flex items-start gap-3">
+              <DynamicIcon
+                icon={fact.icon}
+                className="text-primary mt-1 size-4 shrink-0"
+                aria-hidden="true"
+              />
+              <span>{fact.text}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <div slot="action">
+        <Button
+          href={questionnaire.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="h-auto min-h-12 w-full whitespace-normal"
+          data-questionnaire-action
+        >
+          {page.actionLabel}
+        </Button>
+        <p class="text-muted-foreground mt-3 text-xs leading-relaxed">
+          {page.externalNote}
+        </p>
+      </div>
+      <p class="text-muted-foreground text-xs">{page.organizerLabel}</p>
+      <a
+        href={questionnaire.organizer.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-primary inline-flex min-h-11 items-center rounded text-sm underline underline-offset-4"
+      >
+        {questionnaire.organizer.name}
+      </a>
+    </SidebarCard>
+    <section id="invitation" aria-labelledby="invitation-title" class="scroll-mt-28 border-t py-8 first:border-t-0 first:pt-0 sm:py-10 sm:first:pt-0" data-detail-section>
+      <h2 id="invitation-title" class="sr-only mb-5 text-xl font-semibold sm:text-2xl">{page.invitationTitle}</h2>
+      <div class="min-w-0 space-y-5" data-section-content>
+      <div class="prose dark:prose-invert max-w-prose" set:html={body} />
+      </div>
+    </section>
+    <section id="objectives" aria-labelledby="objectives-title" class="scroll-mt-28 border-t py-8 first:border-t-0 first:pt-0 sm:py-10 sm:first:pt-0" data-detail-section>
+      <h2 id="objectives-title" class="mb-5 text-xl font-semibold sm:text-2xl">{page.objectives.heading}</h2>
+      <div class="min-w-0 space-y-5" data-section-content>
+      <p>{page.objectives.intro}</p>
+      <ul class="list-disc space-y-3 pl-5">
+        {page.objectives.items.map((item) => <li>{item}</li>)}
+      </ul>
+      </div>
+    </section>
+  </ContentLayout>
+</Base>

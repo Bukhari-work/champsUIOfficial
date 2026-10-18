@@ -1,0 +1,46 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { ActivityItem } from "@/lib/contentCatalog";
+import ContentDirectory from "@/components/directories/ContentDirectory.astro";
+import { openChaptersDirectory } from "@/components/directories/DirectoryPresets";
+import { whatWeDoCopy } from "@/i18n/what-we-do";
+interface Props {
+  items: ActivityItem[];
+  lang: Language;
+  id: string;
+  label: string;
+}
+const { items, lang, id, label } = Astro.props;
+const copy = whatWeDoCopy[lang];
+---
+
+{
+  items.length > 0 && (
+    <section
+      class="bg-primary-soft border-t-primary min-w-0 rounded-2xl border border-t-4 p-4 sm:p-5"
+      aria-labelledby={`${id}-more-stories-title`}
+      data-more-stories
+    >
+      <header class="mb-4 border-b pb-4">
+        <h3 class="text-xl font-semibold" id={`${id}-more-stories-title`}>
+          {copy.moreAreaStories}
+        </h3>
+        <p class="text-muted-foreground mt-2 max-w-2xl text-sm leading-relaxed">
+          {copy.moreStoriesIntro}
+        </p>
+      </header>
+      <ContentDirectory
+        {items}
+        {lang}
+        id={`${id}-results`}
+        label={`${label} — ${copy.moreAreaStories}`}
+        {...openChaptersDirectory}
+        cardHeadingLevel="h5"
+        yearHeadingLevel="h4"
+        yearFilterLabel={copy.browseYears}
+        recentLabel={copy.recentStories}
+        unknownYearLabel={copy.unknownPeriod}
+      />
+    </section>
+  )
+}

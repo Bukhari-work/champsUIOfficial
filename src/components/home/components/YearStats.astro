@@ -1,0 +1,37 @@
+---
+interface Props {
+  stats: {
+    amount: string;
+    title: string;
+    description: string;
+  }[];
+}
+const { stats } = Astro.props;
+---
+
+<section id="home-results" class="not-prose relative scroll-mt-18">
+  <div
+    class="intersect-once intersect-quarter intercept-no-queue motion-safe:md:intersect:animate-fade-in text-default relative mx-auto max-w-6xl px-4 py-14 md:px-6 md:py-20 motion-safe:md:opacity-0 lg:pt-20"
+  >
+    <slot />
+    <div
+      class="grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-4 lg:gap-x-0 lg:gap-y-8"
+    >
+      {
+        stats.map(({ amount, title, description }) => (
+          <div class="intersect-once motion-safe:md:intersect:animate-fade-in intersect-quarter border-primary flex flex-col justify-center border-b p-4 text-center transition-none last:border-b-0 nth-last-2:border-b-0 motion-safe:md:opacity-0 lg:border-b-0 lg:border-l lg:nth-[4n+1]:border-none">
+            <div class="mx-auto text-[2.6rem] leading-none font-bold lg:text-5xl xl:text-6xl">
+              {amount}
+            </div>
+            <div class="mx-auto mt-3 flex flex-wrap justify-center text-sm font-medium tracking-widest uppercase">
+              {title}
+            </div>
+            <p class="text-muted-foreground mx-auto mt-2 max-w-[22ch] text-sm leading-snug">
+              {description}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

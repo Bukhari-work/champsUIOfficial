@@ -1,0 +1,39 @@
+---
+title: Programme and participation
+---
+
+import PracticalDetailsList from "@/components/content-page/mdx/PracticalDetailsList.astro";
+import EventFees from "@/components/content-page/events/EventFees.astro";
+import { frontmatter as invitation } from "./invitation.en.mdx";
+
+The programme moves from shared regional challenges to practical leadership and collaboration approaches. Session titles and contributors below are illustrative placeholders.
+
+## Programme themes
+
+1. Building resilient and equitable health systems
+2. Turning research evidence into public policy
+3. Leading cross-sector partnerships and regional collaboration
+
+## Sample two-day schedule
+
+| Time | Day 1 · Evidence and systems | Day 2 · Leadership and action |
+| --- | --- | --- |
+| 09.00 | Welcome and regional context | Recap and leadership reflection |
+| 10.30 | Health-system resilience | Cross-sector partnership lab |
+| 13.00 | Evidence-to-policy case workshop | Action planning in mixed-country groups |
+| 15.30 | Peer exchange | Commitments and closing |
+
+## Participation details
+
+{invitation.practicalDetails && <PracticalDetailsList details={invitation.practicalDetails} sourceLang="en" />}
+
+{invitation.fees && <div class="bg-primary-soft space-y-4 rounded-xl border p-5">
+  <EventFees fee={invitation.fees} lang="en" sourceLang="en" archived={false} />
+  {invitation.fees.includes && <p class="text-sm leading-relaxed" set:html={invitation.fees.includes} />}
+  {invitation.fees.excludes && <p class="text-muted-foreground text-sm leading-relaxed" set:html={invitation.fees.excludes} />}
+</div>}
+
+{invitation.contact && <div>
+  <h3 class="mb-3 text-lg font-semibold">{invitation.contact.heading}</h3>
+  <ul>{invitation.contact.links.map((link) => <li><a href={link.href} class="text-primary inline-flex min-h-11 max-w-full items-center rounded text-sm underline underline-offset-4">{link.text}</a></li>)}</ul>
+</div>}

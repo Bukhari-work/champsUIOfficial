@@ -2,7 +2,7 @@
 // This file defines the site's navigation structure using keys from ui.ts.
 // It's the single source of truth for what links appear and where they go.
 
-import type { NavLink, NavLinkGroup, SideBarProps } from "./types";
+import type { NavLink, NavLinkGroup, SectionNavigationProps } from "./types";
 import { getTranslatedPath, useTranslations } from "./i18n/utils";
 import type { Language } from "./i18n/ui"; // Import the Language type
 
@@ -15,7 +15,7 @@ const getNavStructure = (
 ): {
   header: NavLink[];
   bars: { about: NavLinkGroup; whatWeDo: NavLinkGroup };
-  callToAction: NavLink;
+  callToAction: NavLink & { href: string };
 } => ({
   header: [
     { textKey: "nav.home", href: getTranslatedPath("home", lang) },
@@ -24,7 +24,7 @@ const getNavStructure = (
       textKey: "nav.whatWeDo",
       href: getTranslatedPath("whatWeDo", lang),
     },
-    { textKey: "nav.news", href: getTranslatedPath("news", lang) },
+    { textKey: "nav.events", href: getTranslatedPath("events", lang) },
     {
       textKey: "nav.contact",
       href: getTranslatedPath("contact", lang),
@@ -65,20 +65,21 @@ const getNavStructure = (
           href: getTranslatedPath("whatWeDo", lang),
         },
         {
-          textKey: "sidebar.whatWeDo.item.experiences",
-          href: getTranslatedPath("what-we-do/experiences", lang),
-        },
-        {
           textKey: "sidebar.whatWeDo.item.partners",
           href: getTranslatedPath("what-we-do/partners", lang),
         },
+        {
+          textKey: "nav.archive",
+          href: getTranslatedPath("what-we-do/archive", lang),
+        },
+        { textKey: "nav.events", href: getTranslatedPath("events", lang) },
       ],
     },
   },
 
   callToAction: {
     textKey: "button.latestProgram",
-    href: getTranslatedPath("projects", lang),
+    href: getTranslatedPath("questionnaire", lang),
   },
 });
 
@@ -88,10 +89,10 @@ export const navigation = {
   id: getNavStructure("id"),
 };
 
-export function getSidebar(
+export function getSectionNavigation(
   lang: Language,
   section: keyof (typeof navigation)[Language]["bars"],
-): SideBarProps {
+): SectionNavigationProps {
   const t = useTranslations(lang);
   const group = navigation[lang].bars[section];
   return {

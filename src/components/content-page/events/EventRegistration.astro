@@ -1,0 +1,41 @@
+---
+import { Button } from "@/components/ui/button/index";
+interface Props {
+  registration: { href: string; closesAt: string };
+  label: string;
+}
+const { registration, label } = Astro.props;
+---
+
+<event-registration
+  data-closes-at={registration.closesAt}
+  class="mt-5 block [[hidden]]:hidden!"
+>
+  <Button
+    href={registration.href}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="h-auto min-h-11 w-full whitespace-normal">{label}</Button
+  >
+</event-registration>
+<script>
+  // A static page may outlive a registration deadline. Check again in the browser.
+  class EventRegistration extends HTMLElement {
+    private timer?: ReturnType<typeof setTimeout>;
+    connectedCallback() {
+      clearTimeout(this.timer);
+      const check = () => {
+        const remaining = Date.parse(this.dataset.closesAt ?? "") - Date.now();
+        this.hidden = !Number.isFinite(remaining) || remaining <= 0;
+        if (!this.hidden)
+          this.timer = setTimeout(check, Math.min(remaining, 2147483647));
+      };
+      check();
+    }
+    disconnectedCallback() {
+      clearTimeout(this.timer);
+    }
+  }
+  if (!customElements.get("event-registration"))
+    customElements.define("event-registration", EventRegistration);
+</script>

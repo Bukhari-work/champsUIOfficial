@@ -1,0 +1,672 @@
+---
+import type { DirectoryItem } from "@/lib/contentCatalog";
+import type { Language } from "@/i18n/ui";
+import { cn } from "@/lib/utils";
+import { contentCopy } from "@/i18n/content";
+import ContentCard from "@/components/shared/ContentCard.astro";
+import {
+  groupDirectoryItemsByYear,
+  unknownDirectoryYear,
+} from "@/lib/directoryYears";
+// A browsing grid for wide page containers, using the site's named breakpoints.
+const browseCardGridClass =
+  "grid grid-cols-1 gap-x-5 gap-y-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4";
+const browseCardImageSizes =
+  "(min-width: 1536px) 320px, (min-width: 1280px) 390px, (min-width: 1024px) 420px, (min-width: 768px) 320px, 90vw";
+
+// Story columns depend on their content area, including any sidebar and padding.
+const storyCardGridClass =
+  "grid grid-cols-1 gap-x-5 gap-y-8 @2xl/stories:grid-cols-2 @5xl/stories:grid-cols-3 @story-wide/stories:grid-cols-4";
+// Lazy images use their rendered card width; older browsers retain a safe fallback.
+const storyCardImageSizes = "auto, 90vw";
+interface Props {
+  items: DirectoryItem[];
+  lang: Language;
+  id: string;
+  label: string;
+  layout?: "table" | "cards" | "journey";
+  journeyStyle?: "rail" | "open" | "timeline";
+  yearShortcuts?: boolean;
+  defaultSort?: "newest" | "oldest";
+  paginate?: boolean;
+  dateLabel?: string;
+  cardSize?: "default" | "small";
+  cardColumns?: 2 | 3 | "adaptive";
+  responsiveTo?: "viewport" | "container";
+  density?: "comfortable" | "compact";
+  categoryShortcuts?: boolean;
+  controlsStyle?: "panel" | "toolbar";
+  cardHeadingLevel?: "h3" | "h4" | "h5";
+  yearHeadingLevel?: "h2" | "h3" | "h4";
+  yearFilterLabel?: string;
+  recentLabel?: string;
+  unknownYearLabel?: string;
+  periodNote?: string;
+}
+const {
+  items,
+  lang,
+  id,
+  label,
+  layout = "table",
+  journeyStyle = "rail",
+  yearShortcuts = false,
+  defaultSort = "newest",
+  paginate = true,
+  dateLabel,
+  cardSize = "default",
+  cardColumns = 2,
+  responsiveTo = "viewport",
+  density = "comfortable",
+  categoryShortcuts = false,
+  controlsStyle = "panel",
+  cardHeadingLevel = "h3",
+  yearHeadingLevel = "h2",
+  yearFilterLabel,
+  recentLabel,
+  unknownYearLabel,
+  periodNote,
+} = Astro.props;
+const copy = contentCopy[lang];
+const years = [
+  ...new Set(
+    items.flatMap((item) => item.years ?? [item.year]).filter(Boolean),
+  ),
+]
+  .sort()
+  .reverse();
+const categories = [...new Set(items.map((item) => item.category))].sort();
+const hasCategories = categories.length > 1;
+const hasCategoryField = hasCategories && !categoryShortcuts;
+const journey = layout === "journey";
+const yearRail = journey && journeyStyle === "rail";
+const hasYearShortcuts = journey || yearShortcuts;
+const groups = journey ? groupDirectoryItemsByYear(items) : [];
+const YearHeading = yearHeadingLevel;
+const containerCards = responsiveTo === "container";
+const compact = density === "compact";
+const adaptiveGridClass = cn(
+  containerCards ? storyCardGridClass : browseCardGridClass,
+  compact && "gap-4",
+);
+const adaptiveImageSizes = containerCards
+  ? storyCardImageSizes
+  : browseCardImageSizes;
+const field =
+  "bg-background focus-visible:outline-primary min-h-11 min-w-0 rounded-lg border px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2";
+const attributes = (item: DirectoryItem) => ({
+  "data-directory-item": "",
+  "data-year": (item.years ?? [item.year]).join(" "),
+  "data-category": item.category,
+  "data-date": item.sortDate,
+  "data-search": [item.title, item.description, item.search]
+    .filter(Boolean)
+    .join(" "),
+});
+---
+
+<content-directory
+  class="group/directory block **:[[hidden]]:hidden!"
+  data-language={lang}
+  data-count-label={copy.count}
+  data-default-sort={defaultSort}
+  data-paginate={String(paginate)}
+  data-page-size={paginate ? (layout === "table" ? 12 : 6) : undefined}
+  data-directory-presentation={journey ? journeyStyle : layout}
+>
+  <div
+    class:list={[
+      hasYearShortcuts &&
+        "group-data-ready/directory:flex group-data-ready/directory:flex-wrap group-data-ready/directory:items-end group-data-ready/directory:gap-x-4",
+      hasYearShortcuts &&
+        (compact
+          ? "group-data-ready/directory:gap-y-2"
+          : "group-data-ready/directory:gap-y-4"),
+      yearRail &&
+        "lg:group-data-ready/directory:grid lg:group-data-ready/directory:grid-cols-6 lg:group-data-ready/directory:items-start",
+      yearRail &&
+        (compact
+          ? "lg:group-data-ready/directory:gap-6"
+          : "lg:group-data-ready/directory:gap-8"),
+    ]}
+  >
+    {
+      hasYearShortcuts && (
+        <aside
+          class:list={[
+            "min-w-0 grow basis-64",
+            yearRail && "lg:sticky lg:top-28",
+          ]}
+          hidden
+          data-directory-controls
+          data-pagefind-ignore
+        >
+          <p
+            class:list={[
+              "text-muted-foreground text-xs font-medium",
+              compact ? "mb-2" : "mb-3",
+            ]}
+          >
+            {yearFilterLabel ?? copy.year}
+          </p>
+          <div
+            class:list={["flex flex-wrap gap-2", yearRail && "lg:flex-col"]}
+            role="group"
+            aria-label={yearFilterLabel ?? copy.year}
+            data-directory-year-filters
+          >
+            {[
+              "",
+              ...years,
+              ...(items.some(
+                (item) => !(item.years ?? [item.year]).some(Boolean),
+              )
+                ? [unknownDirectoryYear]
+                : []),
+            ].map((year) => (
+              <button
+                type="button"
+                data-directory-year={year}
+                aria-pressed={year === ""}
+                aria-controls={id}
+                class="bg-background hover:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary focus-visible:outline-primary flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded-lg border px-3 py-2 text-left font-mono text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {year === unknownDirectoryYear
+                  ? (unknownYearLabel ?? copy.periodUnknown)
+                  : year || copy.allYears}
+              </button>
+            ))}
+          </div>
+        </aside>
+      )
+    }
+    <div
+      class:list={[
+        "min-w-0",
+        hasYearShortcuts && "contents",
+        yearRail && "lg:block lg:group-data-ready/directory:col-span-5",
+      ]}
+    >
+      <div
+        class:list={[
+          compact ? "mb-4" : "mb-6",
+          hasYearShortcuts && "contents",
+          yearRail && "lg:block",
+        ]}
+        hidden
+        data-directory-controls
+        data-pagefind-ignore
+      >
+        <details
+          data-directory-filters
+          class:list={[
+            "group",
+            hasYearShortcuts && "contents details-content:contents",
+            yearRail && "lg:block lg:details-content:block",
+          ]}
+        >
+          <summary
+            class="text-primary hover:bg-primary-soft focus-visible:outline-primary flex min-h-11 w-fit max-w-full shrink-0 cursor-pointer list-none items-center gap-3 rounded-lg border px-4 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            <svg
+              class="size-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+              ><path d="M4 7h16M4 17h16M8 4v6M16 14v6"></path></svg
+            >
+            {copy.searchFilters}
+            <span class="flex w-6 shrink-0 items-center justify-center">
+              <span
+                class="bg-primary-soft text-primary flex w-full items-center justify-center rounded-full text-xs tabular-nums"
+                data-active-filters
+                hidden></span>
+            </span>
+            <svg
+              class="size-4 group-open:rotate-180"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg
+            >
+          </summary>
+          <form
+            id={`${id}-filters`}
+            role="search"
+            aria-label={label}
+            class:list={[
+              "w-full rounded-xl border p-4 sm:p-5",
+              hasYearShortcuts ? "basis-full" : "mt-3",
+              hasYearShortcuts && "hidden group-open:block",
+              yearRail && "lg:mt-3",
+              controlsStyle === "toolbar" ? "bg-background" : "bg-primary-soft",
+            ]}
+          >
+            {
+              categoryShortcuts && hasCategories && (
+                <div
+                  class="mb-5 flex flex-wrap gap-2"
+                  role="group"
+                  aria-label={copy.category}
+                >
+                  {["", ...categories].map((category) => (
+                    <button
+                      type="button"
+                      data-directory-category={category}
+                      aria-pressed={category === ""}
+                      aria-controls={id}
+                      class="hover:bg-primary-soft aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary focus-visible:outline-primary min-h-11 cursor-pointer rounded-lg border px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+                    >
+                      {category || copy.allTypes}
+                    </button>
+                  ))}
+                </div>
+              )
+            }
+            <div
+              class:list={[
+                "grid items-start gap-3",
+                hasCategoryField ? "md:grid-cols-4" : "md:grid-cols-3",
+              ]}
+            >
+              <label class="block min-w-0">
+                <span class="mb-2 block text-xs font-medium">{copy.search}</span
+                >
+                <input
+                  type="search"
+                  name="q"
+                  class={`${field} w-full`}
+                  placeholder={copy.placeholder}
+                  autocomplete="off"
+                  aria-controls={id}
+                />
+              </label>
+              <div
+                class:list={[
+                  "min-w-0",
+                  hasCategoryField ? "md:col-span-3" : "md:col-span-2",
+                ]}
+              >
+                <div
+                  class:list={[
+                    "grid gap-3",
+                    (!hasYearShortcuts || hasCategories) && "sm:grid-cols-2",
+                    !hasYearShortcuts &&
+                      (hasCategoryField ? "md:grid-cols-3" : "md:grid-cols-2"),
+                  ]}
+                >
+                  <label hidden={hasYearShortcuts}>
+                    <span class="mb-2 block text-xs font-medium"
+                      >{copy.year}</span
+                    >
+                    <select
+                      name="year"
+                      class={`${field} w-full`}
+                      aria-controls={id}
+                    >
+                      <option value="">{copy.allYears}</option>{
+                        years.map((year) => (
+                          <option value={year}>{year}</option>
+                        ))
+                      }
+                      {
+                        hasYearShortcuts &&
+                          items.some(
+                            (item) =>
+                              !(item.years ?? [item.year]).some(Boolean),
+                          ) && (
+                            <option value={unknownDirectoryYear}>
+                              {unknownYearLabel ?? copy.periodUnknown}
+                            </option>
+                          )
+                      }
+                    </select>
+                  </label>
+                  {
+                    hasCategories && (
+                      <label hidden={categoryShortcuts}>
+                        <span class="mb-2 block text-xs font-medium">
+                          {copy.category}
+                        </span>
+                        <select
+                          name="category"
+                          class={`${field} w-full`}
+                          aria-controls={id}
+                        >
+                          <option value="">{copy.allTypes}</option>
+                          {categories.map((category) => (
+                            <option>{category}</option>
+                          ))}
+                        </select>
+                      </label>
+                    )
+                  }
+                  <label>
+                    <span class="mb-2 block text-xs font-medium"
+                      >{copy.sort}</span
+                    >
+                    <select
+                      name="sort"
+                      class={`${field} w-full`}
+                      aria-controls={id}
+                    >
+                      <option value="newest" selected={defaultSort === "newest"}
+                        >{
+                          defaultSort === "oldest" ? copy.furthest : copy.newest
+                        }</option
+                      >
+                      <option value="oldest" selected={defaultSort === "oldest"}
+                        >{
+                          defaultSort === "oldest" ? copy.nearest : copy.oldest
+                        }</option
+                      >
+                    </select>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </details>
+        <div
+          class:list={[
+            "grid min-h-11 w-full grid-cols-2 items-center gap-3 text-xs",
+            hasYearShortcuts
+              ? compact
+                ? "basis-full"
+                : "mb-2 basis-full"
+              : "mt-4",
+            yearRail && "lg:mt-4 lg:mb-0",
+          ]}
+        >
+          <p
+            class="text-muted-foreground"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            data-directory-status
+          >
+          </p>
+          <button
+            type="reset"
+            form={`${id}-filters`}
+            data-directory-reset
+            hidden
+            class="text-primary invisible min-h-11 cursor-pointer justify-self-end rounded text-right underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+            >{copy.clear}</button
+          >
+        </div>
+      </div>
+      {
+        journey ? (
+          <div
+            id={id}
+            class:list={[
+              "w-full",
+              journeyStyle === "timeline"
+                ? "pl-2"
+                : compact
+                  ? "space-y-6"
+                  : "space-y-10",
+            ]}
+            aria-label={label}
+            data-directory-rows
+          >
+            {groups.map((group, index) => (
+              <section
+                data-directory-group
+                data-group-year={group.year}
+                aria-labelledby={`${id}-year-${group.year || unknownDirectoryYear}`}
+                class={cn(
+                  journeyStyle === "timeline"
+                    ? "border-primary relative border-l-2 pb-10 pl-5 last:pb-0 sm:pl-8"
+                    : "border-t pt-5",
+                  compact &&
+                    (journeyStyle === "timeline"
+                      ? "pb-6 pl-4 sm:pl-6"
+                      : "pt-4"),
+                )}
+              >
+                <div
+                  class:list={[
+                    "flex flex-wrap items-baseline gap-4",
+                    compact ? "mb-3" : "mb-5",
+                  ]}
+                  data-directory-group-header
+                >
+                  {journeyStyle === "timeline" && (
+                    <span
+                      class="border-background bg-primary absolute top-2 -left-2 size-3 rounded-full border-2"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <YearHeading
+                    data-directory-group-heading
+                    id={`${id}-year-${group.year || unknownDirectoryYear}`}
+                    class={
+                      group.year
+                        ? compact
+                          ? "text-2xl font-semibold"
+                          : "text-3xl font-semibold"
+                        : compact
+                          ? "text-lg font-semibold"
+                          : "text-xl font-semibold"
+                    }
+                  >
+                    {group.year || unknownYearLabel || copy.periodUnknown}
+                  </YearHeading>
+                  {index === 0 && group.year && recentLabel && (
+                    <p
+                      class="text-primary text-xs font-medium"
+                      data-directory-recent
+                    >
+                      {recentLabel}
+                    </p>
+                  )}
+                </div>
+                <div
+                  class:list={[
+                    "w-full",
+                    containerCards && "@container/stories",
+                  ]}
+                >
+                  <ul
+                    class:list={[
+                      cardColumns === "adaptive" || journeyStyle === "timeline"
+                        ? adaptiveGridClass
+                        : "grid gap-5 md:grid-cols-2",
+                      cardColumns !== "adaptive" &&
+                        yearRail &&
+                        index > 0 &&
+                        "xl:grid-cols-3",
+                    ]}
+                    data-directory-group-rows
+                  >
+                    {group.items.map((item) => (
+                      <li
+                        {...attributes(item)}
+                        class="flex min-w-0 [&>article]:w-full"
+                      >
+                        <ContentCard
+                          {item}
+                          {lang}
+                          size={
+                            compact
+                              ? cardSize
+                              : journeyStyle === "open" ||
+                                  (yearRail && index === 0)
+                                ? "default"
+                                : "small"
+                          }
+                          headingLevel={cardHeadingLevel}
+                          imageSizes={
+                            cardColumns === "adaptive" ||
+                            journeyStyle === "timeline"
+                              ? adaptiveImageSizes
+                              : journeyStyle === "open"
+                                ? "(min-width: 1280px) 600px, (min-width: 768px) 40vw, 90vw"
+                                : index === 0
+                                  ? "(min-width: 1280px) 500px, (min-width: 768px) 40vw, 90vw"
+                                  : "(min-width: 1280px) 320px, (min-width: 768px) 40vw, 90vw"
+                          }
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </section>
+            ))}
+          </div>
+        ) : layout === "cards" ? (
+          <div class:list={["w-full", containerCards && "@container/stories"]}>
+            <ul
+              id={id}
+              class:list={[
+                "w-full",
+                cardColumns === "adaptive"
+                  ? adaptiveGridClass
+                  : "grid gap-5 md:grid-cols-2",
+                cardColumns === 3 && "xl:grid-cols-3",
+              ]}
+              aria-label={label}
+              data-directory-rows
+            >
+              {items.map((item) => (
+                <li
+                  {...attributes(item)}
+                  class="flex min-w-0 [&>article]:w-full"
+                >
+                  <ContentCard
+                    {item}
+                    {lang}
+                    size={cardSize}
+                    headingLevel={cardHeadingLevel}
+                    imageSizes={
+                      cardColumns === "adaptive"
+                        ? adaptiveImageSizes
+                        : cardColumns === 3
+                          ? "(min-width: 1280px) 310px, (min-width: 768px) 40vw, 90vw"
+                          : undefined
+                    }
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div id={id} class="w-full overflow-hidden rounded-2xl border">
+            <table class="w-full table-fixed border-collapse text-left text-sm">
+              <caption class="sr-only">{label}</caption>
+              <thead class="bg-primary-soft text-muted-foreground hidden border-b text-xs md:table-header-group">
+                <tr>
+                  <>
+                    <th scope="col" class="px-6 py-3">
+                      {copy.title}
+                    </th>
+                    {hasCategories && (
+                      <th scope="col" class="w-40 px-4 py-3">
+                        {copy.category}
+                      </th>
+                    )}
+                    <th scope="col" class="w-40 px-6 py-3 text-right">
+                      {dateLabel ?? copy.date}
+                    </th>
+                  </>
+                </tr>
+              </thead>
+              <tbody class="divide-y" data-directory-rows>
+                {items.map((item) => (
+                  <tr {...attributes(item)} class="align-top">
+                    <td class="px-4 py-5 sm:px-6">
+                      <p class="text-muted-foreground mb-2 text-xs leading-relaxed md:hidden">
+                        {hasCategories && `${item.category} · `}
+                        {item.date}
+                      </p>
+                      {item.href ? (
+                        <a
+                          href={item.href}
+                          class="text-primary block rounded font-semibold wrap-break-word underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"
+                        >
+                          {item.title}
+                        </a>
+                      ) : (
+                        <p class="font-medium wrap-break-word">{item.title}</p>
+                      )}
+                      {item.description && (
+                        <p class="text-muted-foreground mt-2 text-sm leading-relaxed">
+                          {item.description}
+                        </p>
+                      )}
+                      {(item.status || item.note) && (
+                        <p class="text-muted-foreground mt-3 text-xs">
+                          {[item.status, item.note].filter(Boolean).join(" · ")}
+                        </p>
+                      )}
+                    </td>
+                    {hasCategories && (
+                      <td class="text-muted-foreground hidden px-4 py-5 md:table-cell">
+                        {item.category}
+                      </td>
+                    )}
+                    <td class="text-muted-foreground hidden px-6 py-5 text-right text-xs leading-relaxed md:table-cell">
+                      {item.date}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      }
+      <div
+        class="bg-muted mt-4 w-full rounded-2xl border p-8 text-center"
+        data-directory-empty
+        hidden
+        data-pagefind-ignore
+      >
+        <p class="font-semibold">{copy.empty}</p><p
+          class="text-muted-foreground mt-2 text-sm"
+        >
+          {copy.emptyText}
+        </p>
+      </div>
+      {
+        paginate && (
+          <div
+            class:list={[
+              "w-full text-center",
+              compact ? "mt-4 has-[[hidden]]:hidden" : "mt-6",
+            ]}
+            data-pagefind-ignore
+          >
+            <button
+              type="button"
+              data-directory-more
+              class="hover:bg-primary-soft focus-visible:outline-primary min-h-11 cursor-pointer rounded-lg border px-5 py-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+              hidden
+            >
+              {copy.more}
+            </button>
+          </div>
+        )
+      }
+      {
+        hasYearShortcuts && periodNote && (
+          <p
+            class:list={[
+              "text-muted-foreground w-full border-t text-xs leading-relaxed",
+              compact ? "mt-4 pt-4" : "mt-6 pt-5",
+            ]}
+          >
+            {periodNote}
+          </p>
+        )
+      }
+    </div>
+  </div>
+</content-directory>
+<script>
+  import "./ContentDirectory.client";
+</script>

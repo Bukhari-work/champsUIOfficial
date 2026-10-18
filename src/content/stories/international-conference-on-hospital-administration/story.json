@@ -1,0 +1,57 @@
+{
+  "title": {
+    "en": "International Conference on Hospital Administration (ICHA)",
+    "id": "International Conference on Hospital Administration (ICHA)"
+  },
+  "description": {
+    "en": "Through ICHA, CHAMPS brought hospital leaders, researchers, and practitioners together to exchange evidence and approaches to hospital governance.",
+    "id": "Melalui ICHA, CHAMPS mempertemukan pemimpin rumah sakit, peneliti, dan praktisi untuk bertukar bukti serta pendekatan tata kelola rumah sakit."
+  },
+  "authors": {
+    "en": [
+      "en/aulia-khairina-khairil"
+    ],
+    "id": [
+      "en/aulia-khairina-khairil"
+    ]
+  },
+  "date": "2025-09-30T12:00:00.000Z",
+  "images": [
+    {
+      "src": "/images/news/International Conference on Hospital Administration (ICHA) 1.webp",
+      "alt": "Speakers using microphones during the hospital administration conference."
+    },
+    {
+      "src": "/images/news/International Conference on Hospital Administration (ICHA) 2.webp",
+      "alt": "Documentation: International Conference on Hospital Administration (ICHA)"
+    },
+    {
+      "src": "/images/news/International Conference on Hospital Administration (ICHA) 3.webp",
+      "alt": "Documentation: International Conference on Hospital Administration (ICHA)"
+    },
+    {
+      "src": "/images/news/International Conference on Hospital Administration (ICHA) 4.webp",
+      "alt": "Documentation: International Conference on Hospital Administration (ICHA)"
+    }
+  ],
+  "categories": [
+    "Report"
+  ],
+  "tags": [
+    "ICHA"
+  ],
+  "draft": false,
+  "workType": "capacityBuilding",
+  "activityPeriod": {
+    "startYear": 2016,
+    "endYear": 2017
+  },
+  "content": {
+    "mode": "article",
+    "sections": [
+      {
+        "id": "article"
+      }
+    ]
+  }
+}

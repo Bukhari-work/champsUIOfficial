@@ -1,0 +1,42 @@
+---
+import type { Language } from "@/i18n/ui";
+import { useTranslations, getLocalizedPath } from "@/i18n/utils";
+import ContentCard from "@/components/shared/ContentCard.astro";
+import { getActivities } from "@/lib/contentCatalog";
+import { contentCopy } from "@/i18n/content";
+import SectionHeading from "../components/SectionHeading.astro";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const currentPosts = (await getActivities(lang)).slice(0, 3);
+---
+
+<section
+  class="mx-auto max-w-6xl px-5 py-14 sm:px-6 sm:py-20"
+  aria-labelledby="work-title"
+  data-home-section="work"
+>
+  <SectionHeading
+    number="04"
+    label={t("home.story.news")}
+    title={t("home.story.newsTitle")}
+    description={t("home.story.newsBody")}
+    id="work-title"
+    href={getLocalizedPath("/what-we-do", lang)}
+    linkText={contentCopy[lang].browseWork}
+  />
+  <div class="grid gap-4 lg:grid-cols-3">
+    {
+      currentPosts.map((post) => (
+        <ContentCard
+          item={post}
+          {lang}
+          size="small"
+          imageSizes="(min-width: 1024px) 308px, 90vw"
+        />
+      ))
+    }
+  </div>
+</section>

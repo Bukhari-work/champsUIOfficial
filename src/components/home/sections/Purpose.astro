@@ -3,8 +3,8 @@ import type { Language } from "@/i18n/ui";
 import { useTranslations, getLocalizedPath } from "@/i18n/utils";
 import { Image } from "astro:assets";
 import { purposePhoto } from "@/assets/home";
-import Quote from "@/components/ui-astro/Quote.astro";
-import SectionHeading from "../shared/SectionHeading.astro";
+import Quote from "@/components/ui/Quote.astro";
+import SectionHeading from "../components/SectionHeading.astro";
 interface Props {
   lang: Language;
 }
@@ -48,9 +48,9 @@ const t = useTranslations(lang);
           {t("home.story.purposeBody")}
         </p>
         <a
-          class="link text-primary mt-6 inline-flex items-center gap-3 text-sm"
+          class="link text-primary focus-visible:outline-primary mt-6 inline-flex min-h-11 items-center gap-3 rounded text-sm focus-visible:outline-2 focus-visible:outline-offset-4"
           href={getLocalizedPath("/about", lang)}
-          >{t("home.story.about")} <span aria-hidden="true">↗</span></a
+          >{t("home.story.about")} <span aria-hidden="true">→</span></a
         >
       </div>
     </div>

@@ -1,0 +1,72 @@
+---
+import type { Language } from "@/i18n/ui";
+import {
+  tableOfContentsCopy,
+  getTableOfContentsLinks,
+  type TableOfContentsLink,
+} from "./TableOfContents";
+interface Props {
+  lang: Language;
+  links: TableOfContentsLink[];
+  scope?: "page" | "view";
+  substantial?: boolean;
+}
+const {
+  lang,
+  links: supplied,
+  scope = "page",
+  substantial = true,
+} = Astro.props;
+const links = getTableOfContentsLinks(supplied);
+const label = tableOfContentsCopy[lang][scope];
+---
+
+{
+  substantial && links.length >= 3 && (
+    <details
+      class="group/contents bg-primary-soft rounded-xl border px-4 print:hidden"
+      data-table-of-contents
+      data-contents-scope={scope}
+    >
+      <summary class="font-lexend text-primary focus-visible:outline-primary flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 rounded text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 [&::-webkit-details-marker]:hidden">
+        <span class="flex min-w-0 items-center gap-3">
+          <svg
+            class="size-4 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M9 6h12M9 12h12M9 18h12M3 6h1M3 12h1M3 18h1" />
+          </svg>
+          {label}
+        </span>
+        <svg
+          class="size-4 shrink-0 transition-transform group-open/contents:rotate-180 motion-reduce:transition-none"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </summary>
+      <nav aria-label={label} class="border-t py-2">
+        <ul class="grid gap-x-6 sm:grid-cols-2">
+          {links.map((link) => (
+            <li class="min-w-0">
+              <a
+                href={`#${encodeURIComponent(link.slug)}`}
+                class="text-primary focus-visible:outline-primary flex min-h-11 items-center rounded px-2 py-3 text-sm wrap-anywhere underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {link.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+  )
+}

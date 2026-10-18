@@ -11,11 +11,11 @@ const copy =
   lang === "id"
     ? {
         title: "Cari di CHAMPS UI",
-        placeholder: "Cari berita, proyek, atau pakar…",
+        placeholder: "Cari karya, kegiatan, atau pakar…",
         close: "Tutup pencarian",
         clear: "Hapus pencarian",
         idle: "Apa yang ingin Anda temukan?",
-        hint: "Jelajahi berita, proyek, dan tim pakar kami dengan kata kunci.",
+        hint: "Jelajahi karya, kegiatan, dan tim pakar kami dengan kata kunci.",
         loading: "Mencari…",
         empty: "Tidak ada hasil untuk “{query}”. Coba kata kunci lain.",
         count: "{count} hasil untuk “{query}”",
@@ -27,8 +27,8 @@ const copy =
         dismiss: "untuk menutup",
         filters: "Jenis konten",
         all: "Semua",
-        news: "Berita",
-        projects: "Proyek",
+        stories: "Cerita",
+        events: "Kegiatan",
         people: "Tim & Pakar",
         browse: "{count} hasil",
         emptyFilter:
@@ -36,11 +36,11 @@ const copy =
       }
     : {
         title: "Search CHAMPS UI",
-        placeholder: "Search news, projects, or experts…",
+        placeholder: "Search work, events, or experts…",
         close: "Close search",
         clear: "Clear search",
         idle: "What would you like to find?",
-        hint: "Explore our news, projects, and team of experts with a keyword.",
+        hint: "Explore our work, events, and team of experts with a keyword.",
         loading: "Searching…",
         empty: "No results for “{query}”. Try a different keyword.",
         count: "{count} results for “{query}”",
@@ -52,8 +52,8 @@ const copy =
         dismiss: "to close",
         filters: "Content type",
         all: "All",
-        news: "News",
-        projects: "Projects",
+        stories: "Stories",
+        events: "Events",
         people: "People",
         browse: "{count} results",
         emptyFilter:
@@ -138,7 +138,7 @@ const copy =
         aria-label={copy.filters}
       >
         {
-          (["all", "news", "people", "projects"] as const).map((facet) => (
+          (["all", "stories", "events", "people"] as const).map((facet) => (
             <button
               type="button"
               class="aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary shrink-0 cursor-pointer rounded-full border px-3 py-2 text-[0.8125rem] whitespace-nowrap transition-colors motion-reduce:transition-none"
@@ -219,7 +219,7 @@ const copy =
         <span
           class="text-foreground [&>svg]:text-primary flex items-center justify-between gap-3 text-[0.9375rem] leading-normal font-semibold"
           ><span data-result-title></span><DynamicIcon
-            icon="LuArrowUpRight"
+            icon="LuArrowRight"
             className="h-4 w-4 shrink-0"
             aria-hidden="true"
           /></span
@@ -233,5 +233,5 @@ const copy =
 </site-search>
 
 <script>
-  import "@/scripts/search";
+  import "./Search.client";
 </script>

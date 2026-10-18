@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "@/lib/utils";
+
+interface Props extends HTMLAttributes<"div"> {
+  title: string;
+  factsClass?: string;
+  actionClass?: string;
+}
+const {
+  title,
+  class: className,
+  factsClass,
+  actionClass = "bg-primary-soft rounded-xl p-4",
+  ...attributes
+} = Astro.props;
+const facts = await Astro.slots.render("facts");
+const action = await Astro.slots.render("action");
+---
+
+<div
+  class={cn(
+    "bg-background border-t-primary space-y-5 rounded-2xl border border-t-4 p-5 sm:p-6 [&_dd]:wrap-anywhere [&_dl>div]:min-w-0",
+    className,
+  )}
+  data-reference-card
+  {...attributes}
+>
+  <slot name="heading"><h2 class="text-base font-semibold">{title}</h2></slot>
+  {
+    facts?.trim() && (
+      <div class={cn("border-t pt-5", factsClass)} data-reference-facts set:html={facts} />
+    )
+  }
+  {
+    action?.trim() && (
+      <div class={actionClass} data-reference-action set:html={action} />
+    )
+  }
+</div>

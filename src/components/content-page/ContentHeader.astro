@@ -1,0 +1,73 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  context: { label: string; href?: string }[];
+  status?: string;
+  metadata?: string;
+}
+
+const { title, description, context, status, metadata } = Astro.props;
+const linkedContext = context.some((item) => item.href);
+const Context = linkedContext ? "nav" : "div";
+---
+
+<header data-detail-header>
+  <div
+    class="mb-4 flex flex-wrap items-center justify-between gap-x-5 gap-y-2"
+    data-detail-context
+  >
+    <Context
+      aria-label={linkedContext ? context[0]?.label : undefined}
+      class="text-primary flex min-h-11 min-w-0 flex-wrap items-center gap-x-3 font-mono text-xs uppercase"
+      data-detail-parent-links={linkedContext ? "" : undefined}
+    >
+      {
+        context.map((item, index) => (
+          <>
+            {index > 0 && (
+              <span class="text-muted-foreground" aria-hidden="true">
+                /
+              </span>
+            )}
+            {item.href ? (
+              <a
+                href={item.href}
+                class="focus-visible:outline-primary inline-flex min-h-11 max-w-full items-center rounded underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {item.label}
+              </a>
+            ) : (
+              <span class="py-1">{item.label}</span>
+            )}
+          </>
+        ))
+      }
+    </Context>
+    {
+      status?.trim() && (
+        <div class="max-w-full" data-detail-status set:html={status} />
+      )
+    }
+  </div>
+  <h1
+    class="max-w-4xl text-2xl leading-tight font-semibold text-balance wrap-anywhere sm:text-4xl"
+  >
+    {title}
+  </h1>
+  {
+    description?.trim() && (
+      <p
+        class="text-muted-foreground mt-4 max-w-2xl text-sm leading-relaxed sm:text-base"
+        data-detail-summary
+      >
+        {description}
+      </p>
+    )
+  }
+  {
+    metadata?.trim() && (
+      <div class="mt-5" data-detail-metadata set:html={metadata} />
+    )
+  }
+</header>

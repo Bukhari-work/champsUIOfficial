@@ -5,6 +5,12 @@ dist/
 
 # dependencies
 node_modules/
+.pnpm-store/
+
+# local browser-verification artifacts
+.playwright-cli/
+playwright-report/
+test-results/
 
 # logs
 npm-debug.log*

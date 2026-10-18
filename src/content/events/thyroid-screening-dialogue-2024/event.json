@@ -1,0 +1,27 @@
+{
+  "title": {
+    "en": "Policy Dialogue: Closing the Gap in Thyroid Screening",
+    "id": "Dialog Kebijakan: Menutup Kesenjangan Skrining Tiroid"
+  },
+  "summary": {
+    "en": "A policy dialogue bringing health leaders, policymakers, and experts together to explore evidence-based and sustainable approaches to thyroid screening in Indonesia.",
+    "id": "Dialog kebijakan yang mempertemukan pemimpin kesehatan, pembuat kebijakan, dan pakar untuk membahas pendekatan berbasis bukti dan berkelanjutan bagi skrining tiroid di Indonesia."
+  },
+  "format": {
+    "en": "Policy dialogue",
+    "id": "Dialog kebijakan"
+  },
+  "kind": "policyDialogue",
+  "period": "2024-11",
+  "startDate": "2024-11-05",
+  "status": "completed",
+  "venue": {
+    "en": "JW Marriott Hotel, Jakarta",
+    "id": "JW Marriott Hotel, Jakarta"
+  },
+  "recap": true,
+  "content": {
+    "mode": "article",
+    "sections": [{ "id": "recap" }]
+  }
+}

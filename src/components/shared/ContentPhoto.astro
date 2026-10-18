@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import { getImageAsset } from "@/lib/imageAssets";
+interface Props {
+  image: { src: string; alt: string };
+  class?: string;
+  eager?: boolean;
+  sizes?: string;
+  widths?: number[];
+}
+const {
+  image,
+  class: className = "aspect-3/2 w-full object-cover",
+  eager = false,
+  sizes = "(min-width: 1024px) 720px, 100vw",
+  widths = [320, 640, 960, 1280],
+} = Astro.props;
+const src = await getImageAsset(image.src);
+---
+
+{
+  typeof src === "string" ? (
+    <img
+      src={src}
+      alt={image.alt}
+      width="1200"
+      height="800"
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+      class={className}
+    />
+  ) : (
+    <Image
+      src={src}
+      alt={image.alt}
+      width={1280}
+      widths={widths}
+      sizes={sizes}
+      loading={eager ? "eager" : "lazy"}
+      class={className}
+    />
+  )
+}

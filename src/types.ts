@@ -47,7 +47,7 @@ export type NavLinkGroup = Omit<LinkGroup, "links" | "title"> & {
 };
 
 // Change this from 'interface' to 'type'
-export type SideBarLink = Link & {
+export type SectionNavigationLink = Link & {
   hasChildren?: boolean;
   children?: HTMLAttributes<"a">[];
 };
@@ -65,39 +65,14 @@ export interface FooterProps {
 }
 
 // =================================================================
-//  Reusable UI Component Types
+//  Sidebar Component Types
 // =================================================================
 
-/** A standard headline block with title, subtitle, and tagline. */
-export interface Headline {
+/** Props for the SectionNavigation component. */
+export interface SectionNavigationProps extends HTMLAttributes<"div"> {
   title?: string;
-  subtitle?: string;
-  tagline?: string;
-  class?: string;
-  titleClass?: string;
-  subtitleClass?: string;
+  menuItems: SectionNavigationLink[];
 }
-
-/** Base properties for a UI component or page section. */
-export interface Component {
-  id?: string;
-  bg?: string;
-  hasFlatBackground?: boolean; // Renamed for clarity
-  class?: string;
-  containerClass?: string;
-}
-
-/** Props for the SideBar component. */
-export interface SideBarProps extends HTMLAttributes<"div"> {
-  title?: string;
-  menuItems: SideBarLink[];
-}
-
-export type Stat = {
-  amount?: number | string;
-  icon?: string;
-  description?: string;
-} & ({ title: string; titleKey?: never } | { title?: never; titleKey: Key });
 
 // =================================================================
 //  Page Layout & Section Types
@@ -118,16 +93,5 @@ export interface BaseLayoutProps {
   mode?: "light" | "dark";
   makara?: boolean;
   mainClass?: string;
-}
-
-/**
- * A reusable base for page sections that combine Headline and Component props.
- * This avoids repeating `Omit` in every layout type.
- */
-export interface SectionProps extends Headline, Component {}
-
-/** Props for a section displaying a list of statistics. */
-export interface Stats extends SectionProps {
-  stats?: Stat[];
-  flatBackground?: boolean;
+  noindex?: boolean;
 }

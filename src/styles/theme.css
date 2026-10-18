@@ -76,6 +76,8 @@
 
 /* --- Theme configuration for Tailwind --- */
 @theme {
+  /* Four story cards at roughly 330px each, including the gaps. */
+  --container-story-wide: 86rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

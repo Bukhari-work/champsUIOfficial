@@ -8,9 +8,9 @@ import {
 import { getSinglePage } from "@/lib/contentParser.ts";
 import type { CollectionEntry } from "astro:content";
 
-import SidebarLayout from "@/layouts/SidebarLayout.astro";
-import CardAuthor from "@/components/people/CardAuthor.astro";
-import { getSidebar } from "@/navigation";
+import SectionLayout from "@/layouts/SectionLayout.astro";
+import PersonCard from "@/components/people/PersonCard.astro";
+import { getSectionNavigation } from "@/navigation";
 
 export async function getStaticPaths() {
   return getLocaleStaticPaths();
@@ -23,7 +23,7 @@ const PEOPLE_FOLDER = "people";
 
 // --- Page & Sidebar Metadata ---
 
-const sideBar = getSidebar(lang, "about");
+const sectionNavigation = getSectionNavigation(lang, "about");
 
 // --- Fetch and Filter People Data ---
 // Fetch all non-draft people (from ALL languages)
@@ -58,7 +58,7 @@ const sortedResearchers = sortPeopleByIndex(researcher);
 const content = { title: t("sidebar.about.item.experts") };
 ---
 
-<SidebarLayout {content} {sideBar} variant="wide">
+<SectionLayout {content} {sectionNavigation} variant="wide">
   <h1
     class="text-primary mt-8 mb-2 w-fit scroll-mt-24 text-3xl font-semibold sm:text-4xl lg:text-6xl"
   >
@@ -70,14 +70,14 @@ const content = { title: t("sidebar.about.item.experts") };
       <div
         class="not-prose grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
       >
-        {sortedExperts.map((person) => <CardAuthor data={person} />)}
+        {sortedExperts.map((person) => <PersonCard data={person} />)}
       </div>
       <h2 class="text-3xl">{t("about.experts.seniorResearchers")}</h2>
       <div
         class="not-prose grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
       >
-        {sortedResearchers.map((person) => <CardAuthor data={person} />)}
+        {sortedResearchers.map((person) => <PersonCard data={person} />)}
       </div>
     </div>
   </div>
-</SidebarLayout>
+</SectionLayout>

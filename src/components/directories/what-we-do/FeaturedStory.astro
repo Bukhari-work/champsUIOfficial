@@ -1,0 +1,48 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { ActivityItem } from "@/lib/contentCatalog";
+import { contentCopy } from "@/i18n/content";
+import FeaturedContent from "@/components/directories/FeaturedContent.astro";
+import { whatWeDoCopy } from "@/i18n/what-we-do";
+interface Props {
+  item?: ActivityItem;
+  lang: Language;
+  id: string;
+}
+const { item, lang, id } = Astro.props;
+const copy = whatWeDoCopy[lang];
+---
+
+<section
+  class="min-w-0"
+  aria-labelledby={`${id}-stories-title`}
+  data-area-stories
+>
+  <h3 id={`${id}-stories-title`} class="sr-only">{copy.areaStories}</h3>
+  {
+    item ? (
+      <FeaturedContent
+        headingId={`${id}-featured-title`}
+        headingLevel="h4"
+        title={item.title}
+        description={item.description}
+        eyebrow={`${copy.featuredStory} · ${item.date}`}
+        image={item.image}
+        note={item.note}
+        action={{
+          href: item.href,
+          label: item.action ?? contentCopy[lang].readStory,
+        }}
+        data-story-feature
+        data-story-slug={item.slug}
+      />
+    ) : (
+      <div class="border-t pt-6" data-expertise-empty>
+        <h4 class="text-lg font-semibold">{copy.noAreaStories}</h4>
+        <p class="text-muted-foreground mt-3 max-w-2xl text-sm leading-relaxed">
+          {copy.noAreaStoriesIntro}
+        </p>
+      </div>
+    )
+  }
+</section>

@@ -1,0 +1,53 @@
+---
+import { getLinkBehavior } from "@/lib/linkBehavior";
+interface Props {
+  number: string;
+  label: string;
+  title: string;
+  description?: string;
+  href?: string;
+  linkText?: string;
+  id?: string;
+}
+const { number, label, title, description, href, linkText, id } = Astro.props;
+const link = href ? getLinkBehavior(href) : undefined;
+---
+
+<header
+  class="mb-8 flex flex-col items-start justify-between gap-4 md:mb-10 md:flex-row md:items-end md:gap-8"
+  data-chapter={number}
+>
+  <div class="max-w-2xl">
+    <p class="text-primary mb-4 text-xs font-medium tracking-widest uppercase">
+      <span class="tabular-nums">{number}</span><span aria-hidden="true">
+        /
+      </span>{label}
+    </p>
+    <h2
+      class="text-2xl leading-tight font-semibold tracking-tight text-balance sm:text-3xl lg:text-4xl"
+      {id}
+    >
+      {title}
+    </h2>
+    {
+      description && (
+        <p class="text-muted-foreground mt-4 max-w-152 text-sm leading-relaxed">
+          {description}
+        </p>
+      )
+    }
+  </div>
+  {
+    href && (
+      <a
+        class="text-primary focus-visible:outline-primary inline-flex min-h-11 max-w-full items-center gap-3 rounded py-2 text-xs leading-normal hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4"
+        {href}
+        target={link?.target}
+        rel={link?.rel}
+      >
+        {linkText}
+        <span aria-hidden="true">{link?.arrow}</span>
+      </a>
+    )
+  }
+</header>

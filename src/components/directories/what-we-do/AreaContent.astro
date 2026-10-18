@@ -1,0 +1,41 @@
+---
+import type { Language } from "@/i18n/ui";
+import type { ActivityItem } from "@/lib/contentCatalog";
+import type { ProgrammeCategory } from "@/data/programmes";
+import { slugify } from "@/lib/utils/textConverter";
+import { selectFeaturedStory } from "@/lib/featuredStory";
+import ProgrammeIndex from "./ProgrammeIndex.astro";
+import FeaturedStory from "./FeaturedStory.astro";
+import MoreStories from "./MoreStories.astro";
+interface Props {
+  category: ProgrammeCategory;
+  items: ActivityItem[];
+  lang: Language;
+  id: string;
+}
+const { category, items, lang, id } = Astro.props;
+const featured = selectFeaturedStory(items);
+const remaining = items.filter((item) => item.slug !== featured?.slug);
+---
+
+<div class="space-y-10 sm:space-y-14" data-area-content>
+  <div class="grid gap-8" data-area-overview>
+    <header class="min-w-0" data-area-heading>
+      <span
+        id={slugify(category.category)}
+        class="block scroll-mt-32"
+        aria-hidden="true"></span>
+      <h2 id={`${id}-title`} class="text-3xl font-semibold sm:text-4xl">
+        {category.category}
+      </h2>
+      <p
+        class="text-muted-foreground mt-4 max-w-3xl text-sm leading-relaxed sm:text-base"
+      >
+        {category.description}
+      </p>
+    </header>
+    <ProgrammeIndex {category} {lang} {id} />
+  </div>
+  <FeaturedStory item={featured} {lang} {id} />
+  <MoreStories items={remaining} {lang} {id} label={category.category} />
+</div>

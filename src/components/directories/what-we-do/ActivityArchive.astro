@@ -1,0 +1,33 @@
+---
+import type { Language } from "@/i18n/ui";
+import { contentCopy } from "@/i18n/content";
+import { getLocalizedPath } from "@/i18n/utils";
+import { experiencesEn } from "@/data/experiences.en.ts";
+import { experiencesId } from "@/data/experiences.id.ts";
+import ContentDirectory from "@/components/directories/ContentDirectory.astro";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const copy = contentCopy[lang];
+const records = lang === "id" ? experiencesId : experiencesEn;
+const items = [...records].reverse().map((record) => ({
+  title: record.title,
+  description: [record.location, record.authors].filter(Boolean).join(" · "),
+  href: record.detailPath
+    ? getLocalizedPath(record.detailPath, lang)
+    : undefined,
+  date: String(record.year),
+  year: String(record.year),
+  sortDate: record.year,
+  category: copy.historical,
+}));
+---
+
+<ContentDirectory
+  {items}
+  {lang}
+  id="archive-results"
+  label={copy.archiveName}
+  dateLabel={copy.year}
+/>

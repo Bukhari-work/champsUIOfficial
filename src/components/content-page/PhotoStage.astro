@@ -1,0 +1,138 @@
+---
+import type { Language } from "@/i18n/ui";
+import ContentPhoto from "@/components/shared/ContentPhoto.astro";
+import DynamicIcon from "@/components/shared/DynamicIcon";
+import { prepareDetailPhotos, photoCopy, type DetailPhoto } from "./PhotoStage";
+interface Props {
+  id: string;
+  title: string;
+  lang: Language;
+  images: DetailPhoto[];
+}
+const { id, title, lang, images } = Astro.props;
+const photos = prepareDetailPhotos(images);
+const copy = photoCopy[lang];
+const buttonClass =
+  "bg-primary-soft text-primary hover:bg-primary/20 focus-visible:outline-primary inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-default disabled:opacity-40";
+---
+
+{
+  photos.length > 0 && (
+    <section
+      id={id}
+      aria-labelledby={`${id}-title`}
+      class="scroll-mt-28"
+      data-detail-photos
+    >
+      <photo-gallery
+        class="block min-w-0 border-t pt-8"
+        data-photo-stage
+        data-photo-counter={copy.counter}
+      >
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <h2 id={`${id}-title`} class="text-2xl font-semibold sm:text-3xl">
+            {title}
+          </h2>
+          {photos.length > 1 && (
+            <div
+              class="flex items-center gap-3 [[hidden]]:hidden!"
+              data-photo-controls
+              hidden
+            >
+              <button
+                type="button"
+                class={buttonClass}
+                aria-label={copy.previous}
+                data-photo-prev
+              >
+                <DynamicIcon
+                  icon="LuChevronLeft"
+                  aria-hidden="true"
+                  className="size-5"
+                />
+              </button>
+              <p
+                class="text-muted-foreground min-w-24 text-center text-xs tabular-nums"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                data-photo-status
+              >
+                {copy.counter
+                  .replace("{current}", "1")
+                  .replace("{total}", String(photos.length))}
+              </p>
+              <button
+                type="button"
+                class={buttonClass}
+                aria-label={copy.next}
+                data-photo-next
+              >
+                <DynamicIcon
+                  icon="LuChevronRight"
+                  aria-hidden="true"
+                  className="size-5"
+                />
+              </button>
+            </div>
+          )}
+        </div>
+        <div
+          id={`${id}-items`}
+          class="focus-visible:outline-primary grid min-w-0 gap-3 focus-visible:outline-2 focus-visible:outline-offset-4"
+          data-photo-items
+          role="group"
+          aria-label={title}
+        >
+          {photos.map((photo) => (
+            <figure class="min-w-0 [[hidden]]:hidden!" data-detail-photo>
+              <div class="bg-muted/30 aspect-16/10 overflow-hidden rounded-xl">
+                <ContentPhoto
+                  image={photo}
+                  widths={[320, 640, 960, 1280]}
+                  sizes="(min-width:1024px) 800px,90vw"
+                  class="h-full w-full object-contain"
+                />
+              </div>
+              {photo.caption && (
+                <figcaption class="text-muted-foreground pt-3 pb-2 text-xs leading-relaxed">
+                  {photo.caption}
+                </figcaption>
+              )}
+            </figure>
+          ))}
+        </div>
+        {photos.length > 1 && (
+          <div
+            class="mt-5 flex flex-wrap justify-center gap-3 [[hidden]]:hidden!"
+            role="group"
+            aria-label={copy.choose}
+            data-photo-thumbnails
+            hidden
+          >
+            {photos.map((photo, index) => (
+              <button
+                type="button"
+                data-photo-thumbnail={index}
+                aria-pressed={index === 0}
+                aria-controls={`${id}-items`}
+                aria-label={`${copy.select.replace("{number}", String(index + 1))}: ${photo.alt}`}
+                class="ring-offset-background aria-pressed:ring-primary focus-visible:outline-primary min-h-11 w-16 cursor-pointer overflow-hidden rounded-md opacity-60 ring-offset-2 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-4 aria-pressed:opacity-100 aria-pressed:ring-2 sm:w-20"
+              >
+                <ContentPhoto
+                  image={{ src: photo.src, alt: "" }}
+                  widths={[96, 160, 320]}
+                  sizes="(min-width:640px) 80px,64px"
+                  class="aspect-4/3 w-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        )}
+      </photo-gallery>
+    </section>
+  )
+}
+<script>
+  import "./PhotoStage.client";
+</script>

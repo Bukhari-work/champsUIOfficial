@@ -1,0 +1,78 @@
+{
+  "title": {
+    "en": "Demo: Southeast Asia Public Health Leadership & Innovation Forum",
+    "id": "Demo: Forum Kepemimpinan dan Inovasi Kesehatan Masyarakat Asia Tenggara"
+  },
+  "summary": {
+    "en": "A sample two-day regional forum bringing public health leaders together to explore practical approaches to stronger, more innovative health systems. This unlisted preview demonstrates the complete event-page layout.",
+    "id": "Contoh forum regional dua hari yang mempertemukan pemimpin kesehatan masyarakat untuk membahas pendekatan praktis bagi sistem kesehatan yang lebih kuat dan inovatif. Pratinjau ini tidak tercantum di direktori dan menunjukkan tata letak halaman kegiatan lengkap."
+  },
+  "format": {
+    "en": "In-person forum",
+    "id": "Forum tatap muka"
+  },
+  "kind": "seminar",
+  "period": "2027-03",
+  "startDate": "2027-03-18",
+  "endDate": "2027-03-19",
+  "status": "scheduled",
+  "venue": {
+    "en": "Jakarta, Indonesia (sample venue)",
+    "id": "Jakarta, Indonesia (contoh lokasi)"
+  },
+  "duration": {
+    "en": "09.00–17.00 WIB each day",
+    "id": "09.00–17.00 WIB setiap hari"
+  },
+  "invitation": true,
+  "previewOnly": true,
+  "registration": {
+    "href": "https://example.org/event-preview-registration",
+    "closesAt": "2027-03-10T23:59:00+07:00"
+  },
+  "topics": {
+    "en": [
+      "Building resilient and equitable health systems",
+      "Turning research evidence into public policy",
+      "Leading cross-sector partnerships and regional collaboration"
+    ],
+    "id": [
+      "Membangun sistem kesehatan yang tangguh dan berkeadilan",
+      "Menerjemahkan bukti penelitian menjadi kebijakan publik",
+      "Memimpin kemitraan lintas sektor dan kolaborasi regional"
+    ]
+  },
+  "resources": [
+    {
+      "title": {
+        "en": "Sample two-day programme",
+        "id": "Contoh program dua hari"
+      },
+      "href": "https://example.org/event-preview-programme.pdf",
+      "kind": "document"
+    },
+    {
+      "title": {
+        "en": "Sample participant reading list",
+        "id": "Contoh daftar bacaan peserta"
+      },
+      "href": "https://example.org/event-preview-reading",
+      "kind": "document"
+    }
+  ],
+  "content": {
+    "mode": "tabs",
+    "views": [
+      {
+        "key": "overview",
+        "label": { "en": "Overview", "id": "Ringkasan" },
+        "sections": [{ "id": "invitation" }]
+      },
+      {
+        "key": "programme",
+        "label": { "en": "Programme & participation", "id": "Program & partisipasi" },
+        "sections": [{ "id": "details" }, { "id": "resources" }]
+      }
+    ]
+  }
+}

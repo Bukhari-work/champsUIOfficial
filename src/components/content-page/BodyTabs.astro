@@ -1,0 +1,82 @@
+---
+import { render } from "astro:content";
+import type { Language } from "@/i18n/ui";
+import type { EventDocumentEntry, StoryDocumentEntry, PlannedView } from "@/lib/contentCatalog";
+import { contentCopy } from "@/i18n/content";
+import { getTableOfContentsLinks } from "./TableOfContents";
+import TableOfContents from "./TableOfContents.astro";
+
+interface Props {
+  views: PlannedView[];
+  documents: Record<string, StoryDocumentEntry | EventDocumentEntry>;
+  lang: Language;
+  titles?: Record<string, string>;
+  documentProps?: Record<string, unknown>;
+}
+const { views, documents, lang, titles, documentProps } = Astro.props;
+const copy = contentCopy[lang];
+const prepared = await Promise.all(views.map(async (view) => {
+  const documentsForView = await Promise.all(view.sections.map(async (section) => {
+    const document = documents[section.id];
+    if (!document) throw new Error(`Missing declared document ${section.id}`);
+    return { section, document, rendered: await render(document) };
+  }));
+  const headings = documentsForView.flatMap(({ rendered }) => rendered.headings.filter((heading) => heading.depth === 2 || heading.depth === 3));
+  return { ...view, documentsForView, links: getTableOfContentsLinks(headings) };
+}));
+---
+
+<body-tabs class="group/tabs block min-w-0" data-body-tabs>
+  <nav aria-label={lang === "id" ? "Jelajahi isi" : "Explore this page"}
+    hidden data-body-views class="mb-8 border-b print:hidden">
+    <div class="flex gap-1" data-body-tablist>
+      {prepared.map((view) => <a
+        id={`body-view-${view.key}-tab`} href={`#body-view-${view.key}`}
+        data-body-tab={view.key}
+        class="text-muted-foreground focus-visible:outline-primary aria-selected:border-primary aria-selected:text-primary flex min-h-12 min-w-0 flex-1 items-center justify-center border-b-2 border-transparent px-2 py-3 text-center text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 sm:text-base"
+      >{view.label[lang]}</a>)}
+    </div>
+  </nav>
+  {prepared.map((view) => <div
+    id={`body-view-${view.key}`} data-body-view={view.key}
+    aria-labelledby={`body-view-${view.key}-heading`}
+    class="scroll-mt-28 outline-none print:block!"
+  >
+    <h2 id={`body-view-${view.key}-heading`}
+      class="mb-6 text-2xl font-semibold group-data-enhanced/tabs:sr-only print:not-sr-only"
+    >{view.label[lang]}</h2>
+    <div class="min-w-0 max-w-4xl">
+      {view.links.length >= 3 && <div class="mb-6 print:hidden" data-body-contents>
+        <TableOfContents {lang} scope="view" links={view.links} />
+      </div>}
+      <div data-body-reading>
+        {view.documentsForView.map(({ section, document, rendered }) => {
+          const Content = rendered.Content;
+          const sourceLang = document.id.endsWith(".id") ? "id" : "en";
+          if (document.data.renderMode === "component") return (
+            <div class="min-w-0" data-body-document={section.id}>
+              {sourceLang !== lang && <p class="text-muted-foreground mb-4 text-sm">{copy.originalEnglish}</p>}
+              <Content {...documentProps} />
+            </div>
+          );
+          return (
+            <section
+              id={section.id}
+              lang={sourceLang}
+              aria-labelledby={titles?.[section.id] ? `${section.id}-title` : undefined}
+              class="scroll-mt-28 border-t py-8 first:border-t-0 first:pt-0 sm:py-10 sm:first:pt-0"
+              data-detail-section
+            >
+              {titles?.[section.id] && <h2 id={`${section.id}-title`} class="sr-only mb-5 text-xl font-semibold sm:text-2xl">{titles[section.id]}</h2>}
+              <div class="min-w-0 space-y-5" data-section-content>
+                {sourceLang !== lang && <p class="text-muted-foreground mb-4 text-sm">{copy.originalEnglish}</p>}
+                <div class="prose dark:prose-invert max-w-prose [&_h2]:scroll-mt-28 [&_h3]:scroll-mt-28"><Content {...documentProps} /></div>
+              </div>
+            </section>
+          );
+        })}
+      </div>
+    </div>
+  </div>)}
+</body-tabs>
+<script>import "./BodyTabs.client";</script>

@@ -1,0 +1,54 @@
+{
+  "title": {
+    "en": "Story Sidebar Preview: Local Health Planning",
+    "id": "Pratinjau Sidebar Cerita: Perencanaan Kesehatan Daerah"
+  },
+  "description": {
+    "en": "An unlisted sample story showing how standard and story-specific facts can share the sidebar.",
+    "id": "Contoh cerita yang tidak tercantum untuk menunjukkan bagaimana informasi umum dan fakta khusus cerita dapat ditampilkan bersama di sidebar."
+  },
+  "authors": {
+    "en": ["en/aulia-khairina-khairil"],
+    "id": ["id/aulia-khairina-khairil"]
+  },
+  "categories": ["Preview"],
+  "tags": [],
+  "draft": false,
+  "previewOnly": true,
+  "partner": {
+    "en": "Ministry of Health and district health offices",
+    "id": "Kementerian Kesehatan dan dinas kesehatan kabupaten"
+  },
+  "workType": "consulting",
+  "activityPeriod": {
+    "startYear": 2024,
+    "endYear": 2025
+  },
+  "sidebarFacts": [
+    {
+      "label": { "en": "Coverage", "id": "Cakupan" },
+      "value": {
+        "en": "Three districts in Aceh",
+        "id": "Tiga kabupaten di Aceh"
+      }
+    },
+    {
+      "label": { "en": "Participants", "id": "Peserta" },
+      "value": {
+        "en": "District health offices and cross-sector partners",
+        "id": "Dinas kesehatan kabupaten dan mitra lintas sektor"
+      }
+    },
+    {
+      "label": { "en": "Focus", "id": "Fokus" },
+      "value": {
+        "en": "Evidence-based planning and local capacity",
+        "id": "Perencanaan berbasis bukti dan kapasitas daerah"
+      }
+    }
+  ],
+  "content": {
+    "mode": "article",
+    "sections": [{ "id": "article" }]
+  }
+}

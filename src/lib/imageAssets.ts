@@ -2,7 +2,7 @@ import type { ImageMetadata } from "astro";
 
 // Keep public URLs used by content while allowing cards to optimize the source.
 const publicImages = import.meta.glob<ImageMetadata>(
-  "/public/images/{news,people,what-we-do}/*.{jpeg,jpg,png,webp}",
+  "/public/images/{news,people,projects,what-we-do}/*.{jpeg,jpg,png,webp}",
   { import: "default" },
 );
 

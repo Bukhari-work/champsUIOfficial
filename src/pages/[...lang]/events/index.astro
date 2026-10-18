@@ -1,0 +1,28 @@
+---
+import Base from "@/layouts/Base.astro";
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  getLocalizedPath,
+} from "@/i18n/utils";
+import { contentCopy } from "@/i18n/content";
+import { getEvents } from "@/lib/contentCatalog";
+import EventsListing from "@/components/directories/events/EventsListing.astro";
+import { eventsDirectoryCopy } from "@/components/directories/events/Copy";
+import { SITE } from "@/config";
+export function getStaticPaths() {
+  return getLocaleStaticPaths();
+}
+const lang = getPageLanguage(Astro.params.lang);
+const copy = contentCopy[lang];
+const events = await getEvents();
+const content = {
+  title: copy.events,
+  description: eventsDirectoryCopy[lang].heroIntro,
+  canonical: new URL(getLocalizedPath("/events", lang), SITE.base_href),
+};
+---
+
+<Base {content}>
+  <EventsListing {events} {lang} />
+</Base>

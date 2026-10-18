@@ -5,6 +5,7 @@ export interface ExperienceItem {
   authors?: string;
   location?: string;
   icon: string;
+  detailPath?: string;
 }
 
 // Export the typed array
@@ -425,6 +426,7 @@ export const experiencesEn: ExperienceItem[] = [
   {
     year: 2024,
     title: "Capacity Building on Drug-Resistant Tuberculosis Advocations",
+    detailPath: "/events/dr-tb-advocacy-2024",
     authors:
       "Prof. Adang B., Prof. Ede S.D., Prof. Dumilah A., Dr. Prastuti S., et al",
     location: "Ministry of Health, USAID & MSH",
@@ -449,6 +451,7 @@ export const experiencesEn: ExperienceItem[] = [
   {
     year: 2024,
     title: "Global Health Leadership and Diplomacy Training",
+    detailPath: "/events/ghld-2024",
     authors: "Dr. Vetty Y., et al",
     location: "Ministry of Health",
     icon: "FaGlobe",
@@ -456,6 +459,7 @@ export const experiencesEn: ExperienceItem[] = [
   {
     year: 2024,
     title: "Policy Dialogue: Optimizing Thyroid Screening in Indonesia",
+    detailPath: "/events/thyroid-screening-dialogue-2024",
     authors: "Prof. Ede S.D., et al",
     location: "MERCK",
     icon: "FaMicroscope",

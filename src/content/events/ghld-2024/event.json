@@ -1,0 +1,71 @@
+{
+  "title": {
+    "en": "Global Health Leadership & Diplomacy Training",
+    "id": "Pelatihan Kepemimpinan & Diplomasi Kesehatan Global"
+  },
+  "summary": {
+    "en": "CHAMPS and the Ministry of Health brought Indonesian professionals together for three days of global health governance, diplomacy, and negotiation training in Jakarta.",
+    "id": "CHAMPS bersama Kementerian Kesehatan mempertemukan para profesional Indonesia dalam pelatihan tata kelola kesehatan global, diplomasi, dan negosiasi selama tiga hari di Jakarta."
+  },
+  "format": {
+    "en": "Training programme",
+    "id": "Program pelatihan"
+  },
+  "kind": "training",
+  "period": "2024-10",
+  "status": "completed",
+  "venue": {
+    "en": "The Ritz-Carlton Jakarta",
+    "id": "The Ritz-Carlton Jakarta"
+  },
+  "partner": {
+    "en": "Ministry of Health",
+    "id": "Kementerian Kesehatan"
+  },
+  "duration": {
+    "en": "Three days",
+    "id": "Tiga hari"
+  },
+  "workFeature": {
+    "title": {
+      "en": "Preparing Indonesia’s global health leaders.",
+      "id": "Mempersiapkan pemimpin kesehatan global Indonesia."
+    },
+    "contribution": {
+      "en": "A learning programme combining expert-led sessions with hands-on negotiation exercises, connecting global health priorities with Indonesia’s role in international forums.",
+      "id": "Program pembelajaran yang memadukan sesi bersama pakar dengan latihan negosiasi, menghubungkan prioritas kesehatan global dengan peran Indonesia dalam forum internasional."
+    }
+  },
+  "recap": true,
+  "content": {
+    "mode": "tabs",
+    "views": [
+      {
+        "key": "overview",
+        "label": { "en": "Overview", "id": "Ringkasan" },
+        "sections": [{ "id": "recap" }]
+      },
+      {
+        "key": "details",
+        "label": { "en": "Event details", "id": "Detail kegiatan" },
+        "sections": [{ "id": "details" }]
+      }
+    ]
+  },
+  "topics": {
+    "en": [
+      "Global health governance and diplomatic etiquette",
+      "Public diplomacy and cross-cultural communication",
+      "Pandemic Treaty multilateral negotiation simulation",
+      "Strategic negotiation with Ambassador Dian Triansyah Djani",
+      "Personal branding and media engagement"
+    ],
+    "id": [
+      "Tata kelola kesehatan global dan etiket diplomatik",
+      "Diplomasi publik dan komunikasi lintas budaya",
+      "Simulasi negosiasi multilateral Perjanjian Pandemi",
+      "Negosiasi strategis bersama Duta Besar Dian Triansyah Djani",
+      "Personal branding dan keterlibatan media"
+    ]
+  }
+}

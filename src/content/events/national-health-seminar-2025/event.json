@@ -1,0 +1,27 @@
+{
+  "title": {
+    "en": "National Health Seminar 2025",
+    "id": "Seminar Kesehatan Nasional 2025"
+  },
+  "summary": {
+    "en": "A multi-stakeholder dialogue on accessible, efficient, and equitable health services, held as part of the 57th anniversary of BPJS Kesehatan.",
+    "id": "Dialog multipihak tentang layanan kesehatan yang mudah diakses, efisien, dan berkeadilan, diselenggarakan sebagai bagian dari peringatan HUT ke-57 BPJS Kesehatan."
+  },
+  "format": {
+    "en": "Seminar",
+    "id": "Seminar"
+  },
+  "kind": "seminar",
+  "period": "2025-07",
+  "startDate": "2025-07-17",
+  "status": "completed",
+  "venue": {
+    "en": "Balai Purnomo Prawiro, Universitas Indonesia",
+    "id": "Balai Purnomo Prawiro, Universitas Indonesia"
+  },
+  "recap": true,
+  "content": {
+    "mode": "article",
+    "sections": [{ "id": "recap" }]
+  }
+}

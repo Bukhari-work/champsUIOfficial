@@ -1,0 +1,55 @@
+{
+  "title": {
+    "en": "Employee Satisfaction Survey: Fatmawati General Hospital and CHAMPS’ Step Toward Evidence-Based Management",
+    "id": "Survei Kepuasan Pegawai: Langkah RSUP Fatmawati dan CHAMPS Menuju Manajemen Berbasis Bukti"
+  },
+  "description": {
+    "en": "CHAMPS surveyed medical and non-medical staff at Fatmawati General Hospital to support employee well-being and evidence-based management.",
+    "id": "CHAMPS menyurvei tenaga medis dan nonmedis RSUP Fatmawati untuk mendukung kesejahteraan pegawai serta manajemen berbasis bukti."
+  },
+  "subtitle": {
+    "en": "Joint commitment to building a positive, efficient, and proactive work environment",
+    "id": "Komitmen bersama untuk membangun lingkungan kerja yang positif, efisien, dan proaktif"
+  },
+  "authors": {
+    "en": [
+      "en/aulia-khairina-khairil"
+    ],
+    "id": [
+      "id/aulia-khairina-khairil"
+    ]
+  },
+  "date": "2025-06-19T10:00:00.000Z",
+  "images": [
+    {
+      "src": "/images/news/SKP RS Fatmawati 1.webp",
+      "alt": "A presenter discussing the employee satisfaction survey at Fatmawati General Hospital."
+    },
+    {
+      "src": "/images/news/SKP RS Fatmawati 2.webp",
+      "alt": "Documentation: Employee Satisfaction Survey: Fatmawati General Hospital and CHAMPS’ Step Toward Evidence-Based Management"
+    }
+  ],
+  "categories": [
+    "Report",
+    "training"
+  ],
+  "tags": [],
+  "draft": false,
+  "partner": {
+    "en": "Fatmawati General Hospital",
+    "id": "RSUP Fatmawati"
+  },
+  "workType": "consulting",
+  "activityPeriod": {
+    "startYear": 2025
+  },
+  "content": {
+    "mode": "article",
+    "sections": [
+      {
+        "id": "article"
+      }
+    ]
+  }
+}

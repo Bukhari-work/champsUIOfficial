@@ -1,0 +1,126 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import ContentPhoto from "@/components/shared/ContentPhoto.astro";
+import { buttonVariants } from "@/components/ui/button/index";
+import { getLinkBehavior } from "@/lib/linkBehavior";
+import { cn } from "@/lib/utils";
+
+interface Props
+  extends Omit<HTMLAttributes<"article">, "title" | "aria-labelledby"> {
+  headingId: string;
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  image?: { src: string; alt: string };
+  note?: string;
+  themes?: { label: string; items: string[] };
+  partner?: { label: string; value: string };
+  action?: { href: string; label: string };
+  headingLevel?: "h2" | "h3" | "h4";
+}
+const {
+  headingId,
+  title,
+  description,
+  eyebrow,
+  image,
+  note,
+  themes,
+  partner,
+  action,
+  headingLevel: Heading = "h3",
+  class: className,
+  ...attributes
+} = Astro.props;
+const Wrapper = action?.href ? "a" : "div";
+const link = action && getLinkBehavior(action.href);
+---
+
+<article
+  {...attributes}
+  aria-labelledby={headingId}
+  class={cn(
+    "bg-primary-soft grid min-w-0 overflow-hidden rounded-2xl border",
+    className,
+  )}
+  data-featured-content
+>
+  <Wrapper
+    href={action?.href || undefined}
+    target={link?.target}
+    rel={link?.rel}
+    aria-labelledby={action?.href ? headingId : undefined}
+    class:list={[
+      "grid min-w-0 rounded-2xl",
+      image && "lg:grid-cols-2",
+      action?.href &&
+        "group focus-visible:outline-primary focus-visible:outline-2 focus-visible:-outline-offset-4",
+    ]}
+    data-featured-link={action?.href ? "" : undefined}
+  >
+    {
+      image && (
+        <div class="min-w-0" data-featured-media>
+          <ContentPhoto
+            {image}
+            widths={[480, 960, 1280]}
+            sizes="(min-width: 1024px) 48vw, 90vw"
+            class="aspect-video h-full w-full object-cover"
+          />
+        </div>
+      )
+    }
+    <div class="min-w-0 p-6 sm:p-8">
+      {eyebrow && <p class="text-primary mb-3 font-mono text-xs">{eyebrow}</p>}
+      <Heading
+        id={headingId}
+        class:list={[
+          "text-2xl font-semibold text-balance sm:text-3xl",
+          action?.href && "underline-offset-4 group-hover:underline",
+        ]}>{title}</Heading
+      >
+      {
+        description && (
+          <p class="text-muted-foreground mt-4 max-w-3xl text-sm leading-relaxed">
+            {description}
+          </p>
+        )
+      }
+      {note && <p class="text-muted-foreground mt-3 text-xs">{note}</p>}
+      {
+        themes && themes.items.length > 0 && (
+          <div class="mt-5 border-t pt-4" data-featured-themes>
+            <>
+              <p class="mb-3 text-sm font-semibold">{themes.label}</p>
+              <ul class="text-muted-foreground list-disc space-y-2 pl-5 text-sm">
+                {themes.items.map((theme) => (
+                  <li>{theme}</li>
+                ))}
+              </ul>
+            </>
+          </div>
+        )
+      }
+      {
+        partner?.value && (
+          <p class="text-muted-foreground mt-4 text-xs" data-featured-partner>
+            {partner.label}: {partner.value}
+          </p>
+        )
+      }
+      {
+        action?.href && (
+          <span
+            class={buttonVariants({
+              className: "mt-6 h-auto min-h-11 max-w-full whitespace-normal",
+            })}
+            aria-hidden="true"
+            data-featured-action
+          >
+            {action.label}
+          </span>
+        )
+      }
+    </div>
+  </Wrapper>
+</article>

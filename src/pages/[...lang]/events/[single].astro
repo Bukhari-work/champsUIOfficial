@@ -1,0 +1,123 @@
+---
+import Base from "@/layouts/Base.astro";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import { getLocaleStaticPaths, getLocalizedPath, getPageLanguage } from "@/i18n/utils";
+import {
+  getEvents,
+  getEventDocuments,
+  eventPath,
+  type EventEntry,
+} from "@/lib/contentCatalog";
+import { contentCopy } from "@/i18n/content";
+import { SITE } from "@/config";
+import { getCollection, getEntries } from "astro:content";
+import { getEventStatus } from "@/lib/eventDates";
+import ContentBody from "@/components/content-page/ContentBody.astro";
+import EventSidebar from "@/components/content-page/events/EventSidebar.astro";
+import PhotoStage from "@/components/content-page/PhotoStage.astro";
+import CallToAction from "@/components/shared/CallToAction.astro";
+import { Button } from "@/components/ui/button/index";
+import { eventDetailCopy } from "@/components/content-page/events/EventDetailCopy";
+import { resolveInvitationAssets } from "@/lib/eventInvitationAssets";
+interface Props {
+  event: EventEntry;
+}
+export async function getStaticPaths() {
+  // Preview-only fixtures use the production slug renderer but remain out of directories.
+  const events = (await getCollection("events", (event) => !event.data.draft))
+    .filter((event) => !event.data.listingOnly);
+  return getLocaleStaticPaths().flatMap(({ params }) =>
+    events.map((event) => ({
+      params: { ...params, single: event.id },
+      props: { event },
+    })),
+  );
+}
+const { event } = Astro.props;
+const lang = getPageLanguage(Astro.params.lang);
+const plan = event.data.content;
+if (!plan) throw new Error(`Event ${event.id} has no detail content plan`);
+const sections = plan.mode === "article"
+  ? plan.sections
+  : plan.views.flatMap((view) => view.sections);
+const documents = await getEventDocuments(event, sections.map(({ id }) => id), lang);
+const invitationData = documents.invitation?.data;
+const canonical = new URL(eventPath(event, lang), SITE.base_href);
+const content = {
+  title: event.data.title[lang],
+  description: event.data.summary[lang],
+  canonical,
+};
+const language = lang;
+const c = contentCopy[language];
+const p = eventDetailCopy[language];
+const status = getEventStatus(event.data);
+const upcoming = status === "upcoming";
+const recap = documents.recap;
+const photos = recap?.data.images ?? [];
+const archiveOnly = !documents.recap && !documents.invitation && Boolean(event.data.invitationArchive);
+const archive = resolveInvitationAssets(
+  event.data.invitationArchive,
+  language,
+  !upcoming ? invitationData?.originalRegistration?.qrCode : undefined,
+);
+const documentTitles = {
+  recap: c.recap,
+  invitation: upcoming ? c.aboutEvent : p.originalInvitation,
+};
+const documentProps = { eventData: event.data, lang: language, archive, archiveOnly };
+const authors = recap ? await getEntries(recap.data.authors) : [];
+const hasMaterials = event.data.resources.length > 0 && sections.some((section) => section.id === "resources");
+---
+
+<Base {content} noindex={event.data.previewOnly}>
+  <ContentLayout
+    kind="event" lang={language} title={event.data.title[language]} description={event.data.summary[language]}
+    shareUrl={canonical.href}
+    context={[
+      { label: c.events, href: getLocalizedPath("/events", language) },
+      { label: c[event.data.kind] },
+    ]}
+    state={upcoming ? "upcoming" : recap ? "recap" : archiveOnly ? "archive" : "invitation"}
+  >
+    <span slot="status" class:list={[
+      "inline-flex rounded-full border px-3 py-2 text-xs font-semibold",
+      status === "cancelled" ? "border-destructive/30 bg-destructive/10 text-destructive"
+        : "bg-primary-soft text-primary",
+    ]}>{c[status]}</span>
+    {authors.length > 0 && <p slot="metadata" class="text-muted-foreground text-xs leading-relaxed">
+      {c.authors}: {authors.map((author, index) => <Fragment>
+        <a href={getLocalizedPath(`/about/people/${author.id.split("/").slice(1).join("/")}`, language)}
+          class="text-primary inline-flex min-h-11 items-center rounded underline underline-offset-4"
+        >{author.data.name}</a>{index < authors.length - 1 ? ", " : ""}
+      </Fragment>)}
+      {recap?.data.date && ` · ${c.published}: ${recap.data.date.toLocaleDateString(language, {
+        year: "numeric", month: "long", day: "numeric", timeZone: "UTC",
+      })}`}
+    </p>}
+    <div slot="reference">
+      <EventSidebar {event} {invitationData} lang={language}
+        sourceLang={documents.invitation?.id.endsWith(".id") ? "id" : "en"}
+        {hasMaterials} />
+    </div>
+    <ContentBody
+      lang={language} content={plan} {documents} titles={documentTitles}
+      {documentProps}
+    />
+    {photos.length > 0 && <div slot="gallery">
+      <PhotoStage id="photos" title={c.photos} images={photos} lang={language} />
+    </div>}
+    <div slot="ending" class="space-y-10">
+      {!upcoming ? <CallToAction
+        class="md:flex-row md:items-center md:justify-between"
+        headingId="event-next-step" size="compact" title={c.futureTitle}
+        description={c.futureText}
+        action={{ href: `${getLocalizedPath("/contact", language)}#contactForm`, label: c.contact }}
+      /> : <section id="event-enquiries" class="flex flex-col gap-5 rounded-2xl border p-6 sm:p-8 md:flex-row md:items-center md:justify-between"
+        aria-labelledby="event-enquiries-title">
+        <h2 id="event-enquiries-title" class="text-2xl font-semibold">{p.contact}</h2>
+        <Button href={getLocalizedPath("/contact", language)}>{c.contact}</Button>
+      </section>}
+    </div>
+  </ContentLayout>
+</Base>

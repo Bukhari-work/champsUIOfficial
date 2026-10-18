@@ -1,0 +1,16 @@
+---
+interface Props {
+  topics: string[];
+  sourceLang: string;
+}
+const { topics, sourceLang } = Astro.props;
+---
+
+<ol lang={sourceLang} class="divide-y rounded-xl border px-5">
+  {topics.map((topic, index) => <li class="flex gap-4 py-4">
+    <span class="text-primary shrink-0 pt-1 font-mono text-xs" aria-hidden="true">
+      {String(index + 1).padStart(2, "0")}
+    </span>
+    <span>{topic}</span>
+  </li>)}
+</ol>

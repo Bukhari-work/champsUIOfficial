@@ -1,0 +1,77 @@
+---
+import ContentPhoto from "@/components/shared/ContentPhoto.astro";
+import { cn } from "@/lib/utils";
+import { getLinkBehavior } from "@/lib/linkBehavior";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  image?: { src: string; alt: string };
+  textLink?: { href: string; label: string };
+  imageSizes?: string;
+  class?: string;
+}
+const {
+  eyebrow,
+  title,
+  description,
+  image,
+  textLink,
+  imageSizes = "(min-width: 1600px) 1440px, 90vw",
+  class: className,
+} = Astro.props;
+const link = textLink && getLinkBehavior(textLink.href);
+---
+
+<header class={cn("mb-10 pt-5 sm:pt-8", className)} data-page-hero>
+  <div class="mx-auto flex max-w-4xl flex-col items-center gap-6 text-center">
+    <div class="max-w-4xl min-w-0">
+      <div
+        class="text-primary mb-4 flex items-center justify-center gap-4 font-mono text-xs uppercase sm:mb-6"
+        data-hero-eyebrow
+      >
+        <span class="bg-primary h-px w-8 shrink-0 sm:w-12" aria-hidden="true"
+        ></span>
+        <div class="min-w-0"><span>{eyebrow}</span></div>
+        <span class="bg-primary h-px w-8 shrink-0 sm:w-12" aria-hidden="true"
+        ></span>
+      </div>
+      <h1 class="text-3xl font-semibold text-balance sm:text-5xl lg:text-6xl">
+        {title}
+      </h1>
+      <p
+        class="text-muted-foreground mx-auto mt-3 max-w-2xl text-sm leading-relaxed sm:text-base"
+      >
+        {description}
+      </p>
+      {
+        textLink && (
+          <a
+            href={textLink.href}
+            target={link?.target}
+            rel={link?.rel}
+            class="text-primary focus-visible:outline-primary mt-3 inline-flex min-h-11 max-w-full items-center justify-center gap-2 rounded px-2 text-sm font-medium underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+            data-hero-contact-link
+          >
+            <span>{textLink.label}</span>
+            <span aria-hidden="true">{link?.arrow}</span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+  {
+    image && (
+      <figure class="mt-8 overflow-hidden rounded-2xl border sm:mt-10">
+        <ContentPhoto
+          {image}
+          eager
+          widths={[480, 960, 1280, 1600]}
+          sizes={imageSizes}
+          class="aspect-2/1 w-full object-cover sm:aspect-3/1 lg:aspect-4/1"
+        />
+      </figure>
+    )
+  }
+</header>

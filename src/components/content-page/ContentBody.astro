@@ -1,0 +1,69 @@
+---
+import type { ContentPlan, EventDocumentEntry, StoryDocumentEntry } from "@/lib/contentCatalog";
+import type { Language } from "@/i18n/ui";
+import { render } from "astro:content";
+import { contentCopy } from "@/i18n/content";
+import BodyTabs from "./BodyTabs.astro";
+
+interface Props {
+  lang: Language;
+  content: ContentPlan;
+  documents: Record<string, StoryDocumentEntry | EventDocumentEntry>;
+  titles?: Record<string, string>;
+  documentProps?: Record<string, unknown>;
+}
+
+const {
+  lang,
+  content,
+  documents,
+  titles,
+  documentProps,
+} = Astro.props;
+const copy = contentCopy[lang];
+const rendered = content.mode === "article"
+  ? await Promise.all(content.sections.map(async (section) => {
+      const document = documents[section.id];
+      if (!document) throw new Error(`Missing declared document ${section.id}`);
+      return render(document);
+    }))
+  : [];
+---
+
+{content.mode === "article" ? (
+  content.sections.map((section, index) => {
+    const document = documents[section.id];
+    const Content = rendered[index]?.Content;
+    if (!document || !Content) return null;
+    const sourceLang = document.id.endsWith(".id") ? "id" : "en";
+    if (document.data.renderMode === "component") return (
+      <div class="min-w-0" data-body-document={section.id}>
+        {sourceLang !== lang && <p class="text-muted-foreground mb-4 text-sm">{copy.originalEnglish}</p>}
+        <Content {...documentProps} />
+      </div>
+    );
+    return (
+      <section
+        id={section.id}
+        lang={sourceLang}
+        aria-labelledby={titles?.[section.id] ? `${section.id}-title` : undefined}
+        class="scroll-mt-28 border-t py-8 first:border-t-0 first:pt-0 sm:py-10 sm:first:pt-0"
+        data-detail-section
+      >
+        {titles?.[section.id] && <h2 id={`${section.id}-title`} class="sr-only mb-5 text-xl font-semibold sm:text-2xl">{titles[section.id]}</h2>}
+        <div class="min-w-0 space-y-5" data-section-content>
+          {sourceLang !== lang && <p class="text-muted-foreground mb-4 text-sm">{copy.originalEnglish}</p>}
+          <div class="prose dark:prose-invert max-w-prose [&_h2]:scroll-mt-28 [&_h3]:scroll-mt-28"><Content {...documentProps} /></div>
+        </div>
+      </section>
+    );
+  })
+) : (
+  <BodyTabs
+    views={content.views}
+    {documents}
+    {lang}
+    {titles}
+    {documentProps}
+  />
+)}

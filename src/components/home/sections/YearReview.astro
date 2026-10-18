@@ -1,9 +1,9 @@
 ---
 import type { Language } from "@/i18n/ui";
 import { useTranslations, getLocalizedPath } from "@/i18n/utils";
-import Stats from "@/components/shared/Stats.astro";
-import SectionHeading from "../shared/SectionHeading.astro";
-import Kaleidoscope from "../shared/Kaleidoscope.astro";
+import YearStats from "../components/YearStats.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import Kaleidoscope from "../components/Kaleidoscope.astro";
 interface Props {
   lang: Language;
 }
@@ -16,9 +16,7 @@ const t = useTranslations(lang);
   data-home-section="results"
   aria-labelledby="results-title"
 >
-  <Stats
-    id="home-results"
-    containerClass="max-w-6xl py-14 md:py-20 lg:pt-20"
+  <YearStats
     stats={[
       {
         title: t("stats.item1"),
@@ -43,16 +41,15 @@ const t = useTranslations(lang);
     ]}
   >
     <SectionHeading
-      slot="headline"
       number="02"
       label={t("home.story.year")}
       title={t("home.story.resultsTitle")}
       id="results-title"
       description={t("stats.subtitle")}
-      href={getLocalizedPath("/what-we-do/experiences", lang)}
+      href={getLocalizedPath("/what-we-do/archive", lang)}
       linkText={t("home.story.experience")}
     />
-  </Stats>
+  </YearStats>
   <div class="mx-auto max-w-6xl px-5 pb-14 sm:px-6 sm:pb-20">
     <Kaleidoscope {lang} />
   </div>
