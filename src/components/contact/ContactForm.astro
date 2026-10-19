@@ -1,41 +1,85 @@
 ---
 import { Button } from "@/components/ui/button";
+import type { Language } from "@/i18n/ui";
 
 export interface Props {
   title: string;
   url: string;
+  lang: Language;
 }
 
-const { title, url } = Astro.props;
+const { title, url, lang } = Astro.props;
+const backend = import.meta.env.CONTACT_FORM_BACKEND === "vercel";
+const copy = {
+  en: {
+    name: "Full name",
+    email: "Email address",
+    message: "Message",
+    submit: "Send message",
+    submitting: "Sending…",
+    success: "Thanks — your message was sent.",
+    received: "Thanks — your message has been received.",
+    rateLimited:
+      "Too many messages have been submitted. Please try again later or email CHAMPS UI.",
+    error:
+      "The form could not send your message. You can send it by email instead.",
+    emailFallback: "Email CHAMPS UI",
+    errorConfig: "The form is unavailable right now. Please email CHAMPS UI.",
+  },
+  id: {
+    name: "Nama lengkap",
+    email: "Alamat email",
+    message: "Pesan",
+    submit: "Kirim pesan",
+    submitting: "Mengirim…",
+    success: "Terima kasih — pesan Anda telah terkirim.",
+    received: "Terima kasih — pesan Anda telah diterima.",
+    rateLimited:
+      "Terlalu banyak pesan yang dikirim. Silakan coba lagi nanti atau email CHAMPS UI.",
+    error:
+      "Pesan belum dapat dikirim lewat formulir. Anda dapat mengirimnya lewat email.",
+    emailFallback: "Email CHAMPS UI",
+    errorConfig: "Formulir sedang tidak tersedia. Silakan email CHAMPS UI.",
+  },
+}[lang];
 ---
 
-<article
-  class="bg-background dark:shadow-primary/20 right-0 mx-auto mt-6 w-full max-w-xl rounded-xl border p-2.5 px-10 pb-10 font-light shadow-xl"
->
-  <h3>{title}</h3>
-
+<section class="bg-background min-w-0 rounded-2xl border p-5 sm:p-7 lg:p-8">
+  <h2 class="font-libron mb-6 text-2xl sm:text-3xl">{title}</h2>
   <form
     id="contactForm"
-    class="scroll-mt-32"
+    class="scroll-mt-32 space-y-5"
     method="POST"
-    data-contact-url={url}
+    action={backend ? "/api/contact" : url}
+    data-contact-url={backend ? "/api/contact" : url}
+    data-contact-backend={backend ? "vercel" : "legacy"}
+    data-contact-success={backend ? copy.received : copy.success}
+    data-contact-rate-limit={copy.rateLimited}
+    data-contact-error={copy.error}
+    data-contact-config-error={copy.errorConfig}
+    data-contact-fallback-label={copy.emailFallback}
+    data-submit-label={copy.submit}
+    data-submitting-label={copy.submitting}
   >
-    <div class="mb-4">
-      <label for="name" class="form-label">
-        Full Name <span class="text-red-500">*</span>
+    <input type="hidden" name="language" value={lang} />
+    <div>
+      <label for="name" class="mb-2 block text-sm font-medium">
+        {copy.name}
+        <span class="text-destructive" aria-hidden="true">*</span>
       </label>
       <input
         id="name"
         name="name"
-        class="form-input w-full"
+        class="border-input bg-background focus-visible:outline-primary placeholder:text-muted-foreground w-full rounded-lg border px-3.5 py-2.5 text-sm shadow-sm transition outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
         placeholder="Budi Susanti"
         type="text"
         autocomplete="name"
+        maxlength="120"
         required
       />
     </div>
 
-    <div class="mb-4 hidden" aria-hidden="true">
+    <div class="hidden" aria-hidden="true">
       <label for="website" class="form-label">Website</label>
       <input
         id="website"
@@ -48,135 +92,211 @@ const { title, url } = Astro.props;
       />
     </div>
 
-    <div class="mb-4">
-      <label for="email" class="form-label">
-        Working e-Mail <span class="text-red-500">*</span>
+    <div>
+      <label for="email" class="mb-2 block text-sm font-medium">
+        {copy.email}
+        <span class="text-destructive" aria-hidden="true">*</span>
       </label>
       <input
         id="email"
         name="email"
-        class="form-input w-full"
+        class="border-input bg-background focus-visible:outline-primary placeholder:text-muted-foreground w-full rounded-lg border px-3.5 py-2.5 text-sm shadow-sm transition outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
         placeholder="budi.susanti@email.com"
         type="email"
         autocomplete="email"
+        maxlength="254"
         required
       />
     </div>
 
-    <div class="mb-4">
-      <label for="message" class="form-label">
-        Message <span class="text-red-500">*</span>
+    <div>
+      <label for="message" class="mb-2 block text-sm font-medium">
+        {copy.message}
+        <span class="text-destructive" aria-hidden="true">*</span>
       </label>
       <textarea
         id="message"
         name="message"
-        class="form-input w-full"
+        class="border-input bg-background focus-visible:outline-primary placeholder:text-muted-foreground w-full resize-y rounded-lg border px-3.5 py-2.5 text-sm shadow-sm transition outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
         placeholder="Message goes here..."
-        rows="6"
-        required
+        rows="5"
+        maxlength="10000"
+        required>{""}</textarea
       >
-      </textarea>
     </div>
 
-    <div class="flex items-center gap-3">
-      <Button id="submitBtn" type="submit"> Submit </Button>
-      <div id="inline-badge" class="inline-block"></div>
+    <div class="flex flex-wrap items-center gap-3">
+      <Button id="submitBtn" type="submit">{copy.submit}</Button>
+    </div>
+    <div class="space-y-2" data-contact-feedback hidden>
+      <p
+        class="text-sm leading-relaxed"
+        role="status"
+        aria-live="polite"
+        data-contact-status
+      >
+      </p>
+      <a
+        class="text-primary focus-visible:outline-primary inline-flex min-h-11 items-center rounded underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+        data-contact-fallback
+        hidden></a>
     </div>
   </form>
-</article>
+</section>
 
 <script>
-  const form = document.getElementById("contactForm");
+  function initializeContactForm() {
+    const form = document.getElementById(
+      "contactForm",
+    ) as HTMLFormElement | null;
+    const submitBtn = document.getElementById(
+      "submitBtn",
+    ) as HTMLButtonElement | null;
 
-  if (!form) {
-    console.warn("Contact form not found. Submission script will not run.");
-  } else {
-    const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
-    const recaptchaSiteKey = "6LckcswrAAAAAD9Y9Erk6tzAOWtdZXGiUKpNc_dh";
+    if (form && submitBtn && !form.dataset.initialized) {
+      form.dataset.initialized = "true";
+      let pendingSubmission: { signature: string; id: string } | undefined;
+      const recaptchaSiteKey = "6LckcswrAAAAAD9Y9Erk6tzAOWtdZXGiUKpNc_dh";
+      const feedback = form.querySelector<HTMLElement>(
+        "[data-contact-feedback]",
+      )!;
+      const status = form.querySelector<HTMLElement>("[data-contact-status]")!;
+      const fallback = form.querySelector<HTMLAnchorElement>(
+        "[data-contact-fallback]",
+      )!;
+      let recaptchaPromise: Promise<any> | undefined;
 
-    if (!(window as any).grecaptcha) {
-      const script = document.createElement("script");
-      script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
-      script.async = true;
-      script.defer = true;
-      document.head.appendChild(script);
-    }
+      const loadRecaptcha = () => {
+        const existing = (window as any).grecaptcha;
+        if (existing?.ready) return Promise.resolve(existing);
+        if (!recaptchaPromise) {
+          recaptchaPromise = new Promise((resolve, reject) => {
+            const script = document.createElement("script");
+            script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
+            script.async = true;
+            script.onload = () => {
+              const recaptcha = (window as any).grecaptcha;
+              recaptcha?.ready
+                ? resolve(recaptcha)
+                : reject(new Error("reCAPTCHA did not initialize."));
+            };
+            script.onerror = () =>
+              reject(new Error("reCAPTCHA could not be loaded."));
+            document.head.appendChild(script);
+          });
+        }
+        return recaptchaPromise;
+      };
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+      const showFeedback = (message: string, emailHref?: string) => {
+        status.textContent = message;
+        feedback.hidden = false;
+        fallback.hidden = !emailHref;
+        if (emailHref) {
+          fallback.href = emailHref;
+          fallback.textContent =
+            form.dataset.contactFallbackLabel ?? "Email CHAMPS UI";
+        }
+      };
 
-      const url = (form as HTMLFormElement).dataset.contactUrl;
-      const honeypot = (form as any).website.value.trim();
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (submitBtn.disabled) return;
+        if (!form.reportValidity()) return;
+        if (
+          (form.elements.namedItem("website") as HTMLInputElement).value.trim()
+        )
+          return;
 
-      // ============== ✨ START: FIX ==============
-      // Add a check to ensure the URL exists before proceeding
-      if (!url) {
-        console.error(
-          "Submission Error: data-contact-url attribute is missing from the form.",
+        const url = form.dataset.contactUrl;
+        const data = new FormData(form);
+        const name = String(data.get("name") ?? "").trim();
+        const email = String(data.get("email") ?? "").trim();
+        const message = String(data.get("message") ?? "").trim();
+        const backend = form.dataset.contactBackend === "vercel";
+        const mailto = new URL("mailto:champs@ui.ac.id");
+        mailto.searchParams.set("subject", `Website contact from ${name}`);
+        mailto.searchParams.set(
+          "body",
+          `Name: ${name}\nEmail: ${email}\n\n${message}`,
         );
-        alert(
-          "Submission failed: A configuration error occurred. Please contact the site administrator.",
-        );
-        return; // Stop the function
-      }
-      // ============== ✨ END: FIX ==============
 
-      // Honeypot check for bots
-      if (honeypot) {
-        console.log("Bot detected!");
-        return;
-      }
-
-      // Disable button and show loading state
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Submitting...";
-      }
-
-      try {
-        (window as any).grecaptcha.ready(async () => {
-          const token = await (window as any).grecaptcha.execute(
-            recaptchaSiteKey,
-            {
-              action: "submit",
-            },
+        if (!url) {
+          showFeedback(
+            form.dataset.contactConfigError ?? form.dataset.contactError ?? "",
+            mailto.href,
           );
+          return;
+        }
 
-          const formData = new FormData(form as HTMLFormElement);
-          formData.append("recaptchaToken", token);
+        submitBtn.disabled = true;
+        const fields = form.querySelectorAll<
+          HTMLInputElement | HTMLTextAreaElement
+        >("input:not([type=hidden]), textarea");
+        fields.forEach((field) => {
+          field.readOnly = true;
+        });
+        submitBtn.textContent = form.dataset.submittingLabel ?? "Sending…";
+        showFeedback(submitBtn.textContent);
 
-          // Now, TypeScript knows 'url' is a string because of the check above
+        try {
+          if (backend) {
+            const signature = JSON.stringify([name, email, message]);
+            if (pendingSubmission?.signature !== signature) {
+              pendingSubmission = { signature, id: crypto.randomUUID() };
+            }
+            data.set("submission_id", pendingSubmission.id);
+          } else {
+            const recaptcha = await loadRecaptcha();
+            const token = await new Promise<string>((resolve, reject) => {
+              recaptcha.ready(() => {
+                recaptcha
+                  .execute(recaptchaSiteKey, { action: "submit" })
+                  .then(resolve, reject);
+              });
+            });
+            data.append("recaptchaToken", token);
+          }
+
           const response = await fetch(url, {
             method: "POST",
-            body: formData,
+            body: data,
+            headers: { Accept: "application/json" },
+            signal: AbortSignal.timeout(30000),
           });
-
-          if (!response.ok) {
-            throw new Error(
-              `Network response was not ok: ${response.statusText}`,
+          if (response.status === 429) {
+            showFeedback(
+              form.dataset.contactRateLimit ?? form.dataset.contactError ?? "",
+              mailto.href,
             );
+            return;
           }
-
+          if (response.status === 409) pendingSubmission = undefined;
+          if (!response.ok)
+            throw new Error(`Request failed (${response.status}).`);
           const result = await response.json();
+          if (result.status !== "success")
+            throw new Error(result.message || "Message delivery failed.");
 
-          if (result.status === "success") {
-            alert(
-              `Thank you, ${(form as any).name.value.trim()}! Your message has been sent.`,
-            );
-            (form as HTMLFormElement).reset();
-          } else {
-            throw new Error(result.message || "An unknown error occurred.");
-          }
-        });
-      } catch (error) {
-        console.error("Submission Error:", error);
-        alert(`Submission failed: ${(error as Error).message}`);
-      } finally {
-        if (submitBtn) {
+          form.reset();
+          pendingSubmission = undefined;
+          showFeedback(form.dataset.contactSuccess ?? "Message sent.");
+        } catch (error) {
+          console.error("Contact form submission failed:", error);
+          showFeedback(
+            form.dataset.contactError ?? "Message could not be sent.",
+            mailto.href,
+          );
+        } finally {
+          fields.forEach((field) => {
+            field.readOnly = false;
+          });
           submitBtn.disabled = false;
-          submitBtn.textContent = "Submit";
+          submitBtn.textContent = form.dataset.submitLabel ?? "Send message";
         }
-      }
-    });
+      });
+    }
   }
+  initializeContactForm();
+  document.addEventListener("astro:page-load", initializeContactForm);
 </script>

@@ -17,8 +17,10 @@ pnpm dev
 
 Other commands:
 
-- `pnpm build` — build the static site and Pagefind search index into `dist/`.
-- `pnpm preview` — serve the production build locally.
+- `pnpm build` — build prerendered pages, Vercel functions, and the Pagefind
+  search index into `.vercel/output/`.
+- `pnpm preview` — Astro preview; use `pnpm dev` or Vercel Preview deployments
+  when checking the contact endpoint, as Astro preview cannot run Vercel functions.
 - `pnpm test` — run the existing Node test suite. For small changes, run only the
   relevant files: `node --experimental-strip-types --test tests/event-fees.test.mjs`.
 
@@ -46,6 +48,7 @@ Generated output, dependency stores and local browser artifacts are not source.
 
 ## Documentation
 
+- [Contact database, email setup and activation](docs/form-submissions.md)
 - [Architecture and component ownership](docs/architecture.md)
 - [Where to edit Stories, Events, Publications and the questionnaire](docs/content-authoring.md)
 - [Content directories and migration](docs/content-directory.md)
