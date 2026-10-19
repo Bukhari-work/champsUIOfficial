@@ -17,7 +17,7 @@ src/content/
     invitation.en.md or .mdx        Optional original invitation and participation details
     invitation.id.md or .mdx        Optional translated invitation
     details.en.mdx                  Optional MDX composition of event components
-  publications/                    Real publication records; currently empty
+  publications/                    Publication Markdown/MDX, grouped by language
 
 src/data/questionnaire.ts           The single TNA invitation, in both languages
 src/data/announcements.ts           Popup campaign configuration
@@ -151,18 +151,63 @@ source files are not part of this repository.
 
 ## Publications
 
-The `publications` collection is ready for genuine research records. It is empty;
-no public Publications directory or navigation entry has been introduced yet.
+The public directory is at `/publications` and `/id/publications`, with individual
+records at `/publications/<translationKey>` and `/id/publications/<translationKey>`.
+The collection currently has no supplied records, so the directory shows an empty
+state. Adding a published record creates its detail pages automatically.
 
-Real Markdown records require a title, translation key, publication type, year,
+The directory displays 10 publications per page. Search, year/type filters, and
+sorting apply to the full collection before paging; changing a filter returns to
+page one. Without JavaScript, all records remain accessible.
+
+During `pnpm dev`, 15 clearly labeled sample publications populate the directory
+and detail pages in both languages so pagination can be reviewed. Start at
+`/publications/preview` or select any sample in the directory. Records marked
+`previewOnly: true` are excluded from
+production directories, search indexes, and routes. Keep this flag on samples.
+
+Use `src/content/publications/en/<slug>.md` (or `.mdx`) and
+`src/content/publications/id/<slug>.md` for translations. Records require a title,
+translation key (lowercase words separated by hyphens), publication type, year,
 and ordered author names. Authors may optionally reference a People profile or
 an ORCID URL. Journal/publisher, exact date, DOI, abstract, explanatory summary,
 citation, external publication URL and PDF are optional. Never invent access
 links or bibliographic details. Local PDF paths and HTTP(S) PDF URLs are supported.
 
-Stories and event records can reference these records using `publications`,
-validated by Astro. Publication page/navigation activation and rendering related
-publication links should accompany the first real records.
+Use the same `translationKey` in both languages. The requested translation is
+selected when available; otherwise the original is displayed with a language
+notice. Drafts are excluded from the directory and slug routes. Each locale
+allows only one published record per translation key.
+
+For example, these placeholder fields describe the record structure, rather than
+a paper to publish:
+
+```yaml
+title: "The actual publication title"
+translationKey: "actual-publication-slug"
+type: researchArticle # report | policyBrief | bookChapter | other
+authors:
+  - name: "Author name as published"
+    # person: en/person-slug   # optional existing People record
+    # orcid: https://orcid.org/0000-0000-0000-0000
+year: 2025
+summary: "A short description for the directory and page introduction."
+abstract: "The supplied abstract, if available."
+# journal: "Journal name"
+# publisher: "Publisher name"
+# date: 2025-06-01             # only when the actual full date is known
+# doi: "10.xxxx/actual-identifier"
+# url: "https://publisher.example/publication"
+# pdf: "/files/actual-publication.pdf"
+draft: true # remove or set false when ready
+```
+
+Markdown/MDX after the frontmatter supplies any additional discussion, using `##`
+and `###` headings. `abstract` and `citation` are reserved section IDs. Access
+buttons are shown only for supplied publisher/DOI/PDF destinations. A supplied
+`citation` is preserved; otherwise a basic author/year/title citation is assembled
+from the known metadata. Stories and event records may reference publications by
+their collection ID (for example, `en/actual-publication-slug`), validated by Astro.
 
 ## Questionnaire invitation
 

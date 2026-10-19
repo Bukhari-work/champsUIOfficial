@@ -1,8 +1,11 @@
 # CHAMPS UI website
 
 Bilingual English/Indonesian website built with Astro, TypeScript and Tailwind CSS.
-Public content includes What We Do stories, Events, an activity archive and people
-profiles. Design comparison previews have been removed for now.
+Public content includes What We Do stories, Events, Publications, an activity
+archive and people profiles. Publication detail routes are generated from supplied
+records; production displays an empty state until real records are added. Local
+development includes 15 labeled samples for reviewing the directory and pagination.
+Design comparison previews have been removed for now.
 The questionnaire invitation lives at `/questionnaire` and opens the existing
 external survey; the site does not collect survey responses.
 

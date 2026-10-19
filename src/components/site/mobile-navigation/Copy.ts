@@ -8,6 +8,7 @@ export function getMobileNavigationCopy(lang: Language) {
     "nav.about": t("nav.description.about"),
     "nav.whatWeDo": t("nav.description.whatWeDo"),
     "nav.events": t("nav.description.events"),
+    "nav.publications": t("nav.description.publications"),
     "nav.contact": t("nav.description.contact"),
   };
   return {

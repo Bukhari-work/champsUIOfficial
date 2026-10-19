@@ -560,9 +560,20 @@ selectors, including behavior across Astro page transitions.
 - The `publications` collection is ready for genuine records, with ordered authors,
   publication type/year and optional DOI, abstract, source URL and PDF. Stories and
   event records have optional validated `publications` references. The collection
-  is empty; public publication pages, related-link rendering and navigation activation
-  remain tied to the first real records, and a story tagged `Report` is not
-  treated as a published paper.
+  has no supplied real records; the production directory shows an empty state,
+  while real records create bilingual detail routes through their
+  `translationKey`. A story tagged `Report` is not treated as a published paper.
+
+Publications reuse `directories/PageHero`, `ContentDirectory` and the open-chapters
+preset. The directory accepts a card component for publication-specific author
+and journal metadata; its filtering and year grouping stay shared with Events
+and What We Do. Publications use compact rows and 10 results per page, with
+filtering and sorting across the full collection before paging. Detail pages compose `ContentLayout`, `SidebarCard`, the shared
+table of contents and sharing controls. Publication-specific sidebar and citation
+markup live under `content-page/publications/`. Locale selection, DOI handling and
+citations live in `lib/publications.ts`; Astro collection access stays in
+`lib/publicationCatalog.ts`. The 15 bilingual samples marked `previewOnly` are
+available in development and excluded from production directories and routes.
 
 See [Content authoring](./content-authoring.md) for the editor-facing folder map.
 

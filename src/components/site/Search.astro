@@ -11,11 +11,11 @@ const copy =
   lang === "id"
     ? {
         title: "Cari di CHAMPS UI",
-        placeholder: "Cari karya, kegiatan, atau pakar…",
+        placeholder: "Cari karya, publikasi, atau pakar…",
         close: "Tutup pencarian",
         clear: "Hapus pencarian",
         idle: "Apa yang ingin Anda temukan?",
-        hint: "Jelajahi karya, kegiatan, dan tim pakar kami dengan kata kunci.",
+        hint: "Jelajahi karya, publikasi, kegiatan, dan pakar kami dengan kata kunci.",
         loading: "Mencari…",
         empty: "Tidak ada hasil untuk “{query}”. Coba kata kunci lain.",
         count: "{count} hasil untuk “{query}”",
@@ -29,6 +29,7 @@ const copy =
         all: "Semua",
         stories: "Cerita",
         events: "Kegiatan",
+        publications: "Publikasi",
         people: "Tim & Pakar",
         browse: "{count} hasil",
         emptyFilter:
@@ -36,11 +37,11 @@ const copy =
       }
     : {
         title: "Search CHAMPS UI",
-        placeholder: "Search work, events, or experts…",
+        placeholder: "Search work, publications, or experts…",
         close: "Close search",
         clear: "Clear search",
         idle: "What would you like to find?",
-        hint: "Explore our work, events, and team of experts with a keyword.",
+        hint: "Explore our work, publications, events, and experts with a keyword.",
         loading: "Searching…",
         empty: "No results for “{query}”. Try a different keyword.",
         count: "{count} results for “{query}”",
@@ -54,6 +55,7 @@ const copy =
         all: "All",
         stories: "Stories",
         events: "Events",
+        publications: "Publications",
         people: "People",
         browse: "{count} results",
         emptyFilter:
@@ -138,17 +140,19 @@ const copy =
         aria-label={copy.filters}
       >
         {
-          (["all", "stories", "events", "people"] as const).map((facet) => (
-            <button
-              type="button"
-              class="aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary shrink-0 cursor-pointer rounded-full border px-3 py-2 text-[0.8125rem] whitespace-nowrap transition-colors motion-reduce:transition-none"
-              data-search-facet={facet}
-              aria-pressed={facet === "all"}
-              aria-controls="site-search-results"
-            >
-              {copy[facet]}
-            </button>
-          ))
+          (["all", "stories", "events", "publications", "people"] as const).map(
+            (facet) => (
+              <button
+                type="button"
+                class="aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary shrink-0 cursor-pointer rounded-full border px-3 py-2 text-[0.8125rem] whitespace-nowrap transition-colors motion-reduce:transition-none"
+                data-search-facet={facet}
+                aria-pressed={facet === "all"}
+                aria-controls="site-search-results"
+              >
+                {copy[facet]}
+              </button>
+            ),
+          )
         }
       </div>
 

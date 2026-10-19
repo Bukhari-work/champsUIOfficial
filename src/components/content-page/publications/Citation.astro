@@ -1,0 +1,48 @@
+---
+import type { Language } from "@/i18n/ui";
+import { publicationsCopy } from "@/i18n/publications";
+import { sharingCopy } from "@/i18n/sharing";
+import { Button } from "@/components/ui/button";
+
+interface Props {
+  citation: string;
+  lang: Language;
+}
+const { citation, lang } = Astro.props;
+const copy = sharingCopy[lang];
+---
+
+<section
+  id="citation"
+  class="bg-primary-soft scroll-mt-28 rounded-2xl border p-5 sm:p-6"
+  aria-labelledby="citation-title"
+>
+  <h2 id="citation-title" class="text-xl font-semibold">
+    {publicationsCopy[lang].citation}
+  </h2>
+  <p
+    class="mt-4 text-sm leading-relaxed wrap-anywhere whitespace-pre-line"
+    data-publication-citation
+  >
+    {citation}
+  </p>
+  <div
+    class="mt-4 [[hidden]]:hidden!"
+    data-share-copy-control
+    data-copy-value={citation}
+    data-copy-success={copy.citationCopied}
+    data-copy-failed={copy.copyFailed}
+    hidden
+  >
+    <Button variant="outline" data-share-copy
+      >{copy.copyCitation}<span aria-hidden="true">⧉</span></Button
+    >
+    <p
+      class="text-muted-foreground text-xs not-empty:mt-2"
+      role="status"
+      aria-live="polite"
+      data-share-copy-status
+    >
+    </p>
+  </div>
+</section>

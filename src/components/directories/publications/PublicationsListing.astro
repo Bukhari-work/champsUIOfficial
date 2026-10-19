@@ -1,0 +1,135 @@
+---
+import type { PublicationEntry } from "@/lib/contentCatalog";
+import type { Language } from "@/i18n/ui";
+import { getLocalizedPath } from "@/i18n/utils";
+import { publicationsCopy } from "@/i18n/publications";
+import { publicationDirectoryItem } from "@/lib/publicationCatalog";
+import PageHero from "../PageHero.astro";
+import ContentDirectory from "../ContentDirectory.astro";
+import { openChaptersDirectory } from "../DirectoryPresets";
+import KeepExploring from "../KeepExploring.astro";
+import PublicationRow from "./PublicationRow.astro";
+import { Button } from "@/components/ui/button";
+
+interface Props {
+  publications: PublicationEntry[];
+  lang: Language;
+}
+const { publications, lang } = Astro.props;
+const copy = publicationsCopy[lang];
+const items = publications.map((publication) =>
+  publicationDirectoryItem(publication, lang),
+);
+---
+
+<div
+  class="mx-auto max-w-400 px-5 pt-10 pb-16 sm:px-8"
+  data-publications-directory
+>
+  <PageHero
+    class="[&_figure_img]:object-[center_70%]"
+    eyebrow={copy.title}
+    title={copy.heroTitle}
+    description={copy.heroIntro}
+    image={{
+      src: "/images/news/Global Health Security COVID-19 Task Force T20 Indonesia 2022 1.webp",
+      alt: copy.heroImageAlt,
+    }}
+    textLink={{
+      href: items.length
+        ? "#publication-library"
+        : `${getLocalizedPath("/contact", lang)}#contactForm`,
+      label: items.length ? copy.browse : copy.contact,
+    }}
+  />
+  <section
+    id="publication-library"
+    class="bg-primary-soft mt-12 scroll-mt-28 rounded-2xl border p-5 sm:mt-16 sm:p-8"
+    aria-labelledby="publication-library-title"
+  >
+    <div class="mb-6 flex flex-wrap items-baseline justify-between gap-3">
+      <h2
+        id="publication-library-title"
+        class="text-2xl font-semibold sm:text-3xl"
+      >
+        {copy.library}
+      </h2>
+      {
+        items.length > 0 && (
+          <p
+            class="text-muted-foreground font-mono text-sm tabular-nums"
+            aria-hidden="true"
+          >
+            {String(items.length).padStart(2, "0")}
+          </p>
+        )
+      }
+    </div>
+    {
+      items.length > 0 ? (
+        <ContentDirectory
+          {items}
+          {lang}
+          id="publication-results"
+          label={copy.library}
+          {...openChaptersDirectory}
+          paginate
+          paginationMode="pages"
+          pageSize={10}
+          cardColumns={1}
+          cardComponent={PublicationRow}
+          searchPlaceholder={copy.searchPlaceholder}
+          countLabel={copy.count}
+          yearHeadingLevel="h3"
+          cardHeadingLevel="h4"
+        />
+      ) : (
+        <div
+          class="bg-background rounded-xl border px-6 py-10 text-center sm:py-14"
+          data-publications-empty
+        >
+          <svg
+            class="text-primary mx-auto mb-5 size-8"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <>
+              <path d="M4 4h6a3 3 0 0 1 3 3v14a4 4 0 0 0-4-2H4V4Z" />
+              <path d="M13 7a3 3 0 0 1 3-3h5v15h-4a4 4 0 0 0-4 2" />
+            </>
+          </svg>
+          <h3 class="text-xl font-semibold">{copy.emptyTitle}</h3>
+          <p class="text-muted-foreground mx-auto mt-3 max-w-md text-sm leading-relaxed">
+            {copy.emptyIntro}
+          </p>
+          <Button
+            class="mt-6"
+            variant="outline"
+            href={`${getLocalizedPath("/contact", lang)}#contactForm`}
+          >
+            {copy.contact}
+          </Button>
+        </div>
+      )
+    }
+  </section>
+  <KeepExploring
+    headingId="publications-next-title"
+    title={lang === "id" ? "Jelajahi lebih lanjut" : "Keep exploring"}
+    links={[
+      {
+        href: getLocalizedPath("/what-we-do", lang),
+        label: copy.exploreWork,
+        description: copy.workIntro,
+      },
+      {
+        href: getLocalizedPath("/events", lang),
+        label: copy.exploreEvents,
+        description: copy.eventsIntro,
+      },
+    ]}
+  />
+</div>

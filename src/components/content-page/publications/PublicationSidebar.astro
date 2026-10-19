@@ -1,0 +1,103 @@
+---
+import SidebarCard from "../SidebarCard.astro";
+import { Button } from "@/components/ui/button";
+import type { PublicationEntry } from "@/lib/contentCatalog";
+import type { Language } from "@/i18n/ui";
+import { publicationsCopy } from "@/i18n/publications";
+import { publicationDoi, publicationDoiUrl } from "@/lib/publications";
+
+interface Props {
+  publication: PublicationEntry;
+  lang: Language;
+}
+const { publication, lang } = Astro.props;
+const { data } = publication;
+const copy = publicationsCopy[lang];
+const doi = publicationDoi(data.doi);
+const doiUrl = publicationDoiUrl(data.doi);
+const source = data.url ?? doiUrl;
+const facts = [
+  { label: copy.type, value: copy[data.type] },
+  {
+    label: copy.published,
+    value: data.date
+      ? data.date.toLocaleDateString(lang, {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          timeZone: "UTC",
+        })
+      : String(data.year),
+  },
+  ...(data.journal ? [{ label: copy.journal, value: data.journal }] : []),
+  ...(data.publisher ? [{ label: copy.publisher, value: data.publisher }] : []),
+];
+---
+
+<SidebarCard title={copy.details} data-publication-reference>
+  <dl slot="facts" class="space-y-4 text-sm">
+    {
+      facts.map((fact) => (
+        <div>
+          <>
+            <dt class="text-muted-foreground mb-1 text-xs">{fact.label}</dt>
+            <dd class="font-medium">{fact.value}</dd>
+          </>
+        </div>
+      ))
+    }
+    {
+      doi && (
+        <div>
+          <>
+            <dt class="text-muted-foreground mb-1 text-xs">DOI</dt>
+            <dd>
+              <a
+                href={doiUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary inline-flex min-h-11 items-center rounded underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                {doi}
+              </a>
+            </dd>
+          </>
+        </div>
+      )
+    }
+  </dl>
+  <div slot="action" class="space-y-3">
+    {
+      source && (
+        <Button
+          href={source}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="h-auto min-h-11 w-full whitespace-normal"
+        >
+          {copy.source}
+          <span aria-hidden="true">↗</span>
+        </Button>
+      )
+    }
+    {
+      data.pdf && (
+        <Button
+          href={data.pdf}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant={source ? "outline" : "default"}
+          class="h-auto min-h-11 w-full whitespace-normal"
+        >
+          {copy.pdf}
+          <span aria-hidden="true">↗</span>
+        </Button>
+      )
+    }
+    <a
+      href="#citation"
+      class="text-primary flex min-h-11 items-center justify-center rounded text-sm underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+      >{copy.citation}</a
+    >
+  </div>
+</SidebarCard>

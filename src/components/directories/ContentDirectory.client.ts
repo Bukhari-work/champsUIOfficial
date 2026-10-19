@@ -33,6 +33,18 @@ class ContentDirectory extends HTMLElement {
     const rows = this.querySelector<HTMLElement>("[data-directory-rows]")!;
     const empty = this.querySelector<HTMLElement>("[data-directory-empty]")!;
     const more = this.querySelector<HTMLButtonElement>("[data-directory-more]");
+    const pagination = this.querySelector<HTMLElement>(
+      "[data-directory-pagination]",
+    );
+    const previousPage = this.querySelector<HTMLButtonElement>(
+      "[data-directory-previous]",
+    );
+    const nextPage = this.querySelector<HTMLButtonElement>(
+      "[data-directory-next]",
+    );
+    const pageStatus = this.querySelector<HTMLElement>(
+      "[data-directory-page-status]",
+    );
     const status = this.querySelector<HTMLElement>("[data-directory-status]")!;
     const normalize = (text: string) =>
       text.normalize("NFKC").trim().toLocaleLowerCase(this.dataset.language);
@@ -67,8 +79,16 @@ class ContentDirectory extends HTMLElement {
       members: new Set(items.filter((item) => element.contains(item.element))),
     }));
     let limit = pageSize;
+    let page = 1;
+    let pageCount = 1;
+    const paged =
+      this.dataset.paginate !== "false" &&
+      this.dataset.paginationMode === "pages";
     const update = (resetLimit = true) => {
-      if (resetLimit) limit = pageSize;
+      if (resetLimit) {
+        limit = pageSize;
+        page = 1;
+      }
       const terms = normalize(query.value).split(/\s+/).filter(Boolean);
       const ordered = [...items].sort((a, b) => {
         if (!a.date || !b.date)
@@ -85,7 +105,12 @@ class ContentDirectory extends HTMLElement {
           (!category?.value ||
             item.element.dataset.category === category.value),
       );
-      const visible = new Set(matches.slice(0, limit));
+      pageCount = Math.max(1, Math.ceil(matches.length / pageSize));
+      page = Math.min(page, pageCount);
+      const start = paged ? (page - 1) * pageSize : 0;
+      const visible = new Set(
+        matches.slice(start, paged ? start + pageSize : limit),
+      );
       ordered.forEach((item) => (item.element.hidden = !visible.has(item)));
       if (groups.length) {
         for (const group of groups) {
@@ -113,6 +138,13 @@ class ContentDirectory extends HTMLElement {
       } else rows.replaceChildren(...ordered.map((item) => item.element));
       empty.hidden = matches.length > 0;
       if (more) more.hidden = matches.length <= limit;
+      if (pagination) pagination.hidden = pageCount <= 1;
+      if (previousPage) previousPage.disabled = page === 1;
+      if (nextPage) nextPage.disabled = page === pageCount;
+      if (pageStatus)
+        pageStatus.textContent = this.dataset
+          .pageLabel!.replace("{page}", String(page))
+          .replace("{pages}", String(pageCount));
       const selected =
         Number(Boolean(query.value.trim())) +
         Number(Boolean(year.value)) +
@@ -138,6 +170,8 @@ class ContentDirectory extends HTMLElement {
       );
       status.textContent = this.dataset
         .countLabel!.replace("{shown}", String(visible.size))
+        .replace("{from}", String(visible.size ? start + 1 : 0))
+        .replace("{to}", String(start + visible.size))
         .replace("{count}", String(matches.length));
     };
     form.addEventListener("submit", (event) => event.preventDefault(), {
@@ -179,6 +213,22 @@ class ContentDirectory extends HTMLElement {
       },
       { signal },
     );
+    const changePage = (offset: number) => {
+      page = Math.min(pageCount, Math.max(1, page + offset));
+      update(false);
+      // Start the next page at its first result, including for keyboard users.
+      const first = rows.querySelector<HTMLElement>(
+        "[data-directory-item]:not([hidden])",
+      );
+      const target = first?.querySelector<HTMLElement>("a") ?? first;
+      if (target) {
+        if (target === first) target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+        rows.scrollIntoView({ block: "start" });
+      }
+    };
+    previousPage?.addEventListener("click", () => changePage(-1), { signal });
+    nextPage?.addEventListener("click", () => changePage(1), { signal });
     more?.addEventListener(
       "click",
       () => {

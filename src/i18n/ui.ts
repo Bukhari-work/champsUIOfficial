@@ -10,6 +10,7 @@ export const ui = {
     "nav.about": "About Us",
     "nav.whatWeDo": "What We Do",
     "nav.events": "Events",
+    "nav.publications": "Publications",
     "nav.archive": "Activity archive",
     "nav.contact": "Contact",
     "nav.mainNavigation": "Main navigation",
@@ -22,6 +23,7 @@ export const ui = {
     "nav.description.about": "Our mission, values, and team",
     "nav.description.whatWeDo": "Research, consulting, and training",
     "nav.description.events": "Training, seminars, and dialogue",
+    "nav.description.publications": "Research, reports, and policy insights",
     "nav.description.contact": "Start a conversation with us",
 
     // Call to Action Button
@@ -312,6 +314,7 @@ export const ui = {
     "nav.about": "Tentang",
     "nav.whatWeDo": "Layanan",
     "nav.events": "Kegiatan",
+    "nav.publications": "Publikasi",
     "nav.archive": "Arsip kegiatan",
     "nav.contact": "Kontak",
     "nav.mainNavigation": "Navigasi utama",
@@ -324,6 +327,7 @@ export const ui = {
     "nav.description.about": "Misi, nilai, dan tim kami",
     "nav.description.whatWeDo": "Riset, konsultasi, dan pelatihan",
     "nav.description.events": "Pelatihan, seminar, dan dialog",
+    "nav.description.publications": "Riset, laporan, dan kajian kebijakan",
     "nav.description.contact": "Mulai percakapan dengan kami",
 
     // Call to Action Button
@@ -613,6 +617,7 @@ export const headerNavKeys = [
   "nav.about",
   "nav.whatWeDo",
   "nav.events",
+  "nav.publications",
   "nav.contact",
 ];
 

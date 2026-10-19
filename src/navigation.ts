@@ -26,6 +26,10 @@ const getNavStructure = (
     },
     { textKey: "nav.events", href: getTranslatedPath("events", lang) },
     {
+      textKey: "nav.publications",
+      href: getTranslatedPath("publications", lang),
+    },
+    {
       textKey: "nav.contact",
       href: getTranslatedPath("contact", lang),
     },
@@ -65,6 +69,10 @@ const getNavStructure = (
           href: getTranslatedPath("what-we-do/archive", lang),
         },
         { textKey: "nav.events", href: getTranslatedPath("events", lang) },
+        {
+          textKey: "nav.publications",
+          href: getTranslatedPath("publications", lang),
+        },
       ],
     },
   },

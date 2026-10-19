@@ -1,0 +1,26 @@
+---
+import Base from "@/layouts/Base.astro";
+import PublicationsListing from "@/components/directories/publications/PublicationsListing.astro";
+import { getPublications } from "@/lib/publicationCatalog";
+import { publicationsCopy } from "@/i18n/publications";
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  getLocalizedPath,
+} from "@/i18n/utils";
+import { SITE } from "@/config";
+
+export function getStaticPaths() {
+  return getLocaleStaticPaths();
+}
+const lang = getPageLanguage(Astro.params.lang);
+const copy = publicationsCopy[lang];
+const publications = await getPublications(lang);
+const content = {
+  title: copy.title,
+  description: copy.heroIntro,
+  canonical: new URL(getLocalizedPath("/publications", lang), SITE.base_href),
+};
+---
+
+<Base {content}><PublicationsListing {publications} {lang} /></Base>

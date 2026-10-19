@@ -1,0 +1,52 @@
+---
+import Card from "@/components/shared/Card.astro";
+import type { PublicationDirectoryItem } from "@/lib/publicationCatalog";
+import type { Language } from "@/i18n/ui";
+import { publicationsCopy } from "@/i18n/publications";
+
+interface Props {
+  item: PublicationDirectoryItem;
+  lang: Language;
+  size?: "default" | "small";
+  headingLevel?: "h3" | "h4" | "h5";
+}
+const { item, lang, size = "small", headingLevel = "h3" } = Astro.props;
+---
+
+<Card
+  href={item.href}
+  title={item.title}
+  {size}
+  {headingLevel}
+  class="[&_header>h3]:line-clamp-none [&_header>h4]:line-clamp-none [&_header>h5]:line-clamp-none"
+>
+  <p slot="eyebrow" class="text-primary mb-3 font-mono text-xs">
+    {item.category} · {item.date}
+  </p>
+  <p
+    class="text-muted-foreground mt-3 line-clamp-3 text-xs leading-relaxed"
+    data-publication-authors
+  >
+    {item.authors}
+  </p>
+  {
+    item.venue && (
+      <p class="mt-3 border-t pt-3 text-sm font-medium">{item.venue}</p>
+    )
+  }
+  {
+    item.description && (
+      <p class="text-muted-foreground mt-3 line-clamp-3 text-sm leading-relaxed">
+        {item.description}
+      </p>
+    )
+  }
+  {item.note && <p class="text-muted-foreground mt-3 text-xs">{item.note}</p>}
+  <span
+    slot="footer"
+    class="text-primary mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-medium"
+    aria-hidden="true"
+  >
+    {publicationsCopy[lang].readRecord}<span>→</span>
+  </span>
+</Card>

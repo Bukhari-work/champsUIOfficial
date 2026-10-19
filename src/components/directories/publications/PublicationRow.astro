@@ -1,0 +1,52 @@
+---
+import type { PublicationDirectoryItem } from "@/lib/publicationCatalog";
+
+interface Props {
+  item: PublicationDirectoryItem;
+  headingLevel?: "h3" | "h4" | "h5";
+}
+const { item, headingLevel = "h4" } = Astro.props;
+const Heading = headingLevel;
+---
+
+<article
+  class="group/publication hover:bg-background/60 focus-within:bg-background/60 relative grid w-full min-w-0 scroll-mt-28 gap-x-8 gap-y-3 rounded-lg px-3 py-5 transition-colors motion-reduce:transition-none sm:px-4 sm:py-6 md:grid-cols-[minmax(0,1fr)_auto]"
+  data-publication-row
+>
+  <p
+    class="text-primary bg-background w-fit max-w-full self-start rounded-full border px-3 py-1 text-xs font-medium md:col-start-2 md:row-start-1"
+  >
+    {item.category}
+  </p>
+  <div class="min-w-0 md:col-start-1 md:row-start-1">
+    <Heading
+      class="max-w-4xl text-lg leading-snug font-semibold wrap-anywhere sm:text-xl"
+    >
+      <a
+        href={item.href}
+        class="group-hover/publication:text-primary focus-visible:outline-primary rounded underline-offset-4 after:absolute after:inset-0 after:rounded-lg hover:underline focus-visible:outline-2 focus-visible:outline-offset-4"
+      >
+        {item.title}
+      </a>
+    </Heading>
+    <p
+      class="mt-2 text-sm leading-relaxed wrap-anywhere"
+      data-publication-authors
+    >
+      {item.authors}
+    </p>
+    <p
+      class="text-muted-foreground mt-1 text-xs leading-relaxed wrap-anywhere sm:text-sm"
+    >
+      {[item.venue, item.date].filter(Boolean).join(" · ")}
+    </p>
+    {
+      item.description && (
+        <p class="text-muted-foreground mt-3 max-w-3xl text-sm leading-relaxed wrap-anywhere">
+          {item.description}
+        </p>
+      )
+    }
+    {item.note && <p class="text-muted-foreground mt-3 text-xs">{item.note}</p>}
+  </div>
+</article>

@@ -59,9 +59,11 @@ const searchType = /^\/what-we-do\/(?!partners(?:\/|$))/.test(searchPath)
   ? "stories"
   : /^\/events(?:\/|$)/.test(searchPath)
     ? "events"
-    : /^\/about\/(people|experts)(?:\/|$)/.test(searchPath)
-      ? "people"
-      : "pages";
+    : /^\/publications(?:\/|$)/.test(searchPath)
+      ? "publications"
+      : /^\/about\/(people|experts)(?:\/|$)/.test(searchPath)
+        ? "people"
+        : "pages";
 
 // Get the correct navigation links for the current language
 const nav = navigation[lang];

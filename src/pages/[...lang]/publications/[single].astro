@@ -1,0 +1,245 @@
+---
+import { getEntry, render } from "astro:content";
+import type { PublicationEntry } from "@/lib/contentCatalog";
+import Base from "@/layouts/Base.astro";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+import PublicationSidebar from "@/components/content-page/publications/PublicationSidebar.astro";
+import Citation from "@/components/content-page/publications/Citation.astro";
+import PublicationCard from "@/components/directories/publications/PublicationCard.astro";
+import TableOfContents from "@/components/content-page/TableOfContents.astro";
+import { Button } from "@/components/ui/button";
+import {
+  getLocaleStaticPaths,
+  getPageLanguage,
+  getLocalizedPath,
+} from "@/i18n/utils";
+import { publicationsCopy } from "@/i18n/publications";
+import {
+  getPublications,
+  publicationPath,
+  publicationDirectoryItem,
+} from "@/lib/publicationCatalog";
+import { publicationCitation, publicationLanguage } from "@/lib/publications";
+import { SITE } from "@/config";
+
+interface Props {
+  publication: PublicationEntry;
+  related: PublicationEntry[];
+}
+export async function getStaticPaths() {
+  return (
+    await Promise.all(
+      getLocaleStaticPaths().map(async ({ params }) => {
+        const lang = getPageLanguage(params.lang);
+        const publications = await getPublications(lang);
+        return publications.map((publication) => ({
+          params: { ...params, single: publication.data.translationKey },
+          props: {
+            publication,
+            related: publications
+              .filter(
+                (other) =>
+                  other.data.translationKey !== publication.data.translationKey,
+              )
+              .sort(
+                (a, b) =>
+                  Number(b.data.type === publication.data.type) -
+                  Number(a.data.type === publication.data.type),
+              )
+              .slice(0, 3),
+          },
+        }));
+      }),
+    )
+  ).flat();
+}
+
+const { publication, related } = Astro.props;
+const lang = getPageLanguage(Astro.params.lang);
+const copy = publicationsCopy[lang];
+const { data } = publication;
+const preview = data.previewOnly;
+const sourceLang = publicationLanguage(publication);
+const { Content, headings } = await render(publication);
+const hasBody = Boolean(publication.body?.trim());
+const canonical = new URL(publicationPath(publication, lang), SITE.base_href);
+const content = {
+  title: data.title,
+  description: data.summary ?? data.abstract?.slice(0, 180),
+  canonical,
+};
+const citation = publicationCitation(publication);
+const authors = await Promise.all(
+  data.authors.map(async (author) => {
+    const person = author.person ? await getEntry(author.person) : undefined;
+    return {
+      ...author,
+      href:
+        person && !person.data.draft
+          ? getLocalizedPath(
+              `/about/people/${person.id.split("/").slice(1).join("/")}`,
+              lang,
+            )
+          : undefined,
+    };
+  }),
+);
+const links = [
+  ...(data.abstract ? [{ slug: "abstract", text: copy.abstract }] : []),
+  ...(hasBody ? headings.filter((heading) => heading.depth === 2) : []),
+  { slug: "citation", text: copy.citation },
+];
+---
+
+<Base {content} noindex={preview}>
+  <ContentLayout
+    kind="publication"
+    {lang}
+    title={data.title}
+    description={data.summary}
+    shareUrl={preview ? Astro.url.href : canonical.href}
+    context={[
+      { label: copy.title, href: getLocalizedPath("/publications", lang) },
+      { label: copy[data.type] },
+    ]}
+  >
+    <div slot="metadata" class="space-y-3">
+      {
+        preview && (
+          <p
+            class="bg-primary-soft text-primary rounded-lg border px-4 py-3 text-sm"
+            data-publication-preview
+          >
+            {copy.previewNotice}
+          </p>
+        )
+      }
+      <p class="text-muted-foreground text-xs">
+        {
+          [data.journal || data.publisher, data.year]
+            .filter(Boolean)
+            .join(" · ")
+        }
+      </p>
+      <ul
+        class="flex flex-wrap gap-x-4 gap-y-2 text-sm"
+        aria-label={copy.authors}
+        data-publication-author-list
+      >
+        {
+          authors.map((author) => (
+            <li class="flex max-w-full min-w-0 items-center gap-2">
+              {author.href ? (
+                <a
+                  href={author.href}
+                  class="text-primary inline-flex min-h-11 items-center rounded wrap-anywhere underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  {author.name}
+                </a>
+              ) : (
+                <span class="py-2 wrap-anywhere">{author.name}</span>
+              )}
+              {author.orcid && (
+                <a
+                  href={author.orcid}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${author.name} — ORCID`}
+                  class="text-primary inline-flex min-h-11 items-center rounded text-xs underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  ORCID <span aria-hidden="true">↗</span>
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+      {
+        sourceLang !== lang && (
+          <p class="text-muted-foreground text-xs" data-publication-language>
+            {
+              copy[
+                sourceLang === "en" ? "englishFallback" : "indonesianFallback"
+              ]
+            }
+          </p>
+        )
+      }
+    </div>
+    <PublicationSidebar slot="reference" {publication} {lang} />
+    <TableOfContents
+      slot="contents"
+      {lang}
+      {links}
+      substantial={(publication.body ?? "").trim().split(/\s+/).length >= 600}
+    />
+    <div class="space-y-8 sm:space-y-10">
+      {
+        data.abstract && (
+          <section
+            id="abstract"
+            lang={sourceLang}
+            class="scroll-mt-28"
+            aria-labelledby="abstract-title"
+          >
+            <h2
+              id="abstract-title"
+              class="mb-5 text-xl font-semibold sm:text-2xl"
+            >
+              {copy.abstract}
+            </h2>
+            <div class="prose dark:prose-invert max-w-prose">
+              {data.abstract
+                .split(/\n\s*\n/)
+                .filter(Boolean)
+                .map((paragraph) => (
+                  <p>{paragraph}</p>
+                ))}
+            </div>
+          </section>
+        )
+      }
+      {
+        hasBody && (
+          <div
+            lang={sourceLang}
+            class="prose dark:prose-invert max-w-prose [&_h2]:scroll-mt-28 [&_h3]:scroll-mt-28"
+            data-publication-body
+          >
+            <Content />
+          </div>
+        )
+      }
+      <Citation {citation} {lang} />
+    </div>
+    <div slot="ending" class="space-y-10">
+      {
+        related.length > 0 && (
+          <section
+            class="border-t pt-8"
+            aria-labelledby="publication-related-title"
+            data-related-publications
+          >
+            <h2
+              id="publication-related-title"
+              class="mb-6 text-2xl font-semibold sm:text-3xl"
+            >
+              {copy.related}
+            </h2>
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {related.map((other) => (
+                <PublicationCard
+                  item={publicationDirectoryItem(other, lang)}
+                  {lang}
+                />
+              ))}
+            </div>
+          </section>
+        )
+      }
+      <Button href={getLocalizedPath("/publications", lang)} variant="outline"
+        ><span aria-hidden="true">←</span>{copy.back}</Button
+      >
+    </div>
+  </ContentLayout>
+</Base>

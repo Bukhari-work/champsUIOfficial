@@ -29,9 +29,11 @@ interface Props {
   yearShortcuts?: boolean;
   defaultSort?: "newest" | "oldest";
   paginate?: boolean;
+  paginationMode?: "more" | "pages";
+  pageSize?: number;
   dateLabel?: string;
   cardSize?: "default" | "small";
-  cardColumns?: 2 | 3 | "adaptive";
+  cardColumns?: 1 | 2 | 3 | "adaptive";
   responsiveTo?: "viewport" | "container";
   density?: "comfortable" | "compact";
   categoryShortcuts?: boolean;
@@ -42,6 +44,9 @@ interface Props {
   recentLabel?: string;
   unknownYearLabel?: string;
   periodNote?: string;
+  searchPlaceholder?: string;
+  countLabel?: string;
+  cardComponent?: typeof ContentCard;
 }
 const {
   items,
@@ -53,6 +58,8 @@ const {
   yearShortcuts = false,
   defaultSort = "newest",
   paginate = true,
+  paginationMode = "more",
+  pageSize = layout === "table" ? 12 : 6,
   dateLabel,
   cardSize = "default",
   cardColumns = 2,
@@ -66,6 +73,9 @@ const {
   recentLabel,
   unknownYearLabel,
   periodNote,
+  searchPlaceholder,
+  countLabel,
+  cardComponent: ItemCard = ContentCard,
 } = Astro.props;
 const copy = contentCopy[lang];
 const years = [
@@ -108,10 +118,12 @@ const attributes = (item: DirectoryItem) => ({
 <content-directory
   class="group/directory block **:[[hidden]]:hidden!"
   data-language={lang}
-  data-count-label={copy.count}
+  data-count-label={countLabel ?? copy.count}
   data-default-sort={defaultSort}
   data-paginate={String(paginate)}
-  data-page-size={paginate ? (layout === "table" ? 12 : 6) : undefined}
+  data-pagination-mode={paginationMode}
+  data-page-size={paginate ? pageSize : undefined}
+  data-page-label={copy.pageCount}
   data-directory-presentation={journey ? journeyStyle : layout}
 >
   <div
@@ -279,7 +291,7 @@ const attributes = (item: DirectoryItem) => ({
                   type="search"
                   name="q"
                   class={`${field} w-full`}
-                  placeholder={copy.placeholder}
+                  placeholder={searchPlaceholder ?? copy.placeholder}
                   autocomplete="off"
                   aria-controls={id}
                 />
@@ -404,7 +416,7 @@ const attributes = (item: DirectoryItem) => ({
           <div
             id={id}
             class:list={[
-              "w-full",
+              "w-full scroll-mt-28",
               journeyStyle === "timeline"
                 ? "pl-2"
                 : compact
@@ -474,10 +486,14 @@ const attributes = (item: DirectoryItem) => ({
                 >
                   <ul
                     class:list={[
-                      cardColumns === "adaptive" || journeyStyle === "timeline"
-                        ? adaptiveGridClass
-                        : "grid gap-5 md:grid-cols-2",
+                      cardColumns === 1
+                        ? "grid grid-cols-1 divide-y"
+                        : cardColumns === "adaptive" ||
+                            journeyStyle === "timeline"
+                          ? adaptiveGridClass
+                          : "grid gap-5 md:grid-cols-2",
                       cardColumns !== "adaptive" &&
+                        cardColumns !== 1 &&
                         yearRail &&
                         index > 0 &&
                         "xl:grid-cols-3",
@@ -489,7 +505,7 @@ const attributes = (item: DirectoryItem) => ({
                         {...attributes(item)}
                         class="flex min-w-0 [&>article]:w-full"
                       >
-                        <ContentCard
+                        <ItemCard
                           {item}
                           {lang}
                           size={
@@ -524,10 +540,12 @@ const attributes = (item: DirectoryItem) => ({
             <ul
               id={id}
               class:list={[
-                "w-full",
-                cardColumns === "adaptive"
-                  ? adaptiveGridClass
-                  : "grid gap-5 md:grid-cols-2",
+                "w-full scroll-mt-28",
+                cardColumns === 1
+                  ? "grid grid-cols-1 divide-y"
+                  : cardColumns === "adaptive"
+                    ? adaptiveGridClass
+                    : "grid gap-5 md:grid-cols-2",
                 cardColumns === 3 && "xl:grid-cols-3",
               ]}
               aria-label={label}
@@ -538,7 +556,7 @@ const attributes = (item: DirectoryItem) => ({
                   {...attributes(item)}
                   class="flex min-w-0 [&>article]:w-full"
                 >
-                  <ContentCard
+                  <ItemCard
                     {item}
                     {lang}
                     size={cardSize}
@@ -556,7 +574,10 @@ const attributes = (item: DirectoryItem) => ({
             </ul>
           </div>
         ) : (
-          <div id={id} class="w-full overflow-hidden rounded-2xl border">
+          <div
+            id={id}
+            class="w-full scroll-mt-28 overflow-hidden rounded-2xl border"
+          >
             <table class="w-full table-fixed border-collapse text-left text-sm">
               <caption class="sr-only">{label}</caption>
               <thead class="bg-primary-soft text-muted-foreground hidden border-b text-xs md:table-header-group">
@@ -633,23 +654,54 @@ const attributes = (item: DirectoryItem) => ({
         </p>
       </div>
       {
-        paginate && (
-          <div
-            class:list={[
-              "w-full text-center",
-              compact ? "mt-4 has-[[hidden]]:hidden" : "mt-6",
-            ]}
+        paginate && paginationMode === "pages" ? (
+          <nav
+            class="mt-6 grid w-full grid-cols-2 items-center gap-3 border-t pt-5 sm:flex sm:justify-between"
+            aria-label={copy.pagination}
+            data-directory-pagination
             data-pagefind-ignore
+            hidden
           >
             <button
               type="button"
-              data-directory-more
-              class="hover:bg-primary-soft focus-visible:outline-primary min-h-11 cursor-pointer rounded-lg border px-5 py-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
-              hidden
+              data-directory-previous
+              aria-controls={id}
+              class="hover:bg-background focus-visible:outline-primary inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-default disabled:opacity-40 disabled:hover:bg-transparent"
             >
-              {copy.more}
+              <span aria-hidden="true">←</span> {copy.previousPage}
             </button>
-          </div>
+            <p
+              class="text-muted-foreground col-span-2 row-start-1 text-center text-sm tabular-nums sm:order-none"
+              data-directory-page-status
+            />
+            <button
+              type="button"
+              data-directory-next
+              aria-controls={id}
+              class="hover:bg-background focus-visible:outline-primary inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-default disabled:opacity-40 disabled:hover:bg-transparent"
+            >
+              {copy.nextPage} <span aria-hidden="true">→</span>
+            </button>
+          </nav>
+        ) : (
+          paginate && (
+            <div
+              class:list={[
+                "w-full text-center",
+                compact ? "mt-4 has-[[hidden]]:hidden" : "mt-6",
+              ]}
+              data-pagefind-ignore
+            >
+              <button
+                type="button"
+                data-directory-more
+                class="hover:bg-primary-soft focus-visible:outline-primary min-h-11 cursor-pointer rounded-lg border px-5 py-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+                hidden
+              >
+                {copy.more}
+              </button>
+            </div>
+          )
         )
       }
       {

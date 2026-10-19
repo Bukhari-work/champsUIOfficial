@@ -3,6 +3,7 @@ export const routes = {
     home: "/",
     "what-we-do/archive": "what-we-do/archive",
     events: "events",
+    publications: "publications",
     contact: "contact",
 
     about: "about",
@@ -22,6 +23,7 @@ export const routes = {
     home: "/",
     "what-we-do/archive": "what-we-do/archive",
     events: "events",
+    publications: "publications",
     contact: "contact",
 
     about: "about",

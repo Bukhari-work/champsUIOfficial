@@ -334,12 +334,12 @@ const events = defineCollection({
     ),
 });
 
-// Ready for real records. Fictional publication previews never enter this collection.
+// Sample records are marked explicitly and excluded from production directories and routes.
 const publications = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/publications" }),
   schema: z.object({
     title: z.string().min(1),
-    translationKey: z.string().min(1),
+    translationKey: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
     type: z.enum([
       "researchArticle",
       "report",
@@ -360,10 +360,11 @@ const publications = defineCollection({
     date: z.coerce.date().optional(),
     journal: z.string().optional(),
     publisher: z.string().optional(),
-    doi: z.string().min(1).optional(),
+    doi: z.string().trim().regex(/^(?:https?:\/\/(?:dx\.)?doi\.org\/|doi:\s*)?10\.\d{4,9}\/\S+$/i).optional(),
     abstract: z.string().optional(),
     summary: z.string().optional(),
     citation: z.string().optional(),
+    previewOnly: z.boolean().default(false),
     url: z.url({ protocol: /^https?$/ }).optional(),
     pdf: z
       .union([z.url({ protocol: /^https?$/ }), z.string().regex(/^\/(?!\/)/)])
