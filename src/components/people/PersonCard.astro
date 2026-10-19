@@ -37,28 +37,60 @@ const profileHref = getLocalizedPath(`/about/${people_folder}/${slug}`, lang);
 <Card
   href={profileHref}
   title={name}
-  headingLevel="h2"
+  headingLevel="h3"
   imageMeta={image}
   imageAlt={name}
   {imageAspect}
   {size}
-  class={cn("text-left", className)}
+  class={cn(
+    "person-card @container/person h-full min-w-0 text-left [&>div:first-of-type]:shrink-0 [&>div:has(>img)]:mx-auto [&>div:has(>img)]:w-full [&_header>h3]:font-semibold [&_header>h3]:wrap-anywhere",
+    size === "small"
+      ? "p-3 sm:p-4 [&_header>h3]:text-[clamp(0.875rem,5cqi,1rem)] [&_header>h3]:leading-snug"
+      : "gap-[clamp(1rem,1.5vw,1.5rem)] p-[clamp(1rem,2vw,1.5rem)] [&_header>h3]:text-[clamp(1rem,5cqi,1.25rem)] [&_header>h3]:leading-snug",
+    className,
+  )}
 >
-  <h3 class="mt-1 text-sm font-light">
+  <p
+    slot="eyebrow"
+    class={cn(
+      "text-primary mb-1 font-libron",
+      size === "small"
+        ? "text-[clamp(0.6875rem,3.5cqi,0.75rem)]"
+        : "text-[clamp(0.75rem,3.5cqi,0.875rem)]",
+    )}
+  >
     {responsibility}
-  </h3>
+  </p>
 
   <div class="mt-2 border-t pt-2">
-    <p class="mt-2 mb-4 line-clamp-3">
+    <p
+      class={cn(
+        "text-muted-foreground mt-2 mb-4 line-clamp-3 leading-relaxed",
+        size === "small"
+          ? "text-[clamp(0.75rem,4cqi,0.875rem)]"
+          : "text-[clamp(0.8125rem,3.8cqi,0.9375rem)]",
+      )}
+    >
       {description}
     </p>
   </div>
-  {(<Social socialLinks={social} class="relative z-10 w-fit max-w-full" />)}
+  {
+    (
+      <Social
+        socialLinks={social}
+        class="relative z-10 w-fit max-w-full"
+        linkClass="text-muted-foreground hover:text-primary text-[clamp(0.75rem,3.5cqi,0.875rem)]"
+      />
+    )
+  }
 
   <div slot="footer">
     <span
       aria-hidden="true"
-      class={buttonVariants({ className: "min-h-11 w-full whitespace-normal" })}
+      class={buttonVariants({
+        className:
+          "min-h-11 w-full text-[clamp(0.75rem,3.5cqi,0.875rem)] whitespace-normal",
+      })}
     >
       {copy.viewProfile}
     </span>

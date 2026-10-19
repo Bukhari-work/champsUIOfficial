@@ -1,5 +1,6 @@
 class PhotoGallery extends HTMLElement {
   private controller?: AbortController;
+  private heightFrame?: number;
 
   connectedCallback() {
     this.cleanup();
@@ -43,6 +44,8 @@ class PhotoGallery extends HTMLElement {
     const measureStableHeight = () => {
       if (!this.hasAttribute("data-photo-stable-height")) return;
       if (!viewport.getClientRects().length) return;
+      // Measure the natural heights at the current width, including after shrinking.
+      viewport.style.minHeight = "";
       items.forEach((item) => (item.hidden = false));
       const height = Math.max(...items.map((item) => item.offsetHeight));
       items.forEach((item, i) => (item.hidden = i !== index));
@@ -88,14 +91,27 @@ class PhotoGallery extends HTMLElement {
     );
     render();
     if (this.hasAttribute("data-photo-stable-height")) {
-      requestAnimationFrame(measureStableHeight);
-      window.addEventListener("resize", measureStableHeight, { signal });
+      const scheduleMeasurement = () => {
+        if (this.heightFrame !== undefined)
+          cancelAnimationFrame(this.heightFrame);
+        this.heightFrame = requestAnimationFrame(() => {
+          this.heightFrame = undefined;
+          measureStableHeight();
+        });
+      };
+      window.addEventListener("resize", scheduleMeasurement, { signal });
+      scheduleMeasurement();
+      void document.fonts.ready.then(() => {
+        if (!signal.aborted) scheduleMeasurement();
+      });
     }
     this.dataset.ready = "";
   }
 
   private cleanup() {
     this.controller?.abort();
+    if (this.heightFrame !== undefined) cancelAnimationFrame(this.heightFrame);
+    this.heightFrame = undefined;
   }
   disconnectedCallback() {
     this.cleanup();
