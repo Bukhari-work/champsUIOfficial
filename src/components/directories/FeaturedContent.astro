@@ -60,22 +60,31 @@ const link = action && getLinkBehavior(action.href);
   >
     {
       image && (
-        <div class="min-w-0" data-featured-media>
+        <div
+          class="relative min-w-0 overflow-hidden lg:min-h-64"
+          data-featured-media
+        >
           <ContentPhoto
             {image}
-            widths={[480, 960, 1280]}
-            sizes="(min-width: 1024px) 48vw, 90vw"
-            class="aspect-video h-full w-full object-cover"
+            widths={[480, 640, 960, 1280, 1600]}
+            sizes="(min-width: 1600px) 768px, (min-width: 1024px) 46vw, 90vw"
+            class="aspect-video w-full object-cover lg:absolute lg:inset-0 lg:h-full"
           />
         </div>
       )
     }
-    <div class="min-w-0 p-6 sm:p-8">
-      {eyebrow && <p class="text-primary mb-3 font-mono text-xs">{eyebrow}</p>}
+    <div class="@container/feature min-w-0 p-[clamp(1.25rem,2.5vw,2rem)]">
+      {
+        eyebrow && (
+          <p class="text-primary mb-3 font-mono text-[clamp(0.6875rem,3.3cqi,0.75rem)] leading-relaxed wrap-anywhere">
+            {eyebrow}
+          </p>
+        )
+      }
       <Heading
         id={headingId}
         class:list={[
-          "text-2xl font-semibold text-balance sm:text-3xl",
+          "text-[clamp(1.25rem,4.8cqi,1.875rem)] leading-snug font-semibold text-balance wrap-anywhere",
           action?.href && "underline-offset-4 group-hover:underline",
         ]}>{title}</Heading
       >
