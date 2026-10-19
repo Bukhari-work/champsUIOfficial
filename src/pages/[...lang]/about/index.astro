@@ -1,78 +1,202 @@
 ---
+import Base from "@/layouts/Base.astro";
+import CallToAction from "@/components/shared/CallToAction.astro";
+import KeepExploring from "@/components/directories/KeepExploring.astro";
+import SectionHeading from "@/components/home/components/SectionHeading.astro";
+import Quote from "@/components/ui/Quote.astro";
+import AboutPageHeader from "@/components/about/AboutPageHeader.astro";
+import { aboutCopy, aboutSectionCopy } from "@/i18n/about";
 import {
   getLocaleStaticPaths,
+  getLocalizedPath,
   getPageLanguage,
   useTranslations,
 } from "@/i18n/utils";
-
-import SectionLayout from "@/layouts/SectionLayout.astro";
-import Quote from "@/components/ui/Quote.astro";
-import { getSectionNavigation } from "@/navigation.ts";
-import { Image } from "astro:assets";
+import { SITE } from "@/config";
 
 export async function getStaticPaths() {
   return getLocaleStaticPaths();
 }
 
 const lang = getPageLanguage(Astro.params.lang);
-
 const t = useTranslations(lang);
-
-const sectionNavigation = getSectionNavigation(lang, "about");
-
-// Prop for the <Base> layout (title for the browser tab, SEO, etc.)
-const content = { title: t("nav.about") };
+const copy = aboutCopy[lang];
+const sections = aboutSectionCopy[lang];
+const commitments = [1, 2, 3, 4, 5].map((number) => ({
+  title: t(
+    `about.mission.item${number}.title` as Parameters<typeof t>[0],
+  ).replace(/:$/, ""),
+  description: t(`about.mission.item${number}.desc` as Parameters<typeof t>[0]),
+}));
+const values = (
+  [
+    "objectivity",
+    "togetherness",
+    "empowerment",
+    "quality",
+    "sincerity",
+  ] as const
+).map((key) => ({
+  title: t(`about.values.${key}.title`),
+  description: t(`about.values.${key}.desc`),
+}));
+const content = {
+  title: t("nav.about"),
+  description: copy.introduction,
+  canonical: new URL(getLocalizedPath("/about", lang), SITE.base_href),
+};
 ---
 
-<SectionLayout {content} {sectionNavigation}>
-  <h1
-    class="text-primary mt-8 mb-2 w-fit scroll-mt-24 text-3xl font-semibold sm:text-4xl lg:text-6xl"
-  >
-    {t("about.visionTitle")}
-  </h1>
-  <Quote
-    quote={t("about.visionQuote")}
-    class="not-prose font-lexend -mb-4 pl-0 text-center text-2xl"
-  />
-  <p>{t("about.p1")}</p>
-  <p>{t("about.p2")}</p>
-  <p>{t("about.p3")}</p>
-  <p>{t("about.work.title")}</p>
-  <ul>
-    <li>
-      <strong>{t("about.work.item1.title")}</strong>
-      {t("about.work.item1.desc")}
-    </li>
-    <li>
-      <strong>{t("about.work.item2.title")}</strong>
-      {t("about.work.item2.desc")}
-    </li>
-    <li>
-      <strong>{t("about.work.item3.title")}</strong>
-      {t("about.work.item3.desc")}
-    </li>
-    <li>
-      <strong>{t("about.work.item4.title")}</strong>
-      {t("about.work.item4.desc")}
-    </li>
-  </ul>
-  <hr class="bg-primary/10! my-8 h-px! w-full border-0! border-t" />
-  <p class="text-center">
-    {t("about.contactText")}
-    <a href="mailto:champs@ui.ac.id">champs@ui.ac.id</a>.
-  </p>
+<Base {content}>
+  <div class="mx-auto max-w-400 px-5 pb-20 sm:px-8" data-about-page>
+    <AboutPageHeader
+      {lang}
+      eyebrow={copy.eyebrow}
+      title={copy.title}
+      description={copy.introduction}
+    />
 
-  <div slot="aside">
-    <div
-      class="bg-primary/20 dark:bg-primary/80 w-fit transition-transform duration-1000 hover:scale-102"
+    <section
+      id="identity"
+      class="mx-auto grid max-w-7xl gap-7 border-b py-14 sm:py-18 lg:grid-cols-12 lg:gap-12"
+      aria-labelledby="about-foundation-title"
     >
-      <Image
-        src="/images/about.webp"
-        alt="CHAMPS' Director"
-        width={250}
-        height={750}
-        class="p-2"
+      <div class="lg:col-span-4">
+        <p class="text-primary font-mono text-xs tracking-widest uppercase">
+          {copy.originLabel}
+        </p>
+        <p class="font-libron text-primary mt-5 text-3xl sm:text-4xl">
+          {copy.established}
+        </p>
+      </div>
+      <div class="lg:col-span-8">
+        <h2
+          id="about-foundation-title"
+          class="font-libron max-w-3xl text-3xl leading-tight text-balance sm:text-4xl"
+        >
+          {copy.originTitle}
+        </h2>
+        <p
+          class="text-muted-foreground mt-4 max-w-3xl text-sm leading-relaxed sm:text-base"
+        >
+          {copy.originBody}
+        </p>
+      </div>
+    </section>
+
+    <section
+      id="vision"
+      class="bg-primary-soft mx-auto mt-12 grid max-w-7xl gap-4 rounded-2xl border p-5 sm:mt-16 sm:grid-cols-12 sm:gap-8 sm:p-8"
+      aria-labelledby="about-vision-title"
+    >
+      <div class="sm:col-span-3">
+        <p class="text-primary font-mono text-xs tracking-widest uppercase">
+          02 / {sections.mission.visionLabel}
+        </p>
+      </div>
+      <div class="sm:col-span-9">
+        <Quote
+          quote={t("about.visionQuote")}
+          class="text-primary my-0 p-0 text-left text-xl leading-snug sm:text-3xl"
+        />
+      </div>
+    </section>
+
+    <section
+      id="mission"
+      class="mx-auto max-w-7xl py-14 sm:py-20"
+      aria-labelledby="about-mission-title"
+    >
+      <SectionHeading
+        number="03"
+        label={sections.mission.title}
+        title={sections.mission.commitmentsLabel}
+        id="about-mission-title"
+        href={getLocalizedPath("/what-we-do", lang)}
+        linkText={t("nav.whatWeDo")}
+      />
+      <ol class="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-6 xl:gap-4">
+        {
+          commitments.map((item, index) => (
+            <li
+              class:list={[
+                "bg-primary-soft flex min-h-52 flex-col rounded-xl border p-5 sm:min-h-60 sm:p-6",
+                index < 3 ? "xl:col-span-2" : "xl:col-span-3",
+              ]}
+            >
+              <div class="flex items-center gap-3">
+                <span class="text-primary font-mono text-xs tracking-widest tabular-nums">
+                  0{index + 1}
+                </span>
+                <span class="bg-primary/20 h-px flex-1" />
+              </div>
+              <h3 class="font-libron mt-7 text-xl leading-snug text-balance sm:text-2xl">
+                {item.title}
+              </h3>
+              <p class="text-muted-foreground mt-3 text-sm leading-relaxed">
+                {item.description}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section
+      id="values"
+      class="mx-auto max-w-7xl pb-14 sm:pb-20"
+      aria-labelledby="about-values-title"
+    >
+      <SectionHeading
+        number="04"
+        label={lang === "id" ? "Nilai kami" : "Our values"}
+        title={sections.values.title}
+        id="about-values-title"
+      />
+      <ol class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          values.map((value, index) => (
+            <li class="bg-primary-soft rounded-xl border p-5 sm:p-6">
+              <span class="text-primary font-mono text-xs tabular-nums">
+                0{index + 1}
+              </span>
+              <h3 class="mt-5 text-base leading-snug font-semibold">
+                {value.title}
+              </h3>
+              <p class="text-muted-foreground mt-2 text-sm leading-relaxed">
+                {value.description}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <div class="mx-auto max-w-7xl">
+      <p class="text-primary mb-3 font-mono text-xs uppercase">
+        {copy.exploreLabel}
+      </p>
+      <KeepExploring
+        headingId="about-explore-title"
+        title={copy.exploreTitle}
+        links={copy.explore.map((destination) => ({
+          href: getLocalizedPath(destination.path, lang),
+          label: destination.label,
+          description: destination.description,
+        }))}
+        class="mt-0 border-t-0 pt-0"
       />
     </div>
+
+    <CallToAction
+      class="mx-auto mt-8 max-w-7xl sm:mt-12"
+      headingId="about-contact-title"
+      eyebrow={copy.ctaLabel}
+      title={copy.ctaTitle}
+      action={{
+        href: `${getLocalizedPath("/contact", lang)}#contactForm`,
+        label: copy.ctaAction,
+      }}
+    />
   </div>
-</SectionLayout>
+</Base>

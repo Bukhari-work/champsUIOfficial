@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import type { Language } from "@/i18n/ui";
+import { aboutCopy } from "@/i18n/about";
+import groupPhoto from "@/assets/home/community-04.webp";
+import AboutNavigation from "./AboutNavigation.astro";
+
+interface Props {
+  lang: Language;
+  eyebrow: string;
+  title: string;
+  description: string;
+}
+
+const { lang, eyebrow, title, description } = Astro.props;
+const copy = aboutCopy[lang];
+---
+
+<header class="mx-auto max-w-7xl pt-10 sm:pt-14" data-about-page-header>
+  <div class="max-w-4xl">
+    <p
+      class="text-primary mb-5 flex items-center gap-3 font-mono text-xs tracking-widest uppercase"
+    >
+      <span class="bg-primary h-px w-10" aria-hidden="true"></span>
+      {eyebrow}
+    </p>
+    <h1 class="font-libron text-4xl leading-tight text-balance sm:text-6xl">
+      {title}
+    </h1>
+    <p
+      class="text-muted-foreground mt-5 max-w-2xl text-base leading-relaxed sm:text-lg"
+    >
+      {description}
+    </p>
+  </div>
+  <figure class="mt-8 overflow-hidden rounded-2xl border sm:mt-10">
+    <Image
+      src={groupPhoto}
+      alt={copy.groupAlt}
+      widths={[480, 768, 1200, 1600]}
+      sizes="(min-width: 1600px) 1280px, 90vw"
+      format="webp"
+      quality={80}
+      loading="eager"
+      class="aspect-4/3 w-full object-cover object-center sm:aspect-2/1 lg:aspect-3/1"
+    />
+    <figcaption
+      class="bg-background flex flex-wrap items-center justify-between gap-2 px-5 py-4 text-xs sm:px-6"
+    >
+      <span class="text-muted-foreground">{copy.groupCaption}</span>
+      <span class="text-primary font-mono uppercase">{copy.university}</span>
+    </figcaption>
+  </figure>
+  <AboutNavigation {lang} class="mt-6 sm:mt-8" />
+</header>

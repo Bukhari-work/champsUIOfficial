@@ -36,16 +36,8 @@ const getNavStructure = (
       titleKey: "sidebar.about.title",
       links: [
         {
-          textKey: "sidebar.about.item.vision",
+          textKey: "sidebar.about.item.overview",
           href: getTranslatedPath("about", lang),
-        },
-        {
-          textKey: "sidebar.about.item.mission",
-          href: getTranslatedPath("about/mission", lang),
-        },
-        {
-          textKey: "sidebar.about.item.values",
-          href: getTranslatedPath("about/values", lang),
         },
         {
           textKey: "sidebar.about.item.team",

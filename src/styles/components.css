@@ -19,10 +19,6 @@
     scroll-margin-top: 5rem;
   }
 
-  .swiper-slide:not(.swiper-slide-active) {
-    pointer-events: none;
-  }
-
   .is-invalid {
     @apply border-red-500;
   }

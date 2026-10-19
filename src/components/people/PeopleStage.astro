@@ -1,0 +1,144 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { Language } from "@/i18n/ui";
+import ContentPhoto from "@/components/shared/ContentPhoto.astro";
+import DynamicIcon from "@/components/shared/DynamicIcon";
+import PersonCard from "@/components/people/PersonCard.astro";
+import { photoCopy } from "@/components/content-page/PhotoStage";
+
+interface Props {
+  id: string;
+  title: string;
+  lang: Language;
+  people: CollectionEntry<"people">[];
+  showThroughLg?: boolean;
+}
+
+const { id, title, lang, people, showThroughLg = false } = Astro.props;
+const copy = photoCopy[lang];
+const buttonClass =
+  "bg-primary-soft text-primary hover:bg-primary/20 focus-visible:outline-primary inline-flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-default disabled:opacity-40";
+---
+
+<photo-gallery
+  class:list={[
+    "mx-auto block w-full max-w-[26rem] min-w-0 md:max-w-xl",
+    showThroughLg && "xl:hidden",
+  ]}
+  data-photo-stage
+  data-photo-stable-height
+  data-photo-counter={copy.personCounter}
+>
+  <div
+    class="grid min-w-0 gap-4 md:grid-cols-[3.25rem_minmax(0,26rem)_3.25rem] md:items-center md:justify-center"
+  >
+    <div
+      class="order-2 flex w-full items-center justify-between gap-2 md:order-2 md:col-start-3 md:row-start-1 md:flex-col md:justify-center [[hidden]]:hidden!"
+      data-photo-controls
+      hidden
+    >
+      <button
+        type="button"
+        class={buttonClass}
+        aria-label={copy.previousPerson}
+        data-photo-prev
+      >
+        <DynamicIcon
+          icon="LuChevronLeft"
+          aria-hidden="true"
+          className="size-5 md:rotate-90"
+        />
+      </button>
+      <p
+        class="text-muted-foreground min-w-28 flex-1 text-center text-xs tabular-nums md:min-w-0 md:py-2"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        data-photo-status
+      >
+        {
+          copy.personCounter
+            .replace("{current}", "1")
+            .replace("{total}", String(people.length))
+        }
+      </p>
+      <button
+        type="button"
+        class={buttonClass}
+        aria-label={copy.nextPerson}
+        data-photo-next
+      >
+        <DynamicIcon
+          icon="LuChevronRight"
+          aria-hidden="true"
+          className="size-5 md:rotate-90"
+        />
+      </button>
+    </div>
+    <div
+      id={`${id}-items`}
+      class="focus-visible:outline-primary order-1 grid min-w-0 gap-3 focus-visible:outline-2 focus-visible:outline-offset-4 md:order-none md:col-start-2 md:row-start-1"
+      data-photo-items
+      role="group"
+      aria-label={title}
+    >
+      {
+        people.map((person, index) => (
+          <div
+            class="min-w-0 [[hidden]]:hidden!"
+            data-detail-photo
+            hidden={index !== 0}
+          >
+            <PersonCard data={person} />
+          </div>
+        ))
+      }
+    </div>
+
+    {
+      people.length > 1 && (
+        <div class="order-3 flex justify-center md:order-3 md:col-start-1 md:row-start-1 md:self-center">
+          <div
+            class="grid w-full grid-cols-[repeat(auto-fit,minmax(2.75rem,2.75rem))] justify-center gap-2 px-1 py-1 md:grid-cols-1 md:justify-items-center [[hidden]]:hidden!"
+            role="group"
+            aria-label={copy.choosePerson}
+            data-photo-thumbnails
+            hidden
+          >
+            {people.map((person, index) => (
+              <button
+                type="button"
+                data-photo-thumbnail={index}
+                aria-pressed={index === 0}
+                aria-controls={`${id}-items`}
+                aria-label={`${copy.selectPerson.replace("{number}", String(index + 1))}: ${person.data.name}`}
+                class="ring-offset-background aria-pressed:ring-primary focus-visible:outline-primary size-11 cursor-pointer overflow-hidden rounded-md opacity-60 ring-offset-2 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-4 aria-pressed:opacity-100 aria-pressed:ring-2"
+              >
+                {person.data.image ? (
+                  <ContentPhoto
+                    image={{ src: person.data.image.src, alt: "" }}
+                    widths={[96, 160, 320]}
+                    sizes="64px"
+                    class="size-full object-cover"
+                  />
+                ) : (
+                  <span class="bg-muted text-muted-foreground flex size-full items-center justify-center text-sm font-semibold">
+                    {person.data.name
+                      .split(/\s+/)
+                      .slice(0, 2)
+                      .map((part) => part[0])
+                      .join("")}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</photo-gallery>
+
+<script>
+  import "@/components/content-page/PhotoStage.client";
+</script>

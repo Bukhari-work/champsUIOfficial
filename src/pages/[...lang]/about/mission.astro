@@ -1,54 +1,14 @@
 ---
 import {
   getLocaleStaticPaths,
+  getLocalizedPath,
   getPageLanguage,
-  useTranslations,
 } from "@/i18n/utils";
 
-import SectionLayout from "@/layouts/SectionLayout.astro";
-import { getSectionNavigation } from "@/navigation.ts";
-
-export async function getStaticPaths() {
+export function getStaticPaths() {
   return getLocaleStaticPaths();
 }
 
 const lang = getPageLanguage(Astro.params.lang);
-
-const t = useTranslations(lang);
-
-const sectionNavigation = getSectionNavigation(lang, "about");
-
-// Prop for the layout (title for the browser tab, SEO, etc.)
-const content = { title: t("sidebar.about.item.mission") };
+return Astro.redirect(`${getLocalizedPath("/about", lang)}#mission`, 301);
 ---
-
-<SectionLayout {content} {sectionNavigation}>
-  <h1
-    class="text-primary mt-8 mb-2 w-fit scroll-mt-24 text-3xl font-semibold sm:text-4xl lg:text-6xl"
-  >
-    {t("about.mission.title")}
-  </h1>
-  <p>{t("about.mission.intro")}</p>
-  <ul>
-    <li>
-      <strong>{t("about.mission.item1.title")}</strong>
-      {t("about.mission.item1.desc")}
-    </li>
-    <li>
-      <strong>{t("about.mission.item2.title")}</strong>
-      {t("about.mission.item2.desc")}
-    </li>
-    <li>
-      <strong>{t("about.mission.item3.title")}</strong>
-      {t("about.mission.item3.desc")}
-    </li>
-    <li>
-      <strong>{t("about.mission.item4.title")}</strong>
-      {t("about.mission.item4.desc")}
-    </li>
-    <li>
-      <strong>{t("about.mission.item5.title")}</strong>
-      {t("about.mission.item5.desc")}
-    </li>
-  </ul>
-</SectionLayout>

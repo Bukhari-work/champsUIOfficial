@@ -131,69 +131,42 @@ export const ui = {
     // Homepage - News Section
 
     // About Us Page
-    "about.visionTitle": "OUR VISION",
     "about.visionQuote":
       "Becoming a center of excellence in Southeast Asia in the field of health administration and policy.",
-    "about.p1":
-      "The Center for Health Administration and Policy Studies (CHAMPS), established in 2006 under the Faculty of Public Health, Universitas Indonesia, has emerged as a leading entity in advancing health administration and policy development in Indonesia. Over its 18 years of operation, CHAMPS has demonstrated excellence in research, training, and community service. It has collaborated with key stakeholders, including the Ministry of Health, local health departments, international organisations, and private institutions, to design and implement impactful health programs.",
-    "about.p2":
-      "With a vision to be a center of excellence in Southeast Asia, CHAMPS continues to empower professionals, foster partnerships, and drive impactful health initiatives, striving for equitable and sustainable health improvements across the region.",
-    "about.p3":
-      "CHAMPS boasts a diverse portfolio, including health policy analysis, program evaluations, strategic plannings, and innovative training programs on global health leadership, advocacy, regulatory impact analysis, healthcare management and so on. Its contributions include conducting groundbreaking studies, developing policy recommendations, and hosting international conferences, to address critical health challenges such as universal health coverage, health governance, and tuberculosis.",
-    "about.work.title": "Our work encompasses:",
-    "about.work.item1.title": "Comprehensive Research:",
-    "about.work.item1.desc":
-      "Conducting in-depth studies and analyses on various aspects of health administration and policy, contributing to evidence-based recommendations that shape national and regional health strategies.",
-    "about.work.item2.title": "Capacity Building:",
-    "about.work.item2.desc":
-      "Offering specialized training programs and workshops for healthcare professionals and policymakers, equipping them with the knowledge and skills necessary to enhance the effectiveness of health systems and services.",
-    "about.work.item3.title": "Strategic Consultation:",
-    "about.work.item3.desc":
-      "Providing tailored advisory services to support governmental bodies, healthcare institutions, and private sector organizations in strategic planning, health system development, and advocacy for sustainable health development.",
-    "about.work.item4.title": "Knowledge Dissemination:",
-    "about.work.item4.desc":
-      "Actively sharing our findings and insights through publications, conferences, and public engagement, ensuring that valuable information reaches those who can utilize it for positive change.",
-    "about.contactText": "Want to work with us? Contact us at",
 
     // About Us Page - Mission
-    "about.mission.title": "THE MISSION",
-    "about.mission.intro":
-      "At CHAMPS, our mission is to drive significant progress in health administration and policy, both in Indonesia and across Southeast Asia. We achieve this through a multi-faceted approach, focusing on research, partnership, and education:",
-    "about.mission.item1.title": "Advancing Healthcare Studies:",
+    "about.mission.item1.title": "Advance health research",
     "about.mission.item1.desc":
-      "We are dedicated to conducting cutting-edge studies on healthcare systems and policies in Indonesia. Our research aims to generate critical insights and evidence to inform effective solutions for real-world health challenges.",
-    "about.mission.item2.title": "Partnering for Better Health Services:",
+      "Study health systems and policy in Indonesia to inform practical solutions.",
+    "about.mission.item2.title": "Improve health services",
     "about.mission.item2.desc":
-      "We serve as a trusted partner to communities and the government, actively collaborating to improve the quality of health services throughout Indonesia. By working together, we strive to translate research into tangible improvements for public health.",
-    "about.mission.item3.title": "Fostering Regional Collaboration:",
+      "Work with communities and government to improve the quality of health services.",
+    "about.mission.item3.title": "Build regional partnerships",
     "about.mission.item3.desc":
-      "Recognizing the interconnectedness of health across borders, we aim to be a valuable partner for international institutions in developing health administration and policy studies within the Southeast Asian region. We believe in sharing knowledge and expertise to collectively advance health outcomes.",
-    "about.mission.item4.title": "Applying Academic Expertise:",
+      "Partner with international institutions to advance health administration and policy studies in Southeast Asia.",
+    "about.mission.item4.title": "Apply academic expertise",
     "about.mission.item4.desc":
-      "CHAMPS provides a vital platform for the teaching staff of the Department of Health Administration and Policy and the Faculty of Public Health to apply their scientific knowledge. This ensures our academic insights directly contribute to practical advancements in health administration and policy.",
-    "about.mission.item5.title": "Nurturing Future Leaders:",
+      "Help faculty members apply their expertise to health administration and policy practice.",
+    "about.mission.item5.title": "Develop future experts",
     "about.mission.item5.desc":
-      "We are committed to fostering the next generation of experts in health administration and policy. By serving as a means of regeneration for our teaching staff, we support the continuous development of specialized expertise crucial for the future of public health.",
+      "Support the next generation of teaching staff and experts in health administration and policy.",
 
     // About Us Page - Values
-    "about.values.title": "VALUES",
-    "about.values.intro":
-      "Driven by our core values of Objectivity, Togetherness, Empowerment, Quality Improvement, and Sincerity, CHAMPS is committed to being a catalyst for progress in the field of public health. We envision a future where every individual has access to quality healthcare and where policies truly serve the health needs of the population. At the heart of everything we do are the principles that guide our actions, decisions, and interactions. These values are not just words; they are the foundation of our culture and our commitment to you.",
     "about.values.objectivity.title": "Objectivity",
     "about.values.objectivity.desc":
-      "We believe in approaching every situation with a clear, unbiased mind. Our commitment to <strong>objectivity</strong> means we base our decisions on facts and evidence, ensuring fair and sound judgments in all our endeavors.",
+      "Base decisions on evidence and fair judgment.",
     "about.values.togetherness.title": "Togetherness",
     "about.values.togetherness.desc":
-      "We foster a spirit of collaboration and mutual support. <strong>Togetherness</strong> means we work as a unified team, valuing diverse perspectives and leveraging our collective strengths to achieve common goals and support one another's success.",
+      "Work together, value different perspectives, and support one another.",
     "about.values.empowerment.title": "Empowerment",
     "about.values.empowerment.desc":
-      "We champion growth and enable potential. <strong>Empowerment</strong> is about providing our team and our clients with the tools, knowledge, and autonomy to take initiative, make impactful decisions, and reach their full potential.",
+      "Give our team and partners the knowledge, tools, and autonomy to act.",
     "about.values.quality.title": "Quality Improvement",
     "about.values.quality.desc":
-      "We are dedicated to continuous growth and excellence. <strong>Quality improvement</strong> is an ongoing journey for us; we consistently seek ways to refine our processes, enhance our services, and deliver the highest possible standards in everything we do.",
+      "Keep improving our processes, services, and standards.",
     "about.values.sincerity.title": "Sincerity",
     "about.values.sincerity.desc":
-      "We operate with honesty, integrity, and genuine care. Our commitment to <strong>sincerity</strong> means we are transparent in our communication, authentic in our relationships, and always act with the best interests of our clients and colleagues at heart. More than just being genuine, sincerity is the actualization of our values through compassion, openness, and heart in every action and relationship.",
+      "Act with honesty, openness, and care for our partners and colleagues.",
 
     // About Us Page - Team
     "about.team.title": "THE TEAM",
@@ -208,10 +181,10 @@ export const ui = {
 
     // About section sidebar
     "sidebar.about.title": "About",
-    "sidebar.about.item.vision": "Vision",
+    "sidebar.about.item.overview": "Overview",
     "sidebar.about.item.mission": "Mission",
     "sidebar.about.item.values": "Values",
-    "sidebar.about.item.team": "Team",
+    "sidebar.about.item.team": "People",
     "sidebar.about.item.experts": "Experts",
 
     // What We Do Page
@@ -459,70 +432,42 @@ export const ui = {
     // Homepage - News Section
 
     // Halaman Tentang Kami
-    "about.visionTitle": "VISI KAMI",
     "about.visionQuote":
       "Menjadi pusat unggulan di Asia Tenggara dalam bidang administrasi dan kebijakan kesehatan.",
-    "about.p1":
-      "Pusat Kajian Administrasi dan Kebijakan Kesehatan (CHAMPS), yang didirikan pada tahun 2006 di bawah Fakultas Kesehatan Masyarakat, Universitas Indonesia, telah muncul sebagai entitas terkemuka dalam memajukan pengembangan administrasi dan kebijakan kesehatan di Indonesia. Selama 18 tahun beroperasi, CHAMPS telah menunjukkan keunggulan dalam penelitian, pelatihan, dan pengabdian masyarakat. CHAMPS telah berkolaborasi dengan para pemangku kepentingan utama, termasuk Kementerian Kesehatan, dinas kesehatan daerah, organisasi internasional, dan lembaga swasta, untuk merancang dan melaksanakan program-program kesehatan yang berdampak.",
-    "about.p2":
-      "Dengan visi menjadi pusat keunggulan di Asia Tenggara, CHAMPS terus memberdayakan para profesional, membina kemitraan, dan mendorong inisiatif kesehatan yang berdampak, berjuang untuk perbaikan kesehatan yang merata dan berkelanjutan di seluruh kawasan.",
-    "about.p3":
-      "CHAMPS memiliki portofolio yang beragam, termasuk analisis kebijakan kesehatan, evaluasi program, perencanaan strategis, dan program pelatihan inovatif tentang kepemimpinan kesehatan global, advokasi, analisis dampak peraturan, manajemen layanan kesehatan, dan sebagainya. Kontribusinya meliputi pelaksanaan studi terobosan, pengembangan rekomendasi kebijakan, dan penyelenggaraan konferensi internasional, untuk mengatasi tantangan kesehatan kritis seperti jaminan kesehatan universal, tata kelola kesehatan, dan tuberkulosis.",
-    "about.work.title": "Pekerjaan kami meliputi:",
-    "about.work.item1.title": "Penelitian Komprehensif:",
-    "about.work.item1.desc":
-      "Melakukan studi dan analisis mendalam tentang berbagai aspek administrasi dan kebijakan kesehatan, berkontribusi pada rekomendasi berbasis bukti yang membentuk strategi kesehatan nasional dan regional.",
-    "about.work.item2.title": "Peningkatan Kapasitas:",
-    "about.work.item2.desc":
-      "Menawarkan program pelatihan khusus dan lokakarya untuk para profesional dan pembuat kebijakan di bidang kesehatan, membekali mereka dengan pengetahuan dan keterampilan yang diperlukan untuk meningkatkan efektivitas sistem dan layanan kesehatan.",
-    "about.work.item3.title": "Konsultasi Strategis:",
-    "about.work.item3.desc":
-      "Menyediakan layanan konsultasi yang disesuaikan untuk mendukung badan pemerintah, institusi layanan kesehatan, dan organisasi sektor swasta dalam perencanaan strategis, pengembangan sistem kesehatan, dan advokasi untuk pembangunan kesehatan yang berkelanjutan.",
-    "about.work.item4.title": "Diseminasi Pengetahuan:",
-    "about.work.item4.desc":
-      "Secara aktif membagikan temuan dan wawasan kami melalui publikasi, konferensi, dan keterlibatan publik, memastikan bahwa informasi berharga menjangkau mereka yang dapat memanfaatkannya untuk perubahan positif.",
-    "about.contactText": "Ingin bekerja sama dengan kami? Hubungi kami di",
 
     // Halaman Tentang Kami - Misi
-    "about.mission.title": "MISI KAMI",
-    "about.mission.intro":
-      "Di CHAMPS, misi kami adalah untuk mendorong kemajuan signifikan dalam administrasi dan kebijakan kesehatan, baik di Indonesia maupun di seluruh Asia Tenggara. Kami mencapai ini melalui pendekatan multi-segi, dengan fokus pada penelitian, kemitraan, dan pendidikan:",
-    "about.mission.item1.title": "Memajukan Studi Pelayanan Kesehatan:",
+    "about.mission.item1.title": "Memajukan riset kesehatan",
     "about.mission.item1.desc":
-      "Kami berdedikasi untuk melakukan studi mutakhir tentang sistem dan kebijakan layanan kesehatan di Indonesia. Penelitian kami bertujuan untuk menghasilkan wawasan dan bukti penting untuk menginformasikan solusi efektif bagi tantangan kesehatan di dunia nyata.",
-    "about.mission.item2.title":
-      "Bermitra untuk Pelayanan Kesehatan yang Lebih Baik:",
+      "Mengkaji sistem dan kebijakan kesehatan di Indonesia untuk menghasilkan solusi praktis.",
+    "about.mission.item2.title": "Meningkatkan layanan kesehatan",
     "about.mission.item2.desc":
-      "Kami berfungsi sebagai mitra tepercaya bagi masyarakat dan pemerintah, secara aktif berkolaborasi untuk meningkatkan kualitas layanan kesehatan di seluruh Indonesia. Dengan bekerja sama, kami berusaha untuk menerjemahkan penelitian menjadi perbaikan nyata bagi kesehatan masyarakat.",
-    "about.mission.item3.title": "Mendorong Kolaborasi Regional:",
+      "Bekerja bersama masyarakat dan pemerintah untuk meningkatkan mutu layanan kesehatan.",
+    "about.mission.item3.title": "Membangun kemitraan regional",
     "about.mission.item3.desc":
-      "Menyadari keterkaitan kesehatan lintas batas, kami bertujuan untuk menjadi mitra berharga bagi lembaga internasional dalam mengembangkan studi administrasi dan kebijakan kesehatan di kawasan Asia Tenggara. Kami percaya pada berbagi pengetahuan dan keahlian untuk secara kolektif memajukan hasil kesehatan.",
-    "about.mission.item4.title": "Menerapkan Keahlian Akademik:",
+      "Bermitra dengan lembaga internasional untuk mengembangkan kajian administrasi dan kebijakan kesehatan di Asia Tenggara.",
+    "about.mission.item4.title": "Menerapkan keahlian akademik",
     "about.mission.item4.desc":
-      "CHAMPS menyediakan platform penting bagi staf pengajar Departemen Administrasi dan Kebijakan Kesehatan dan Fakultas Kesehatan Masyarakat untuk menerapkan pengetahuan ilmiah mereka. Hal ini memastikan wawasan akademis kami secara langsung berkontribusi pada kemajuan praktis dalam administrasi dan kebijakan kesehatan.",
-    "about.mission.item5.title": "Membina Pemimpin Masa Depan:",
+      "Mendukung dosen dalam menerapkan keilmuan pada praktik administrasi dan kebijakan kesehatan.",
+    "about.mission.item5.title": "Mengembangkan ahli masa depan",
     "about.mission.item5.desc":
-      "Kami berkomitmen untuk membina generasi ahli berikutnya dalam administrasi dan kebijakan kesehatan. Dengan berfungsi sebagai sarana regenerasi bagi staf pengajar kami, kami mendukung pengembangan berkelanjutan keahlian khusus yang krusial untuk masa depan kesehatan masyarakat.",
+      "Mendukung regenerasi dosen dan ahli administrasi serta kebijakan kesehatan.",
 
     // Halaman Tentang Kami - Nilai
-    "about.values.title": "NILAI-NILAI KAMI",
-    "about.values.intro":
-      "Didorong oleh nilai-nilai inti kami yaitu Objektivitas, Kebersamaan, Pemberdayaan, Peningkatan Kualitas, dan Ketulusan, CHAMPS berkomitmen untuk menjadi katalisator kemajuan di bidang kesehatan masyarakat. Kami membayangkan masa depan di mana setiap individu memiliki akses terhadap layanan kesehatan berkualitas dan di mana kebijakan benar-benar melayani kebutuhan kesehatan penduduk. Di jantung dari semua yang kami lakukan adalah prinsip-prinsip yang memandu tindakan, keputusan, dan interaksi kami. Nilai-nilai ini bukan sekadar kata-kata; nilai-nilai ini adalah fondasi budaya dan komitmen kami kepada Anda.",
     "about.values.objectivity.title": "Objektivitas",
     "about.values.objectivity.desc":
-      "Kami percaya dalam mendekati setiap situasi dengan pikiran yang jernih dan tidak bias. Komitmen kami terhadap <strong>objektivitas</strong> berarti kami mendasarkan keputusan kami pada fakta dan bukti, memastikan penilaian yang adil dan sehat dalam semua usaha kami.",
+      "Mendasarkan keputusan pada bukti dan penilaian yang adil.",
     "about.values.togetherness.title": "Kebersamaan",
     "about.values.togetherness.desc":
-      "Kami memupuk semangat kolaborasi dan saling mendukung. <strong>Kebersamaan</strong> berarti kami bekerja sebagai tim yang terpadu, menghargai beragam perspektif dan memanfaatkan kekuatan kolektif kami untuk mencapai tujuan bersama dan mendukung keberhasilan satu sama lain.",
+      "Bekerja bersama, menghargai beragam pandangan, dan saling mendukung.",
     "about.values.empowerment.title": "Pemberdayaan",
     "about.values.empowerment.desc":
-      "Kami memperjuangkan pertumbuhan dan memungkinkan potensi. <strong>Pemberdayaan</strong> adalah tentang menyediakan tim dan klien kami dengan alat, pengetahuan, dan otonomi untuk mengambil inisiatif, membuat keputusan yang berdampak, dan mencapai potensi penuh mereka.",
+      "Memberi tim dan mitra pengetahuan, sarana, dan kemandirian untuk bertindak.",
     "about.values.quality.title": "Peningkatan Kualitas",
     "about.values.quality.desc":
-      "Kami berdedikasi pada pertumbuhan dan keunggulan yang berkelanjutan. <strong>Peningkatan kualitas</strong> adalah perjalanan yang berkelanjutan bagi kami; kami secara konsisten mencari cara untuk menyempurnakan proses kami, meningkatkan layanan kami, dan memberikan standar setinggi mungkin dalam segala hal yang kami lakukan.",
+      "Terus meningkatkan proses, layanan, dan standar kerja.",
     "about.values.sincerity.title": "Ketulusan",
     "about.values.sincerity.desc":
-      "Kami beroperasi dengan kejujuran, integritas, dan kepedulian yang tulus. Komitmen kami terhadap <strong>ketulusan</strong> berarti kami transparan dalam komunikasi kami, otentik dalam hubungan kami, dan selalu bertindak dengan kepentingan terbaik klien dan kolega kami di hati. Lebih dari sekadar tulus, ketulusan adalah aktualisasi nilai-nilai kami melalui kasih sayang, keterbukaan, dan hati dalam setiap tindakan dan hubungan.",
+      "Bertindak jujur, terbuka, dan peduli terhadap mitra serta rekan kerja.",
 
     // Halaman Tentang Kami - Tim
     "about.team.title": "TIM KAMI",
@@ -537,7 +482,7 @@ export const ui = {
 
     // Sidebar untuk bagian Tentang
     "sidebar.about.title": "Tentang",
-    "sidebar.about.item.vision": "Visi",
+    "sidebar.about.item.overview": "Ikhtisar",
     "sidebar.about.item.mission": "Misi",
     "sidebar.about.item.values": "Nilai",
     "sidebar.about.item.team": "Tim Kami",

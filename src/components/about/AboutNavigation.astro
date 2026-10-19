@@ -1,0 +1,45 @@
+---
+import type { Language } from "@/i18n/ui";
+import { getSectionNavigation } from "@/navigation";
+
+interface Props {
+  lang: Language;
+  class?: string;
+}
+
+const { lang, class: className } = Astro.props;
+const links = getSectionNavigation(lang, "about").menuItems;
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const label = lang === "id" ? "Jelajahi bagian Tentang" : "Explore About";
+---
+
+<nav
+  aria-label={label}
+  class:list={["border-b", className]}
+  data-about-navigation
+>
+  <ul class="grid grid-cols-3 gap-1">
+    {
+      links.map((item) => {
+        const href = item.href?.toString() ?? "";
+        const isCurrent = (href.replace(/\/$/, "") || "/") === currentPath;
+        return (
+          <li class="min-w-0">
+            <a
+              href={href}
+              aria-current={isCurrent ? "page" : undefined}
+              class:list={[
+                "focus-visible:outline-primary flex min-h-12 min-w-0 items-center justify-center border-b-2 px-1 py-3 text-center text-xs leading-tight font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 sm:px-2 sm:text-sm",
+                isCurrent
+                  ? "border-b-primary text-primary"
+                  : "text-muted-foreground hover:text-primary border-b-transparent",
+              ]}
+            >
+              {item.text}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

@@ -9,6 +9,7 @@ export interface Props {
   title: string;
   imageMeta?: ImageMetadata | { alt: string; src: string | ImageMetadata };
   imageAlt?: string;
+  imageAspect?: "video" | "portrait" | "landscape" | "square";
   imageWidths?: number[];
   imageSizes?: string;
   headingLevel?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -21,6 +22,7 @@ const {
   title,
   imageMeta,
   imageAlt,
+  imageAspect = "video",
   imageWidths,
   imageSizes,
   headingLevel: Heading = "h2",
@@ -93,7 +95,14 @@ const Title = href ? "a" : "span";
       imageProps && (
         <div
           class={cn(
-            "relative aspect-video overflow-hidden",
+            "relative overflow-hidden",
+            imageAspect === "square"
+              ? "aspect-square"
+              : imageAspect === "portrait"
+                ? "aspect-[5/6]"
+                : imageAspect === "landscape"
+                  ? "aspect-[4/3]"
+                  : "aspect-video",
             isSmall ? "rounded-md" : "rounded-lg",
           )}
         >

@@ -1,80 +1,123 @@
 ---
+import type { CollectionEntry } from "astro:content";
+import Base from "@/layouts/Base.astro";
+import AboutPageHeader from "@/components/about/AboutPageHeader.astro";
+import CallToAction from "@/components/shared/CallToAction.astro";
+import PersonCard from "@/components/people/PersonCard.astro";
+import PeopleStage from "@/components/people/PeopleStage.astro";
+import { aboutSectionCopy } from "@/i18n/about";
 import {
   getLocaleStaticPaths,
+  getLocalizedPath,
   getPageLanguage,
   useTranslations,
 } from "@/i18n/utils";
-
-import { getSinglePage } from "@/lib/contentParser.ts";
-import type { CollectionEntry } from "astro:content";
-
-import SectionLayout from "@/layouts/SectionLayout.astro";
-import PeopleDeck from "@/components/people/PeopleDeck.astro";
-import { getSectionNavigation } from "@/navigation";
+import { getSinglePage } from "@/lib/contentParser";
+import { SITE } from "@/config";
 
 export async function getStaticPaths() {
   return getLocaleStaticPaths();
 }
 
 const lang = getPageLanguage(Astro.params.lang);
-
 const t = useTranslations(lang);
-const PEOPLE_FOLDER = "people";
-
-// --- Page & Sidebar Metadata ---
-
-const sectionNavigation = getSectionNavigation(lang, "about");
-
-// --- Fetch and Filter People Data ---
-// Fetch all non-draft people (from ALL languages)
-const allPeople: CollectionEntry<"people">[] =
-  await getSinglePage(PEOPLE_FOLDER);
-
-// Filter the results by the current language
-const people: CollectionEntry<"people">[] = allPeople.filter((person) =>
+const copy = aboutSectionCopy[lang].people;
+const people = (await getSinglePage("people")) as CollectionEntry<"people">[];
+const localizedPeople = people.filter((person) =>
   person.id.startsWith(`${lang}/`),
 );
-const advisors = people.filter((person) => person.data.role === "Advisors");
-const leadership = people.filter((person) => person.data.role === "Leadership");
-const teamMembers = people.filter((person) => person.data.role === "The Team");
-
-const sortPeopleByIndex = (peopleArray: CollectionEntry<"people">[]) => {
-  return peopleArray.sort((a, b) => {
-    // People with an undefined index are pushed to the end.
-    const aIndex = a.data.index ?? Infinity;
-    const bIndex = b.data.index ?? Infinity;
-    return aIndex - bIndex;
-  });
+const byIndex = (a: CollectionEntry<"people">, b: CollectionEntry<"people">) =>
+  (a.data.index ?? Infinity) - (b.data.index ?? Infinity);
+const groups = [
+  {
+    id: "advisors",
+    title: t("about.team.advisors"),
+    introduction: copy.advisorsIntro,
+    people: localizedPeople
+      .filter((person) => person.data.role === "Advisors")
+      .sort(byIndex),
+  },
+  {
+    id: "leadership",
+    title: t("about.team.leadership"),
+    introduction: copy.leadershipIntro,
+    people: localizedPeople
+      .filter((person) => person.data.role === "Leadership")
+      .sort(byIndex),
+  },
+  {
+    id: "team",
+    title: t("about.team.ourteam"),
+    introduction: copy.teamIntro,
+    people: localizedPeople
+      .filter((person) => person.data.role === "The Team")
+      .sort(byIndex),
+  },
+];
+const content = {
+  title: t("sidebar.about.item.team"),
+  description: copy.introduction,
+  canonical: new URL(getLocalizedPath("/about/people", lang), SITE.base_href),
 };
-
-// --- Sort People Data ---
-const sortedAdvisors = sortPeopleByIndex(advisors);
-const sortedLeadership = sortPeopleByIndex(leadership);
-const sortedTeamMembers = sortPeopleByIndex(teamMembers);
-
-const content = { title: t("sidebar.about.item.team") };
 ---
 
-<SectionLayout {content} {sectionNavigation} variant="wide">
-  <h1
-    class="text-primary mt-8 mb-2 w-fit scroll-mt-24 text-3xl font-semibold sm:text-4xl lg:text-6xl"
-  >
-    {t("about.team.title")}
-  </h1>
-  <div class="w-full">
-    <div>
-      <h2 class="text-3xl">{t("about.team.advisors")}</h2>
-      <div class="not-prose">
-        <PeopleDeck people={sortedAdvisors} />
-      </div>
-      <h2 class="text-3xl">{t("about.team.leadership")}</h2>
-      <div class="not-prose">
-        <PeopleDeck people={sortedLeadership} />
-      </div>
-      <h2 class="text-3xl">{t("about.team.ourteam")}</h2>
-      <div class="not-prose mb-24">
-        <PeopleDeck people={sortedTeamMembers} />
-      </div>
+<Base {content}>
+  <div class="mx-auto max-w-400 px-5 pb-20 sm:px-8" data-about-people>
+    <AboutPageHeader
+      {lang}
+      eyebrow={copy.eyebrow}
+      title={copy.title}
+      description={copy.introduction}
+    />
+
+    <div class="mx-auto max-w-7xl pt-4">
+      {
+        groups.map((group) =>
+          group.people.length ? (
+            <section
+              class="border-primary/20 border-b py-12 sm:py-16"
+              aria-labelledby={`people-${group.id}-title`}
+            >
+              <div class="mb-7 grid gap-2 md:grid-cols-2 md:items-end">
+                <h2
+                  id={`people-${group.id}-title`}
+                  class="font-libron text-3xl sm:text-4xl"
+                >
+                  {group.title}
+                </h2>
+                <p class="text-muted-foreground max-w-xl text-sm leading-relaxed">
+                  {group.introduction}
+                </p>
+              </div>
+              <PeopleStage
+                id={`people-${group.id}-stage`}
+                title={group.title}
+                {lang}
+                people={group.people}
+                showThroughLg={group.people.length >= 3}
+              />
+              {group.people.length >= 3 && (
+                <div class="hidden gap-5 xl:grid xl:grid-cols-3">
+                  {group.people.map((person) => (
+                    <PersonCard data={person} />
+                  ))}
+                </div>
+              )}
+            </section>
+          ) : null,
+        )
+      }
     </div>
+
+    <CallToAction
+      class="mx-auto mt-12 max-w-7xl sm:mt-16"
+      headingId="people-next-title"
+      title={copy.nextTitle}
+      description={copy.nextDescription}
+      action={{
+        href: getLocalizedPath("/about/experts", lang),
+        label: copy.nextAction,
+      }}
+    />
   </div>
-</SectionLayout>
+</Base>

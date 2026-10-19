@@ -46,19 +46,21 @@ test("biographies remain readable without JavaScript and only disclose real over
   assert.match(script, /disconnectedCallback/);
   assert.match(script, /this\.observer\?\.disconnect\(\)/);
   const page = read("src/pages/[...lang]/about/people/[single].astro");
-  assert.match(page, /hasBiography &&/);
+  assert.match(page, /hasBiography\s*(?:&&|\?)/);
   assert.doesNotMatch(page, /onclick|toggleContent|450px|<script is:inline/);
 });
 
-test("people controls have matching bilingual labels and native carousel buttons", () => {
+test("people profile labels match across languages and directories retain profile cards", () => {
   assert.deepEqual(
     Object.keys(peopleCopy.en).sort(),
     Object.keys(peopleCopy.id).sort(),
   );
   for (const copy of Object.values(peopleCopy))
     for (const text of Object.values(copy)) assert.ok(text.trim());
-  const carousel = read("src/components/people/PeopleDeck.astro");
-  assert.equal((carousel.match(/<button\b/g) ?? []).length, 2);
-  assert.match(carousel, /aria-label=\{copy\.previous\}/);
-  assert.match(carousel, /aria-label=\{copy\.next\}/);
+  const team = read("src/pages/[...lang]/about/people/index.astro");
+  const experts = read("src/pages/[...lang]/about/experts/index.astro");
+  for (const page of [team, experts]) {
+    assert.match(page, /<PersonCard/);
+    assert.doesNotMatch(page, /PeopleDeck|swiper/);
+  }
 });

@@ -40,6 +40,14 @@ class PhotoGallery extends HTMLElement {
           .replace("{current}", String(index + 1))
           .replace("{total}", String(items.length));
     };
+    const measureStableHeight = () => {
+      if (!this.hasAttribute("data-photo-stable-height")) return;
+      if (!viewport.getClientRects().length) return;
+      items.forEach((item) => (item.hidden = false));
+      const height = Math.max(...items.map((item) => item.offsetHeight));
+      items.forEach((item, i) => (item.hidden = i !== index));
+      viewport.style.minHeight = `${height}px`;
+    };
     const select = (target: number) => {
       index = Math.max(0, Math.min(items.length - 1, target));
       render();
@@ -79,6 +87,10 @@ class PhotoGallery extends HTMLElement {
       { signal },
     );
     render();
+    if (this.hasAttribute("data-photo-stable-height")) {
+      requestAnimationFrame(measureStableHeight);
+      window.addEventListener("resize", measureStableHeight, { signal });
+    }
     this.dataset.ready = "";
   }
 

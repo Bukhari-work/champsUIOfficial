@@ -1,83 +1,106 @@
 ---
+import type { CollectionEntry } from "astro:content";
+import Base from "@/layouts/Base.astro";
+import AboutPageHeader from "@/components/about/AboutPageHeader.astro";
+import CallToAction from "@/components/shared/CallToAction.astro";
+import PersonCard from "@/components/people/PersonCard.astro";
+import { aboutSectionCopy } from "@/i18n/about";
 import {
   getLocaleStaticPaths,
+  getLocalizedPath,
   getPageLanguage,
   useTranslations,
 } from "@/i18n/utils";
-
-import { getSinglePage } from "@/lib/contentParser.ts";
-import type { CollectionEntry } from "astro:content";
-
-import SectionLayout from "@/layouts/SectionLayout.astro";
-import PersonCard from "@/components/people/PersonCard.astro";
-import { getSectionNavigation } from "@/navigation";
+import { getSinglePage } from "@/lib/contentParser";
+import { SITE } from "@/config";
 
 export async function getStaticPaths() {
   return getLocaleStaticPaths();
 }
 
 const lang = getPageLanguage(Astro.params.lang);
-
 const t = useTranslations(lang);
-const PEOPLE_FOLDER = "people";
-
-// --- Page & Sidebar Metadata ---
-
-const sectionNavigation = getSectionNavigation(lang, "about");
-
-// --- Fetch and Filter People Data ---
-// Fetch all non-draft people (from ALL languages)
-const allPeople: CollectionEntry<"people">[] =
-  await getSinglePage(PEOPLE_FOLDER);
-
-// Filter the results by the current language
-const people: CollectionEntry<"people">[] = allPeople.filter((person) =>
-  person.id.startsWith(`${lang}/`),
-);
-
+const copy = aboutSectionCopy[lang].experts;
+const people = (await getSinglePage("people")) as CollectionEntry<"people">[];
 const experts = people.filter(
-  (person) => person.data.responsibility === "Senior Expert",
+  (person) =>
+    person.id.startsWith(`${lang}/`) && person.data.role === "Experts",
 );
-const researcher = people.filter(
-  (person) => person.data.responsibility === "Senior Researcher",
-);
-
-const sortPeopleByIndex = (peopleArray: CollectionEntry<"people">[]) => {
-  return peopleArray.sort((a, b) => {
-    // People with an undefined index are pushed to the end.
-    const aIndex = a.data.index ?? Infinity;
-    const bIndex = b.data.index ?? Infinity;
-    return aIndex - bIndex;
-  });
+const byIndex = (a: CollectionEntry<"people">, b: CollectionEntry<"people">) =>
+  (a.data.index ?? Infinity) - (b.data.index ?? Infinity);
+const groups = [
+  {
+    id: "senior-experts",
+    title: t("about.experts.seniorExperts"),
+    introduction: copy.expertsIntro,
+    people: experts
+      .filter((person) => person.data.responsibility === "Senior Expert")
+      .sort(byIndex),
+  },
+  {
+    id: "senior-researchers",
+    title: t("about.experts.seniorResearchers"),
+    introduction: copy.researchersIntro,
+    people: experts
+      .filter((person) => person.data.responsibility === "Senior Researcher")
+      .sort(byIndex),
+  },
+];
+const content = {
+  title: t("sidebar.about.item.experts"),
+  description: copy.introduction,
+  canonical: new URL(getLocalizedPath("/about/experts", lang), SITE.base_href),
 };
-
-// --- Sort People Data ---
-const sortedExperts = sortPeopleByIndex(experts);
-const sortedResearchers = sortPeopleByIndex(researcher);
-
-const content = { title: t("sidebar.about.item.experts") };
 ---
 
-<SectionLayout {content} {sectionNavigation} variant="wide">
-  <h1
-    class="text-primary mt-8 mb-2 w-fit scroll-mt-24 text-3xl font-semibold sm:text-4xl lg:text-6xl"
-  >
-    {t("about.experts.title")}
-  </h1>
-  <div class="w-full">
-    <div>
-      <h2 class="text-3xl">{t("about.experts.seniorExperts")}</h2>
-      <div
-        class="not-prose grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
-      >
-        {sortedExperts.map((person) => <PersonCard data={person} />)}
-      </div>
-      <h2 class="text-3xl">{t("about.experts.seniorResearchers")}</h2>
-      <div
-        class="not-prose grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
-      >
-        {sortedResearchers.map((person) => <PersonCard data={person} />)}
-      </div>
+<Base {content}>
+  <div class="mx-auto max-w-400 px-5 pb-20 sm:px-8" data-about-experts>
+    <AboutPageHeader
+      {lang}
+      eyebrow={copy.eyebrow}
+      title={copy.title}
+      description={copy.introduction}
+    />
+
+    <div class="mx-auto max-w-7xl pt-4">
+      {
+        groups.map((group) =>
+          group.people.length ? (
+            <section
+              class="border-primary/20 border-b py-12 sm:py-16"
+              aria-labelledby={`people-${group.id}-title`}
+            >
+              <div class="mb-7 grid gap-2 md:grid-cols-2 md:items-end">
+                <h2
+                  id={`people-${group.id}-title`}
+                  class="font-libron text-3xl sm:text-4xl"
+                >
+                  {group.title}
+                </h2>
+                <p class="text-muted-foreground max-w-xl text-sm leading-relaxed">
+                  {group.introduction}
+                </p>
+              </div>
+              <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-4">
+                {group.people.map((person) => (
+                  <PersonCard data={person} size="small" />
+                ))}
+              </div>
+            </section>
+          ) : null,
+        )
+      }
     </div>
+
+    <CallToAction
+      class="mx-auto mt-12 max-w-7xl sm:mt-16"
+      headingId="experts-next-title"
+      title={copy.nextTitle}
+      description={copy.nextDescription}
+      action={{
+        href: `${getLocalizedPath("/contact", lang)}#contactForm`,
+        label: copy.nextAction,
+      }}
+    />
   </div>
-</SectionLayout>
+</Base>

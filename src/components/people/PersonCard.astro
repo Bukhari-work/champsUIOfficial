@@ -12,11 +12,18 @@ import type { CollectionEntry } from "astro:content";
 
 interface Props {
   data: CollectionEntry<"people">;
+  size?: "default" | "small";
+  imageAspect?: "video" | "portrait" | "landscape" | "square";
   class?: string;
 }
 
 const { people_folder } = SETTINGS;
-const { data, class: className } = Astro.props;
+const {
+  data,
+  size = "default",
+  imageAspect = "square",
+  class: className,
+} = Astro.props;
 const { name, responsibility, description, image, social } = data.data;
 
 // Split the data.id (e.g., "en/john-doe") into its parts
@@ -33,6 +40,8 @@ const profileHref = getLocalizedPath(`/about/${people_folder}/${slug}`, lang);
   headingLevel="h2"
   imageMeta={image}
   imageAlt={name}
+  {imageAspect}
+  {size}
   class={cn("text-left", className)}
 >
   <h3 class="mt-1 text-sm font-light">
@@ -40,9 +49,11 @@ const profileHref = getLocalizedPath(`/about/${people_folder}/${slug}`, lang);
   </h3>
 
   <div class="mt-2 border-t pt-2">
-    <p class="mt-2 mb-4 line-clamp-3">{description}</p>
+    <p class="mt-2 mb-4 line-clamp-3">
+      {description}
+    </p>
   </div>
-  <Social socialLinks={social} class="relative z-10 w-fit max-w-full" />
+  {(<Social socialLinks={social} class="relative z-10 w-fit max-w-full" />)}
 
   <div slot="footer">
     <span
