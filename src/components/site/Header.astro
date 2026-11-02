@@ -9,6 +9,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import DynamicIcon from "@/components/shared/DynamicIcon";
 import { Image } from "astro:assets";
+import { logoOnDark, logoOnLight } from "@/assets/logos";
 
 interface Props {
   lang?: Language;
@@ -73,10 +74,12 @@ const isActiveHref = (href?: string | URL | null): boolean => {
 
           <!-- Dark mode logo -->
           <Image
-            src="/images/Logo-landscape-black.webp"
+            src={logoOnDark}
             alt="Company Logo"
-            width={150}
-            height={48}
+            width={128}
+            densities={[1, 2]}
+            format="webp"
+            quality={80}
             class="hidden w-28 p-2 transition-transform duration-300 motion-safe:hover:scale-105 motion-reduce:transition-none sm:w-36 dark:block"
             loading="eager"
             decoding="async"
@@ -84,10 +87,12 @@ const isActiveHref = (href?: string | URL | null): boolean => {
 
           <!-- Light mode logo -->
           <Image
-            src="/images/Logo-landscape-white.webp"
+            src={logoOnLight}
             alt="Company Logo"
-            width={150}
-            height={48}
+            width={128}
+            densities={[1, 2]}
+            format="webp"
+            quality={80}
             class="block w-28 p-2 transition-transform duration-300 motion-safe:hover:scale-105 motion-reduce:transition-none sm:w-36 dark:hidden"
             loading="eager"
             decoding="async"
