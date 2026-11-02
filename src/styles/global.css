@@ -13,7 +13,6 @@
  */
 
 /* 1. Tailwind Setup */
-@import "./fonts.css";
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "bejamas/tailwind.css";

@@ -6,6 +6,7 @@
 // 1a. External Packages & Astro APIs
 import { SEO } from "astro-seo";
 import { ClientRouter } from "astro:transitions";
+import { Font } from "astro:assets";
 
 // 1b. Global Styles
 import "../styles/global.css";
@@ -90,17 +91,9 @@ const footerProps = {
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta data-pagefind-filter="type[content]" content={searchType} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
-      transition:persist="lexend-font"
-    />
+    <Font cssVariable="--font-family-lexend" preload />
+    <Font cssVariable="--font-family-libron" preload />
+    <Font cssVariable="--font-family-cinzel" />
 
     <SEO
       charset="UTF-8"

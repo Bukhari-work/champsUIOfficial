@@ -389,12 +389,16 @@ public content/image URLs stable; this organization does not rename routes or as
   and page titles use responsive sizes to fit narrow screens. Body text and
   navigation inherit Lexend from the body instead of assigning Lexend to every element. Explicit
   legacy Lexend heading classes are removed so the shared typography applies.
-  Libron's self-hosted font-face is in `styles/fonts.css`, with its unmodified WOFF2
-  and license under `public/fonts/libron/`.
-  Lexend loads through a persistent Google Fonts stylesheet link in `Base` rather
-  than a CSS `@import`, keeping its font definitions attached across client navigation.
-  Unused font imports, definitions, and assets are removed; regular Trajan remains
-  for the sidebar label, but its unused bold font file is not shipped.
+  All fonts load through the Astro Fonts API configured in `astro.config.mjs` and
+  rendered by `<Font>` in `Base`, which self-hosts them under `/_astro/fonts/` with
+  metric-matched fallbacks. Lexend is Google Fonts' latin variable subset with its
+  OFL license in `src/assets/fonts/lexend/`; site copy uses no latin-ext characters,
+  so that subset is not shipped. Libron's unmodified WOFF2 and license live in
+  `src/assets/fonts/libron/`. Tailwind's `--font-*` theme tokens in
+  `styles/theme.css` point at the API's `--font-family-*` variables.
+  Unused font imports, definitions, and assets are removed. The sidebar label uses
+  Cinzel, an OFL Trajan-style face, as a latin WOFF2 subset with its license in
+  `src/assets/fonts/cinzel/`.
 - `SectionLayout` owns section navigation and the content grid. Its `default`
   variant preserves the narrower content width; `wide` uses the remaining width;
   `with-aside` reserves a right-hand column. Supplying an `aside` slot selects

@@ -117,7 +117,8 @@
   --color-kuning: var(--kuning);
   --color-ungu: var(--ungu);
 
-  --font-trajan: "Trajan", serif;
-  --font-lexend: "Lexend", sans-serif;
-  --font-libron: "Libron", serif;
+  /* Font stacks come from the Fonts API config in astro.config.mjs. */
+  --font-cinzel: var(--font-family-cinzel);
+  --font-lexend: var(--font-family-lexend);
+  --font-libron: var(--font-family-libron);
 }
